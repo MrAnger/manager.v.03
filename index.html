@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow"/>
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/ru-ru.js"></script>
+    <script type="text/javascript" src="js/share.js"></script>
+</head>
+<body>
+<div class="loader" style="display: none">
+    <div class="loader-content">
+        <span class="loader-text" name="load" translate="0" lang="text"></span>
+    </div>
+</div>
+<div class="container">
+<div class="header">
+    <div class="login-content" style="display: none">
+        <div class="topmenu">
+            <span class="link" name="top-menu" translate="0" lang="tasks"></span>
+            <span class="link" name="top-menu" translate="0" lang="iplists"></span>
+        </div>
+        <div class="login-set">
+            <span name="top" translate="0" lang="info"></span>, <span class="link" name="username">Creator</span> |
+            <span class="exit link" name="top" translate="0" lang="exit"></span>
+        </div>
+    </div>
+    <div class="lng">
+        <span class="show"><span class="lng-item">Language</span></span>
+        <ul class="lng-check" style="display: none">
+            <li>
+                <span class="lng-item rus active">Русский</span>
+            </li>
+            <li>
+                <span class="lng-item eng">English</span>
+            </li>
+            <li>
+                <span class="lng-item ukr">Українська</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="all">
+<div class="main">
+<div class="msg-box">
+    <div class="msg-content" default>
+        <div class="close"></div>
+        <div class="content"></div>
+    </div>
+    <div class="msg-content error">
+        <div class="close"></div>
+        <div class="content"></div>
+    </div>
+</div>
+<div class="content-scroll" style="height: 0;">
+<div class="center-box" style="top: 0px;">
+    <form name="auth">
+        <div class="sign-box">
+            <div class="title" translate="0" name="sign-in" lang="title"></div>
+            <div class="label-block">
+                <div class="label-text" translate="0" name="sign-in" lang="email"></div>
+                <div class="text-line">
+                    <input type="text" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="email" lang="email">
+                </div>
+            </div>
+            <div class="label-block">
+                <div class="label-text" translate="0" name="sign-in" lang="password"></div>
+                <div class="text-line">
+                    <input class="password" type="password" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="password" lang="password">
+                </div>
+            </div>
+            <div class="label-text">
+                <label>
+                    <div class="check-area">
+                        <input type="checkbox" class="hidden" name="remember"><span class="checkbox"></span>
+                    </div>
+                    <div class="remember" translate="0" name="remember" lang="remember"></div>
+                </label>
+            </div>
+            <button type="submit" value="" class="btn" translate="0" name="sign-in" lang="auth"></button>
+        </div>
+        <div class="sign-other">
+            <div class="other-text" translate="0" name="sign-in" lang="other-reg"></div>
+            <div class="other-text" translate="0" name="sign-in" lang="other-forgot"></div>
+        </div>
+    </form>
+    <form name="reg" style="display: none">
+        <div class="sign-box">
+            <div class="title" translate="0" name="sign-up" lang="title"></div>
+            <div class="label-block">
+                <div class="label-text" translate="0" name="sign-up" lang="login"></div>
+                <div class="text-line">
+                    <input type="text" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="login" lang="login">
+                </div>
+            </div>
+            <div class="label-block">
+                <div class="label-text" translate="0" name="sign-up" lang="email"></div>
+                <div class="text-line">
+                    <input type="text" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="email" lang="email">
+                </div>
+            </div>
+            <div class="label-block">
+                <div class="label-text" translate="0" name="sign-up" lang="password"></div>
+                <div class="text-line">
+                    <input class="password" type="password" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="password" lang="password">
+                </div>
+            </div>
+            <div class="agreement" translate="0" name="sign-up" lang="agreement"></div>
+            <button type="submit" value="" class="btn" translate="0" name="sign-up" lang="reg"></button>
+        </div>
+        <div class="sign-other">
+            <div class="other-text" translate="0" name="sign-up" lang="other-reg"></div>
+            <div class="other-text" translate="0" name="sign-up" lang="other-forgot"></div>
+        </div>
+    </form>
+    <form name="forgot" style="display: none">
+        <div class="sign-box">
+            <div class="title" translate="0" name="sign-forgot" lang="title"></div>
+            <div class="label-block">
+                <div class="label-text" translate="0" name="sign-forgot" lang="account"></div>
+                <div class="text-line">
+                    <input type="text" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="email" lang="email">
+                </div>
+            </div>
+            <div class="label-block" name="confirm-box" style="display: none">
+                <div class="label-text" translate="0" name="sign-forgot" lang="confirm-code"></div>
+                <div class="text-line">
+                    <input type="text" value="" placeholder="" translate="0" traslatetype="attribute" translateattribute="placeholder" name="code" lang="confirm">
+                </div>
+            </div>
+            <button type="submit" value="" class="btn" translate="0" name="sign-forgot" lang="send"></button>
+            <button type="button" value="" class="btn gray forgot-cancel" translate="0" name="sign-forgot" lang="cancel"></button>
+        </div>
+        <div class="sign-other">
+            <div class="other-text" translate="0" name="sign-forgot" lang="other-info"></div>
+        </div>
+    </form>
+</div>
+<div class="manager" style="display: none">
+    <div class="title-box">
+        <div class="title one" name="manager-title" translate="0" lang="folders"></div>
+        <div class="title two" name="manager-title" translate="0" lang="tasks"></div>
+        <div class="title three">
+            <ul class="tab-list">
+                <li class="general active" name="task-tabs" translate="0" lang="general"></li>
+                <li class="audit" name="task-tabs" translate="0" lang="auditory"></li>
+                <li class="targeting" name="task-tabs" translate="0" lang="targeting"></li>
+                <li class="statistics" name="task-tabs" translate="0" lang="stat"></li>
+            </ul>
+            <ul class="task-info">
+                <li><b name="task-cost-text">0</b><span>кр.</span></li>
+                <li>
+                                <span class="switch-box">
+                                    <form name="task-status">
+                                        <span class="switcher"></span> <input type="hidden" value="true">
+                                    </form>
+                                </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content-idea one">
+        <div class="content-scroll">
+            <ul class="item-list" style="top:0px;">
+                <form name="folder" default>
+                    <input type="hidden" name="folder-id" value="0">
+                    <input type="hidden" name="folder-name" value="default">
+                    <li name="folder-name-text">Default</li>
+                    <div class="context-option"></div>
+                </form>
+                <form name="folder">
+                    <input type="hidden" name="folder-id" value="1">
+                    <input type="hidden" name="folder-name" value="Категория 1">
+                    <li name="folder-name-text" class="active">Категория 1</li>
+                    <div class="context-option"></div>
+                </form>
+                <form name="folder">
+                    <input type="hidden" name="folder-id" value="1">
+                    <input type="hidden" name="folder-name" value="Категория 1">
+                    <li name="folder-name-text">Категория 2</li>
+                    <div class="context-option"></div>
+                </form>
+                <form name="folder">
+                    <input type="hidden" name="folder-id" value="1">
+                    <input type="hidden" name="folder-name" value="Категория 1">
+                    <li name="folder-name-text">Категория 3</li>
+                    <div class="context-option"></div>
+                </form>
+                <form name="folder">
+                    <input type="hidden" name="folder-id" value="1">
+                    <input type="hidden" name="folder-name" value="Категория 1">
+                    <li name="folder-name-text">Категория 4</li>
+                    <div class="context-option"></div>
+                </form>
+            </ul>
+        </div>
+    </div>
+    <div class="content-idea two">
+        <div class="content-scroll">
+            <ul class="item-list" style="top:0px;">
+                <form name="task" default>
+                    <input type="hidden" name="task-id" value="0">
+                    <input type="hidden" name="task-name" value="default">
+                    <li name="task-name-text">Default</li>
+                </form>
+                <form name="task">
+                    <input type="hidden" name="task-id" value="1">
+                    <input type="hidden" name="task-name" value="Задание 1">
+                    <li name="task-name-text" class="active">Задание 1</li>
+                    <div class="context-option">
+                        <div class="context-list">
+                            <div class="list">one</div>
+                            <div class="list">two</div>
+                            <div class="list">three</div>
+                        </div>
+                    </div>
+                </form>
+                <form name="task">
+                    <input type="hidden" name="task-id" value="1">
+                    <input type="hidden" name="task-name" value="Задание 1">
+                    <li name="task-name-text">Задание 2</li>
+                    <div class="context-option">
+                        <div class="context-list">
+                            <div class="list">one</div>
+                            <div class="list">two</div>
+                            <div class="list">three</div>
+                        </div>
+                    </div>
+                </form>
+                <form name="task">
+                    <input type="hidden" name="task-id" value="1">
+                    <input type="hidden" name="task-name" value="Задание 1">
+                    <li name="task-name-text">Задание 3</li>
+                    <div class="context-option">
+                        <div class="context-list">
+                            <div class="list">one</div>
+                            <div class="list">two</div>
+                            <div class="list">three</div>
+                        </div>
+                    </div>
+                </form>
+                <form name="task">
+                    <input type="hidden" name="task-id" value="1">
+                    <input type="hidden" name="task-name" value="Задание 1">
+                    <li name="task-name-text">Задание 4</li>
+                    <div class="context-option">
+                        <div class="context-list">
+                            <div class="list">one</div>
+                            <div class="list">two</div>
+                            <div class="list">three</div>
+                        </div>
+                    </div>
+                </form>
+            </ul>
+        </div>
+    </div>
+    <div class="content-idea three">
+        <div class="content-scroll">
+            <div class="three-content" style="top:0;"></div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="js/main.js" type="text/javascript"></script>
+</body>
+</html>
