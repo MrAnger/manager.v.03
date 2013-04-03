@@ -1,0 +1,884 @@
+(function($){
+	var api = window.api =  {
+		options: {
+			server: "",
+			timeout: 30000,
+			log: {
+				enable: false,
+				callback: {
+					send: function(str){},
+					receive: function(str){}
+				}
+			},
+			loader: {
+				enable: false,
+				show: function(){},
+				hide: function(){}
+			},
+			exception : {
+				NoResponse : function(data){},
+				UnDefined : function(data){},
+				WrongDataFormat : function(data){},
+				AntiDosBlock : function(data){},
+				WrongSessionId : function(data){},
+				NotActivated : function(data){},
+				MailSystemError : function(data){},
+				Blocked: function(data){},
+				AccessDenied: function(data){}
+			}
+		},
+		methods: {
+			Auth: function(data){
+				data = $.extend(true, {
+					remember: false,
+					exception: {
+						NotMatch: function(){},
+						SessionLimit: function(){}
+					},
+					ge_callback: function(){}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Auth);
+
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.Password, data.password);
+				req.addData(OperationItem.Remember, data.remember);
+
+				req.send(function(_data){
+					var output = {
+						token: _data[OperationItem.Token]
+					};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			Register: function(data){
+				data = $.extend(true, {
+					exception: {
+						MailExists: function(){},
+						LoginExists: function(){},
+						Forbidden: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Registration);
+
+				req.addData(OperationItem.Login, data.login);
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.Password, data.password);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			LogOut: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.LogOut);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			ResetPassword: function(data){
+				data = $.extend(true, {
+					exception: {
+						NotFound: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Reset.Password);
+
+				req.addData(OperationItem.Mail, data.mail);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			ConfirmResetAccountPassword: function(data){
+				data = $.extend(true, {
+					exception: {
+						InvalidCode: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Confirm.ResetPassword);
+
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.CodeConfirm, data.code);
+				req.addData(OperationItem.Password, data.password);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			ConfirmRegister: function(data){
+
+				data = $.extend(true, {
+					exception: {
+						InvalidCode: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Confirm.Register);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.CodeConfirm, data.code);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			}
+		},
+		utils: {
+			cwe: cwe,
+			addScript: addScript,
+			addStyleSheet: addStyleSheet,
+			cookie : Cookie,
+			interval: Interval,
+			request: Request,
+			wa_request: WaRequest
+		}
+	};
+
+	api.requestStorage = new StorageRequest();
+
+	api.Constants = {
+		OperationCode : {
+			Auth : 'Sign in',
+			LogOut: 'Sign out',
+			Registration : 'Sign up',
+			Activate : 'Activate',
+			Transfer2XXBalance: 'Transfer 2xx balance',
+
+			Get : {
+				GeneralInfo : 'Get general info',
+				Balance : 'Get balance',
+				TimeBonus : 'Get timebonus',
+				Invite : 'Get invite',
+				Masks: 'Get masks',
+				Folders: 'Get folders',
+				AccessKeys: 'Get access keys',
+				GeoTargeting: 'Get geo targeting',
+				ViewTargeting: 'Get views targeting',
+				ClickTargeting: 'Get clicks targeting',
+				DayTargeting: 'Get day targeting',
+				Domains: 'Get domains',
+				Tasks: 'Get tasks',
+				SystemConstants: 'Get system constants',
+				WeekTargeting: 'Get week targeting',
+				IPLists: 'Get IP lists',
+				IPRanges: "Get IP ranges",
+				DayStats: "Get day stats",
+				TimeDistribution: "Get time distribution"
+			},
+
+			Set : {
+				AccountStatus: 'Set account status',
+				Vip: 'Set VIP',
+				MaskRangeSize: 'Set mask range size',
+				Mask: 'Set mask',
+				FolderName: 'Set folder name',
+				GeoTargeting: 'Set geo targeting',
+				ViewTargeting: 'Set views targeting',
+				ClickTargeting: 'Set clicks targeting',
+				DayTargeting: 'Set day targeting',
+				Domain: 'Set domain',
+				Task: 'Set task',
+				Password: 'Set password',
+				TaskFrozen: 'Set task frozen',
+				WeekTargeting: 'Set week targeting',
+				IPListName: 'Set IP list name',
+				IPRange: 'Set IP range',
+				TimeDistribution: "Set time distribution"
+			},
+
+			Add : {
+				Folder: 'Add folder',
+				Domain: 'Add domain',
+				Mask: 'Add mask',
+				Task: 'Add task',
+				IPList: 'Add IP list',
+				IPRange: 'Add IP range'
+			},
+
+			Delete : {
+				Folders : 'Delete folders',
+				Domains: 'Delete domains',
+				Masks: 'Delete masks',
+				Tasks: 'Delete tasks',
+				IPLists: 'Delete IP lists',
+				IPRanges: 'Delete IP ranges'
+			},
+
+			Change : {
+				Login : 'Change login',
+				Mail : 'Change mail',
+				Password : 'Change password'
+			},
+
+			Restore : {
+				Access: 'Restore access',
+				Account: 'Restore account'
+			},
+
+			Reset : {
+				Account: 'Reset account',
+				SurfingKey: 'Reset surfing key',
+				ReadonlyKey: 'Reset readonly key',
+				Password: 'Reset password'
+			},
+
+			Confirm: {
+				Register: 'Confirm sign up',
+				SetAccountPassword: 'Confirm set password',
+				SendCredits: 'Confirm send credits',
+				ResetPassword: 'Confirm reset password'
+			},
+
+			Send: {
+				Credits: "Send credits"
+			}
+		},
+
+		OperationItem : {
+			Action : 'Action',
+			Amount: 'Amount',
+			Status : 'Status',
+			Error : 'Error',
+			Data : 'Data',
+			Login : 'Login',
+			Mail : 'Mail',
+			Password : 'Password',
+			Token : 'Token',
+			Invite : 'Invite',
+			Offset : 'Offset',
+			Count : 'Count',
+			Name : 'Name',
+			Fields : 'Fields',
+			NewDatasetId : 'New dataset ID',
+			Id : 'ID',
+			Use : 'In use',
+			FieldsCount : 'Fields count',
+			DataSets : 'Datasets',
+			SetsCount : 'Sets count',
+			Ids : 'IDs',
+			NewName : 'New name',
+			IdSet : 'SetID',
+			ActivationCode : 'Activation code',
+			RegDate : 'Register timestamp',
+			NewLogin : 'New login',
+			NewMail : 'New mail',
+			NewPassword : 'New password',
+			Confirmation : 'Confirmation',
+			Icq: 'ICQ',
+			Wmr: 'WMR',
+			InActivity: 'Inactivity',
+			Balance: 'Balance',
+			Deleted: 'Deleted',
+			TimeBonus: 'Timebonus',
+			Vip: 'VIP',
+			AllowProxy: 'Allow proxy',
+			IgnoreGU: 'Ignore GU',
+			IdMask: 'Mask ID',
+			RangeSize: 'Range size',
+			Mask: 'Mask',
+			UniqPeriod: 'Unique period',
+			Masks: 'Masks',
+			Folders: 'Folders',
+			IdFolder: 'Folder ID',
+			IdsFolder: 'Folder IDs',
+			SurfingKey: 'Surfing key',
+			ReadonlyKey: 'Readonly key',
+			Remember: 'Remember',
+			GeoTargeting: 'Geo targeting',
+			ViewTargeting: 'Views targeting',
+			ClickTargeting: 'Clicks targeting',
+			TimeTargeting: 'Time targeting',
+			DayTargeting: 'Day targeting',
+			WeekTargeting: 'Week targeting',
+			IdZone: 'Zone ID',
+			Target: 'Target',
+			ZoneShortName: 'Zone shortname',
+			Domains: 'Domains',
+			IdDomain: 'Domain ID',
+			Domain: 'Domain',
+			ExtSource: 'Ext source',
+			IdsDomain: 'Domain IDs',
+			IdsMasks: 'Mask IDs',
+			IdsTasks: 'Task IDs',
+			IdsRanges: 'Range IDs',
+			IdsList: 'List IDs',
+			IdTime: 'Time ID',
+			IdTask: 'Task ID',
+			IdList: 'List ID',
+			IdRange: 'Range ID',
+			Day: 'Day',
+			IdOperation: 'Operation ID',
+			Recd: 'Recd',
+			Min: 'Min',
+			Max: 'Max',
+			BeforeClick: 'Before click',
+			AfterClick: 'After click',
+			Tasks: 'Tasks',
+			Incomplete: 'Incomplete',
+			CodeConfirm: 'Confirm code',
+			TaskSecondCost: 'Task second cost',
+			TransferPercent:  'Transfer percent',
+			ExchangeRate: 'Exchange rate',
+			ProxyFactor: 'Proxy factor',
+			SystemWMR: 'System WMR',
+			UniqueTimeFactor: 'Unique time factor',
+			IPRangeFactor: 'IP range factor',
+			Recipient: 'Recipient',
+			TransferAmount: 'Transfer amount',
+			Overload: 'Overload',
+			Frozen: 'Frozen',
+			Hour: 'Hour',
+			Growth: 'Growth',
+			Profile: 'Profile',
+			IPLists: 'IP lists',
+			Ranges: 'Ranges',
+			Start: 'Start',
+			End: 'End',
+			Days: 'Days',
+			Balance2XX: '2xx balance',
+			Balance3XX: '3xx balance',
+			ListMode: 'List mode',
+			TimeDistribution: 'Time distribution',
+			Percent: 'Percent',
+			Priority: 'Priority'
+		},
+
+		ResponseStatus : {
+			GeneralError : 'General error',
+			QueryError : 'Query error',
+			Success : 'Success'
+		},
+
+		GeneralError : {
+			NoResponse : 'No response',
+			UnDefined : 'Undefined',
+			WrongDataFormat : 'Wrong data format',
+			AntiDosBlock : 'AntiDOS block',
+			WrongSessionId : 'Wrong session ID',
+			NotActivated : 'Account not activated',
+			Blocked: 'Account blocked',
+			MailSystemError : 'Mail system error',
+			AccessDenied: 'Access denied'
+		},
+
+		QueryError : {
+			NotMatch : 'Not match',
+			NotFound: 'Not found',
+			SessionLimit : 'Session limit',
+			MailExists : 'Mail exists',
+			LoginExists : 'Login exists',
+			InviteNotFound : 'Invite not found',
+			NameExists : 'Name exists',
+			LimitExceeded : 'Limit exceeded',
+			FieldsLimitExceeded : 'Fields limit exceeded',
+			CannotRemove : 'Cannot remove',
+			AlreadyActive : 'Already active',
+			AlreadyExists: 'Already exists',
+			WrongActivationCode : 'Wrong activation code',
+			WrongPassword: 'Wrong password',
+			PasswordNotMatch : 'Password not match',
+			MailNotMatch : 'Mail not match',
+			Forbidden: 'Forbidden',
+			IcqExists: 'ICQ UIN exists',
+			WmrExists: 'WMR exists',
+			IpRangeNotRegistered: 'IP range not registered',
+			WrongConfirmCode: 'Wrong confirm code',
+			InvalidCode: 'Invalid code',
+			LowBalance: 'Low balance',
+			InvalidRecipient: 'Invalid recipient'
+		},
+
+		AccountStatus : {
+			Active : 0,
+			Frozen : 1,
+			Blocked : 2,
+			Awaiting : 3
+		},
+
+		Limit : {
+			Account : {
+				Login : {
+					Length : {
+						Min : 4,
+						Max : 50
+					}
+				},
+
+				Password : {
+					Length : {
+						Min : 3,
+						Max : 40
+					}
+				},
+
+				Mail : {
+					Length : {
+						Min : 8,
+						Max : 70
+					}
+				}
+			},
+
+			Folder: {
+				Name: {
+					Length: {
+						Min: 1,
+						Max: 50
+					}
+				}
+			},
+
+			Domain: {
+				Domain: {
+					Length: {
+						Min: 5,
+						Max: 255
+					}
+				},
+				ExtSource: {
+					Length: {
+						Min: 5,
+						Max: 500
+					}
+				}
+			},
+
+			Task: {
+				Name: {
+					Length: {
+						Min: 1,
+						Max: 50
+					}
+				},
+				Domain: {
+					Length: {
+						Min: 5,
+						Max: 255
+					}
+				},
+				ExtSource: {
+					Length: {
+						Min: 5,
+						Max: 500
+					}
+				},
+				RangeSize: {
+					Value: {
+						Min: 4,
+						Max: 24,
+						Default: 16
+					}
+				},
+				Mask: {
+					Length: {
+						Min: 0,
+						Max: 50
+					}
+				},
+				UniqPeriod: {
+					Value: {
+						Min: 0,
+						Max: 28800,
+						Default: 1440
+					}
+				},
+				BeforeClick: {
+					Value: {
+						Min: 10,
+						Max: 900,
+						Default: 250
+					}
+				},
+				AfterClick: {
+					Value: {
+						Min: 0,
+						Max: 900,
+						Default: 150
+					}
+				},
+				Growth: {
+					Value: {
+						Min: 0,
+						Max: 100,
+						Default: 0
+					}
+				},
+				Profile: {
+					Length: {
+						Min: 0,
+						Max: 50
+					}
+				},
+				Days: {
+					Value: {
+						Min: 0,
+						Max: 4294967296
+					}
+				}
+			},
+
+			Confirm: {
+				Code: {
+					Length: {
+						Min: 1,
+						Max: 100
+					}
+				}
+			},
+
+			IPLists: {
+				Name: {
+					Length: {
+						Min: 1,
+						Max: 150
+					}
+				},
+				IP: {
+					Length: {
+						Min: 7,
+						Max: 15
+					}
+				}
+			}
+		}
+	};
+
+	var OperationCode = api.Constants.OperationCode,
+		OperationItem = api.Constants.OperationItem;
+
+	var Cookie = {
+		get : function(name){
+			var cookie = " " + document.cookie;
+			var search = " " + name + "=";
+			var setStr = null;
+			var offset = 0;
+			var end = 0;
+			if (cookie.length > 0){
+				offset = cookie.indexOf(search);
+				if (offset != -1){
+					offset += search.length;
+					end = cookie.indexOf(";", offset);
+					if (end == -1) {
+						end = cookie.length;
+					};
+					setStr = unescape(cookie.substring(offset, end));
+				};
+			};
+			return(setStr);
+		},
+		set : function(name, value, expires, path, domain, secure){
+			document.cookie = name + "=" + escape(value) +
+				((expires) ? "; expires=" + expires : "") +
+				((path) ? "; path=" + path : "") +
+				((domain) ? "; domain=" + domain : "") +
+				((secure) ? "; secure" : "");
+		},
+		del : function(name){
+			var cookie_date = new Date ( );
+			cookie_date.setTime ( cookie_date.getTime() - 1 );
+			document.cookie = name += "=; expires=" + cookie_date.toGMTString();
+		},
+		getExpiresDataByDay : function(countDays){
+			var exdate=new Date();
+			exdate.setDate(exdate.getDate() + countDays);
+			return exdate.toGMTString();
+		}
+	};
+	function Interval(action, time){
+		var stop = false;
+
+		function interval(){
+			action();
+			if(!stop) setTimeout(arguments.callee, time);
+		};
+
+		this.start = function(){
+			stop = false;
+			interval();
+		};
+		this.stop = function(){
+			stop = true;
+		};
+	};
+	function cwe(tag, attr, parent){
+		var element = document.createElement(tag);
+		if(attr){
+			if(attr instanceof Object){
+				$.each(attr, function(name, value){
+					element.setAttribute(name, value);
+				});
+			}else{
+				if (attr.length > 0) {
+					var array = attr.split(";");
+					for (var x = 0; x<=array.length - 1; x++) {
+						var tattr = array[x].split(",");
+						element.setAttribute(tattr[0], tattr[1]);
+					};
+				};
+			};
+		};
+
+		if(parent) $(parent).append(element);
+
+		return element;
+	};
+	function addScript(path, anticache){
+		return cwe('script','type,text/javascript;src,'+path+((anticache)?"?rnd="+Math.random():""), document.getElementsByTagName('head')[0]);
+	};
+	function addStyleSheet(path, anticache){
+		return cwe('link','rel,stylesheet;type,text/css;href,'+path+((anticache)?"?rnd="+Math.random():""), document.getElementsByTagName('head')[0]);
+	};
+	function Request(_url, _data, _callback, _defaultReceive, _timeout, _loaderShow, _loaderHide, _logSend, _logReceive, _otherOptions){
+		if(_loaderShow) _loaderShow();
+		var complete = false,
+			stop = false,
+			sended = false,
+			state = {
+				"waiting": "waiting",
+				"loading": "loading",
+				"canceled": "canceled",
+				"completed": "completed"
+			},
+			SelfObj = this,
+			otherOptions = $.extend(true, {
+				changeStateCallback: function(state){}
+			}, _otherOptions);
+
+		var IFRAME = cwe('iframe','',document.getElementsByTagName('body')[0]);
+		IFRAME.contentWindow.name = _defaultReceive;
+
+		$(IFRAME).css({
+			'display': 'none',
+			'position': 'fixed',
+			'top': 0,
+			'left': -2000,
+			'width': 0,
+			'height': 0
+		});
+		var DOCUMENT = IFRAME.contentWindow.document;
+		if(!DOCUMENT.body) DOCUMENT.appendChild(DOCUMENT.createElement('body'));
+		var FORM = cwe('form',{
+			'method': 'POST',
+			'enctype': 'application/x-www-form-urlencoded',
+			'accept-charset': 'utf-8',
+			'action': _url + '?rnd='+Math.random()
+		},DOCUMENT.body);
+		var TEXTAREA = cwe('textarea','name,v',FORM);
+		TEXTAREA.value = _data;
+
+		function processResponse(resp){
+			setState(state.completed);
+			if(_loaderHide) _loaderHide();
+			$(IFRAME).remove();
+			resp = decodeURI(resp);
+			if(_logReceive) _logReceive(resp);
+			if(_callback) _callback(resp);
+		};
+		function setState(state){
+			SelfObj.state = state;
+			otherOptions.changeStateCallback(SelfObj.state);
+		};
+
+		$(IFRAME).bind('load',function(e){
+			if(!stop){
+				if(window.navigator.appName == 'Opera'){
+					var interval = new Interval(function(){
+						if(IFRAME.contentWindow.name != _defaultReceive){
+							complete = true;
+							interval.stop();
+							processResponse(IFRAME.contentWindow.name);
+						};
+					}, 100);
+					interval.start();
+					$(IFRAME).unbind('load');
+				}else{
+					$(IFRAME).unbind('load');
+					IFRAME.contentWindow.location.href="about:blank";
+					$(IFRAME).bind('load',function(e){
+						complete = true;
+						processResponse(IFRAME.contentWindow.name);
+					});
+				};
+			}else{
+				$(IFRAME).unbind('load');
+				setState(state.canceled);
+			};
+		});
+
+		this.state = state.waiting;
+
+		this.send = function(){
+			if(sended){
+				return false;
+			}else {
+				$(FORM).submit();
+				sended = true;
+				setState(state.loading);
+				setTimeout(function(){
+					if(!stop){
+						if(!complete){
+							$(IFRAME).unbind("load");
+							complete = true;
+							processResponse(_defaultReceive);
+						};
+					};
+				},_timeout);
+				if(_logSend) _logSend(TEXTAREA.value);
+				return true;
+			};
+		};
+		this.stop = function(){
+			stop = true;
+			$(IFRAME).unbind("load");
+			setState(state.canceled);
+		};
+		this.setData = function(data){
+			TEXTAREA.value = data;
+		};
+		this.setCallback = function(callback){
+			_callback = callback;
+		};
+	};
+	function WaRequest(){
+		var urlRequest = api.options.server,
+			defaultReceive = {},//string
+			data = {},
+			SelfObj = this;
+
+		//Default receive data
+		defaultReceive[api.Constants.OperationItem.Status] = api.Constants.ResponseStatus.GeneralError;
+		defaultReceive[api.Constants.OperationItem.Error] = api.Constants.GeneralError.NoResponse;
+		defaultReceive["_defaultReceive"] = true;
+		defaultReceive = $.toJSON(defaultReceive);
+
+		//request
+		var request = new Request(
+			urlRequest,//url
+			null,//data
+			null,//callback
+			defaultReceive,//default receive data
+			api.options.timeout,//timeout
+			null,//loader show callback
+			null,//loader hide callback
+			((api.options.log.enable) ? api.options.log.callback.send : null),//log send callback
+			((api.options.log.enable) ? api.options.log.callback.receive : null),//log receive callback
+			{
+				changeStateCallback: function(state){
+					SelfObj.state = state;
+				}
+			}
+		);
+
+		this.state = request.state;
+
+		this.setOpCode = function(opCode){
+			data[api.Constants.OperationItem.Action] = opCode;
+		};
+		this.setToken = function(token){
+			data[api.Constants.OperationItem.Token] = token;
+		};
+		this.addData = function(key, value){
+			if(!data[api.Constants.OperationItem.Data]) data[api.Constants.OperationItem.Data] = {};
+			data[api.Constants.OperationItem.Data][key] = value;
+		};
+		this.toCode = function(){
+			return $.toJSON(data);
+		};
+		this.toObject = function(code){
+			return eval("v="+code);
+		};
+		this.send = function(callback, exception, ge_callback){
+			request.setData(SelfObj.toCode(data));
+			request.setCallback(function(receive_data){
+				receive_data = SelfObj.toObject(receive_data);
+				if(!receive_data[api.Constants.OperationItem.Data]) receive_data[api.Constants.OperationItem.Data] = {};
+				var data = receive_data[api.Constants.OperationItem.Data];
+
+				switch(receive_data[api.Constants.OperationItem.Status]){
+					case api.Constants.ResponseStatus.Success:
+						callback(data);
+						break;
+					case api.Constants.ResponseStatus.QueryError:
+						if(exception){
+							$.each(api.Constants.QueryError, function(key, val){
+								if(val == receive_data[api.Constants.OperationItem.Error]){
+									exception[key](data);
+								};
+							});
+						};
+						break;
+					case api.Constants.ResponseStatus.GeneralError:
+						$.each(api.Constants.GeneralError, function(key, val){
+							if(val == receive_data[api.Constants.OperationItem.Error]){
+								api.options.exception[key](data);
+							};
+						});
+						if(ge_callback) ge_callback(data);
+						break;
+				};
+			});
+			request.send();
+		};
+	};
+	function StorageRequest(){
+		var listRequest = [];
+
+		var interval = new Interval(function(){
+			if(listRequest.length > 0){
+				var count_worked = 0;
+
+				var iStart = 0, iEnd = listRequest.length;
+				for(iStart; iStart < iEnd; iStart++){
+					var req = listRequest[iStart];
+
+					if(req.state == "loading"){
+						count_worked++;
+					}else if(req.state == "canceled" || req.state == "completed"){
+						listRequest.splice(iStart, 1);
+						iStart--;
+						iEnd = listRequest.length
+					};
+				};
+
+				if(api.options.loader.enable){
+					if(count_worked > 0) api.options.loader.show();
+					else api.options.loader.hide();
+				};
+			};
+		}, 300);
+		interval.start();
+
+		this.addRequest = function(){
+			var req = new WaRequest();
+			listRequest.push(req);
+			return req;
+		};
+	};
+})(jQuery);
