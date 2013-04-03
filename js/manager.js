@@ -32,6 +32,7 @@
 		}
 	};
 
+	//forms
 	var forms = {
 		auth: "auth",
 		register: "reg",
