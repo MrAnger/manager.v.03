@@ -52,19 +52,16 @@ signList = function (event) {
 //  функции при загрузке документа
 $(document).ready(function () {
     $(".link").on("click", signList);
-    $("form").submit(function () {
-        return false;
-    });
     $(".forgot-cancel").on("click", function () {
         $('.center-box form').hide();
         $('form[name=auth]').fadeIn(550).slideDown(500);
     });
-    $("form[name=auth]").submit(function () {
+    /*$("form[name=auth]").submit(function () {
         $('.center-box').hide();
         $('.center-box form').hide();
         $('.manager').fadeIn(550).slideDown(500);
         $('.login-content').fadeIn(550).slideDown(500);
-    });
+    });*/
     $("form[name=forgot]").submit(function () {
         $("[name=confirm-box]").fadeIn(550).slideDown(500);
     });
@@ -106,8 +103,8 @@ $('.lng-check li').click(function () {
     $('.lng-check').fadeOut(10).slideOut(200);
 });
 //  мессаги
-$('.msg-box .close').click(function (event) {
-    $(this).parent().fadeOut(300).slideUp(200);
+$('.msg-box .close').live("click", function(e){
+	$(this).parent().fadeOut(300).slideUp(200);
 });
 //  лоадер
 function loader() {
@@ -173,4 +170,3 @@ $(".context-list .list").on("click", function (event) {
     $(this).parents(".context-option").removeClass("active");
     event.stopImmediatePropagation();
 });
-$("[default]").hide();
