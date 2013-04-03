@@ -13,6 +13,7 @@
  * It is also influenced heavily by MochiKit's serializeJSON, which is
  * copyrighted 2005 by Bob Ippolito.
  */
+
 (function( $ ) {
 
 	var	escapeable = /["\\\x00-\x1f\x7f-\x9f]/g,
