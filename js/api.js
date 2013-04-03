@@ -1,4 +1,5 @@
 (function($){
+	//api
 	var api = window.api =  {
 		options: {
 			server: "",
