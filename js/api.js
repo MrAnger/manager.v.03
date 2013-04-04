@@ -425,6 +425,7 @@
 		Limit : {
 			Account : {
 				Login : {
+					Regexp: /^.*$/,
 					Length : {
 						Min : 4,
 						Max : 50
@@ -432,6 +433,7 @@
 				},
 
 				Password : {
+					Regexp: /^.*$/,
 					Length : {
 						Min : 3,
 						Max : 40
@@ -439,6 +441,7 @@
 				},
 
 				Mail : {
+					Regexp: /^[a-zA-Z0-9\.\-_]+@[a-zA-Z0-9\-]+(\.[a-zA-Z]{2,6})+$/,
 					Length : {
 						Min : 8,
 						Max : 70
@@ -448,48 +451,38 @@
 
 			Folder: {
 				Name: {
+					Regexp: /^.*$/,
 					Length: {
 						Min: 1,
 						Max: 50
-					}
-				}
-			},
-
-			Domain: {
-				Domain: {
-					Length: {
-						Min: 5,
-						Max: 255
-					}
-				},
-				ExtSource: {
-					Length: {
-						Min: 5,
-						Max: 500
 					}
 				}
 			},
 
 			Task: {
 				Name: {
+					Regexp: /^.*$/,
 					Length: {
 						Min: 1,
 						Max: 50
 					}
 				},
 				Domain: {
+					Regexp: /^((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Zа-яА-Я0-9\-]*\.)+[a-zA-Zа-яА-Я\-\d]{2,9}))(\/.*)?$/,
 					Length: {
 						Min: 5,
 						Max: 255
 					}
 				},
 				ExtSource: {
+					Regexp: /^(http|https|ftp)(:\/\/)((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Zа-яА-Я0-9\-]*\.)+[a-zA-Zа-яА-Я\-\d]{2,9}))(\/{1}.{1,})?$/,
 					Length: {
 						Min: 5,
 						Max: 500
 					}
 				},
 				RangeSize: {
+					Regexp: /^\d*$/,
 					Value: {
 						Min: 4,
 						Max: 24,
@@ -497,12 +490,14 @@
 					}
 				},
 				Mask: {
+					Regexp: /^.*$/,
 					Length: {
 						Min: 0,
 						Max: 50
 					}
 				},
-				UniqPeriod: {
+				UniquePeriod: {
+					Regexp: /^\d*$/,
 					Value: {
 						Min: 0,
 						Max: 28800,
@@ -510,6 +505,7 @@
 					}
 				},
 				BeforeClick: {
+					Regexp: /^\d*$/,
 					Value: {
 						Min: 10,
 						Max: 900,
@@ -517,6 +513,7 @@
 					}
 				},
 				AfterClick: {
+					Regexp: /^\d*$/,
 					Value: {
 						Min: 0,
 						Max: 900,
@@ -524,6 +521,7 @@
 					}
 				},
 				Growth: {
+					Regexp: /^\d*$/,
 					Value: {
 						Min: 0,
 						Max: 100,
@@ -531,12 +529,14 @@
 					}
 				},
 				Profile: {
+					Regexp: /^.*$/,
 					Length: {
 						Min: 0,
 						Max: 50
 					}
 				},
 				Days: {
+					Regexp: /^\d*$/,
 					Value: {
 						Min: 0,
 						Max: 4294967296
@@ -546,6 +546,7 @@
 
 			Confirm: {
 				Code: {
+					Regexp: /^.*$/,
 					Length: {
 						Min: 1,
 						Max: 100
@@ -555,12 +556,14 @@
 
 			IPLists: {
 				Name: {
+					Regexp: /^.*$/,
 					Length: {
 						Min: 1,
 						Max: 150
 					}
 				},
 				IP: {
+					Regexp: /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,
 					Length: {
 						Min: 7,
 						Max: 15

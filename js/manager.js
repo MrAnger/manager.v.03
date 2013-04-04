@@ -20,7 +20,8 @@
 		utils: {
 			showMsg: MsgShow,
 			cookie: Cookie,
-			dataStorage: DataStorage
+			dataStorage: DataStorage,
+			checkType: CheckType
 		},
 		methods: {
 			getToken: function(){
@@ -46,31 +47,38 @@
 			remember: this["remember"]
 		};
 
-		api.methods.Auth({
-			mail: inputs.mail.value,
-			password: inputs.password.value,
-			remember: inputs.remember.checked,
-			exception: {
-				NotMatch: function(){
-					manager.utils.showMsg(manager.lng.exception.query.auth.NotMatch, "error");
-					$(inputs.password).focus();
+		//check input data
+		if(!CheckType(inputs.mail.value, TYPE.MAIL)){
+			manager.utils.showMsg(manager.lng.sign.in.email_error, "error");
+		}else if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
+			manager.utils.showMsg(manager.lng.sign.in.password_error, "error");
+		}else{
+			api.methods.Auth({
+				mail: inputs.mail.value,
+				password: inputs.password.value,
+				remember: inputs.remember.checked,
+				exception: {
+					NotMatch: function(){
+						manager.utils.showMsg(manager.lng.exception.query.auth.NotMatch, "error");
+						$(inputs.password).focus();
+					},
+					SessionLimit: function(){
+						manager.utils.showMsg(manager.lng.exception.query.auth.SessionLimit, "error");
+					}
 				},
-				SessionLimit: function(){
-					manager.utils.showMsg(manager.lng.exception.query.auth.SessionLimit, "error");
-				}
-			},
-			callback: function(data){
-				manager.methods.setToken(data.token);
-				if(inputs.remember.checked){
-					DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
-				};
+				callback: function(data){
+					manager.methods.setToken(data.token);
+					if(inputs.remember.checked){
+						DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
+					};
 
-				$('.center-box').hide();
-				$('.center-box form').hide();
-				$('.manager').fadeIn(550).slideDown(500);
-				$('.login-content').fadeIn(550).slideDown(500);
-			}
-		});
+					$('.center-box').hide();
+					$('.center-box form').hide();
+					$('.manager').fadeIn(550).slideDown(500);
+					$('.login-content').fadeIn(550).slideDown(500);
+				}
+			});
+		};
 
 		return false;
 	});
@@ -185,6 +193,46 @@
 			DataStorage.set(manager.options.params.lngDataKey, lng);
 			window.location.href = "";
 		}
+	};
+	var TYPE = manager.type = {
+		LOGIN: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Account.Login.Regexp,
+			min: api.Constants.Limit.Account.Login.Length.Min,
+			max: api.Constants.Limit.Account.Login.Length.Max
+		},
+		MAIL: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Account.Mail.Regexp,
+			min: api.Constants.Limit.Account.Mail.Length.Min,
+			max: api.Constants.Limit.Account.Mail.Length.Max
+		},
+		PASSWORD: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Account.Password.Regexp,
+			min: api.Constants.Limit.Account.Password.Length.Min,
+			max: api.Constants.Limit.Account.Password.Length.Max
+		}
+	};
+	function CheckType(_data, _type, _allowEmpty){
+		var out = true;
+
+		switch(_type.dataType){
+			case "text":
+				if(_allowEmpty && _data.length == 0) out = true;
+				else if(_data.search(_type.regexp) == 0 && _data.length >= _type.min && _data.length <= _type.max) out = true;
+				else out = false;
+				break;
+			case "int":
+				if(_allowEmpty && _data.toString().length == 0) out = true;
+				else if(_data.toString().search(_type.regexp) == 0 && _data >= _type.min && _data <= _type.max) out = true;
+				else out = false;
+				break;
+			default:
+				out = false;
+		};
+
+		return out;
 	};
 
 	//init
