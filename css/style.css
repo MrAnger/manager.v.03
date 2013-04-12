@@ -67,14 +67,13 @@ body {
     position: relative;
     padding: 20px 20px 5px 20px;
     min-width: 350px;
-    color: #2d2d2d!important;
+    color: #2d2d2d !important;
     text-align: left;
     background: #fff;
     border-radius: 3px;
     -moz-border-radius: 3px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
 }
-
 
 .add-box-content textarea {
     width: 400px;
@@ -85,6 +84,7 @@ body {
 .add-box-content .close {
     background-color: #3E3E3E;
 }
+
 .add-box-content .close:hover {
     background-color: transparent;
 }
@@ -351,6 +351,8 @@ input[type=checkbox] {
 .btn.cancel, .btn.gray {
     background: #DBDBDB;
     background-image: linear-gradient(#DBDBDB, #ABABAB);
+    background-image: -moz-linear-gradient(#DBDBDB, #ABABAB);
+    background-image: -webkit-linear-gradient(#DBDBDB, #ABABAB);
 }
 
 .btn:hover {
@@ -360,6 +362,11 @@ input[type=checkbox] {
 .btn:active {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
     background: #FFCC00;
+}
+
+.btn.gray:active, .btn.cancel:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+    background: #DBDBDB;
 }
 
 .show-box {
@@ -491,6 +498,7 @@ input[type=checkbox] {
     min-width: 600px;
     min-height: 100%;
 }
+
 .set-iplist {
     width: 80%;
 }
@@ -883,7 +891,55 @@ input[readonly].geo {
     background: transparent !important;
 }
 
+.account-set {
+    position: relative;
+    width: 600px;
+    margin: 30px auto;
+}
 
+.account-set td {
+    height: 30px;
+    vertical-align: middle;
+    padding: 0 5px;
+}
+
+.account-set td.name {
+    font-weight: bold;
+}
+
+.account-set td.option {
+    width:100px;
+    text-align: center;
+}
+.account-set .closed {
+    font-style: italic;
+    color: #ccc;
+}
+
+.generate, .copy, .editing {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url(../img/renew.png) no-repeat 50% 50%;
+    opacity: .3;
+    cursor: pointer;
+}
+
+.editing {
+    background-image: url(../img/edit.png);
+}
+
+.copy {
+    background-image: url(../img/clipboard.png);
+}
+
+.generate:hover, .editing:hover, .copy:hover {
+    opacity: 1;
+}
+
+.generate:active, .editing:active, .copy:active {
+    opacity: .6;
+}
 
 
 

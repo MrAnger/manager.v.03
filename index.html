@@ -16,7 +16,7 @@
         <div class="add-box-content">
             <div class="close"></div>
             <div class="content">
-                <form name="add-folder" style="display: none">
+                <form name="add-folder">
                     <div class="label-block">
                         <div class="label-text">Имя категории</div>
                         <div class="text-line">
@@ -25,7 +25,7 @@
                     </div>
                     <button type="submit" class="btn">Добавить</button>
                 </form>
-                <form name="add-task" style="display: none">
+                <form name="add-task">
                     <div class="label-block">
                         <div class="label-text">Имя задания</div>
                         <div class="text-line">
@@ -34,7 +34,7 @@
                     </div>
                     <button type="submit" class="btn">Добавить</button>
                 </form>
-                <form name="add-iplist" style="display: none">
+                <form name="add-iplist">
                     <div class="label-block">
                         <div class="label-text">Имя IP списка</div>
                         <div class="text-line">
@@ -47,7 +47,7 @@
                     <div class="label-block">
                         <div class="label-text">IP-диапазоны</div>
                         <div class="text-line">
-                            <textarea type="text" value="" placeholder="IP-диапазоны" wrap="off"></textarea>
+                            <textarea placeholder="IP-диапазоны" wrap="off"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn">Добавить</button>
@@ -57,26 +57,26 @@
         </div>
     </div>
 </div>
-<div class="msg-box">
-    <div class="msg-content" style="display: none">
+<div class="msg-box" style="display: none">
+    <div class="msg-content">
         <div class="close"></div>
         <div class="content">
             <div class="text">Обычное сообщение</div>
         </div>
     </div>
-    <div class="msg-content true" style="display: none">
+    <div class="msg-content true">
         <div class="close"></div>
         <div class="content">
             <div class="text">Сообщение об успешной операции</div>
         </div>
     </div>
-    <div class="msg-content false" style="display: none">
+    <div class="msg-content false">
         <div class="close"></div>
         <div class="content">
             <div class="text">Сообщение об ошибке</div>
         </div>
     </div>
-    <div class="msg-content warning" style="display: none">
+    <div class="msg-content warning">
         <div class="close"></div>
         <div class="content">
             <div class="text">Предупреждающее действие</div>
@@ -191,7 +191,7 @@
                         <input type="text" value="" placeholder="Email">
                     </div>
                 </div>
-                <div class="label-block" style="display: none">
+                <div class="label-block">
                     <div class="label-text">Код подтверждения</div>
                     <div class="text-line">
                         <input type="text" value="" placeholder="Код подтверждения">
@@ -201,7 +201,7 @@
             </div>
             <div class="sign-other">
                 <div class="other-text">На указанный email будет выслан код подтверждения, который необходимо ввести на следующем этапе восстановления.</div>
-                <div class="other-text" style="display: none">Введите полученный код в соответствующее поле для завершения процесса восстановления доступа.</div>
+                <div class="other-text">Введите полученный код в соответствующее поле для завершения процесса восстановления доступа.</div>
             </div>
         </form>
     </div>
@@ -396,7 +396,7 @@
 </ul>
 <div class="setting-group">
 <div class="content-scroll" style="top:0;">
-<form style="display: none">
+<form>
     <div class="label-block">
         <div class="label-text">Имя</div>
         <div class="text-line">
@@ -440,7 +440,7 @@
     </div>
     <button type="submit" class="btn">Сохранить</button>
 </form>
-<form style="display: none">
+<form>
     <div class="label-block">
         <div class="label-text">Размер разброса IP в подсети</div>
         <div class="text-line">
@@ -493,13 +493,13 @@
     </div>
     <button type="submit" class="btn">Сохранить</button>
 </form>
-<form style="display: none">
+<form>
     <div class="tab-content">
         <div class="set-item">
             <div class="name">
                 <div class="spoiler">Суточный таргетинг</div>
             </div>
-            <div class="graph-box" style="display: none">
+            <div class="graph-box">
                 graph 1
             </div>
         </div>
@@ -507,7 +507,7 @@
             <div class="name">
                 <div class="spoiler">Недельный таргетинг</div>
             </div>
-            <div class="graph-box" style="display: none">
+            <div class="graph-box">
                 graph 2
             </div>
         </div>
@@ -515,7 +515,7 @@
             <div class="name">
                 <div class="spoiler">Геотаргетинг</div>
             </div>
-            <div class="graph-box" style="display: none">
+            <div class="graph-box">
                 <div class="label-text">Поиск стран</div>
                 <div class="text-line">
                     <input type="text" value="" placeholder="Введите текст для поиска">
@@ -635,7 +635,7 @@
         </div>
     </div>
 </form>
-<form style="display: none">
+<form>
     <div class="tab-content">
         <div class="set-item">
             <div class="name">
@@ -750,7 +750,49 @@
         </div>
     </div>
 </div>
-<div class="accounts-content" style="display: none">account</div>
+<div class="account-content" style="display: none">
+    <div class="content-scroll" style="top:0;">
+        <table class="account-set">
+            <tr>
+                <td class="name">Баланс</td>
+                <td class="option"><span class="add"></span><span class="cost-move"></span></td>
+                <td class="value">1 000 000</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="name">Логин</td>
+                <td class="option"></td>
+                <td class="value">Creator</td>
+            </tr>
+            <tr>
+                <td class="name">Email</td>
+                <td class="option"></td>
+                <td class="value">ololo@olo.ru</td>
+            </tr>
+            <tr>
+                <td class="name">Пароль</td>
+                <td class="option"><span class="editing"></span></td>
+                <td class="value closed">Информация скрыта</td>
+            </tr>
+            <tr>
+                <td class="name">Гостевой ключ</td>
+                <td class="option"><span class="generate"></span><span class="copy"></span></td>
+                <td class="value">WUd|PxDcHaV9M7ex</td>
+            </tr>
+            <tr>
+                <td class="name">Статус аккаунта</td>
+                <td class="option">
+                    <span class="switch-box status-off">
+                        <span class="switcher"></span><input type="hidden" value="true">
+                    </span>
+                </td>
+                <td class="value">Выключен</td>
+            </tr>
+        </table>
+    </div>
+</div>
 </div>
 </div>
 </div>
