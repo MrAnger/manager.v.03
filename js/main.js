@@ -1,36 +1,41 @@
-//  для всех с классом password
-$(".text-line input.password").after("<span class='show-box'></span>");
-//  чекбокс
-$("input[type=checkbox]").click(function () {
-    $(this).siblings(".checkbox").toggleClass("true")
+function setHeightTaskContent() {
+    $(".tasks-content").css("height", $(window).height() - 30);
+};
+$(window).resize(setHeightTaskContent);
+$(document).ready(setHeightTaskContent);
+$(".lng-item").click(function () {
+    $(".lng-item").removeClass("active");
+    $(this).addClass("active");
 });
-//  радиобокс, нужно подправить
-$("input[type=radio]").click(function () {
-    $(this).siblings(".radiobox").toggleClass("true")
+$(".switch-box").click(function () {
+    $(this).toggleClass("status-off");
 });
-//  фокусирование полей ввода
-$(".text-line input").focus(function (event) {
-    $(".text-line").removeClass("focus");
-    $(this).parent().addClass("focus");
-    event.stopImmediatePropagation();
-});
-//  показ/скрытие символов для пароля
+/*
+ $(".auth-no-success").click(function () {
+ $('.auth-no-success').hide();
+ $('.auth-success').show();
+ });
+ $(".auth-success").click(function () {
+ $('.auth-success').hide();
+ $('.auth-no-success').show();
+ }); */
 $(".show-box").disableSelection().click(function (event) {
     var el = $(this)
     el.toggleClass("true")
     var elData = el.parents(".text-line").children("input").val();
     if (el.hasClass("true")) {
-        el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value='' placeholder='' translate='0' traslatetype='attribute' translateattribute='placeholder' name='password' lang='password'>");
+        el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value='' placeholder='Пароль'>");
         el.parents(".text-line").children("input[type=password]").remove();
         el.parents(".text-line").children("input[type=text]").val(elData);
     }
     else {
-        el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value='' placeholder='' translate='0' traslatetype='attribute' translateattribute='placeholder' name='password' lang='password'>");
+        el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value='' placeholder='Пароль'>");
         el.parents(".text-line").children("input[type=text]").remove();
         el.parents(".text-line").children("input[type=password]").val(elData);
     }
     event.stopImmediatePropagation();
 });
+<<<<<<< HEAD
 //  авторизация/регистрация/восстановление
 signList = function (event) {
     $("[name=confirm-box]").hide();
@@ -114,32 +119,16 @@ $('.loader').on("ready", function () {
     setTimeout("loader();", 1000);
 });
 //  менеджер/списки
+=======
+>>>>>>> add
 $('.item-list li').click(function (event) {
-    $('.loader').show();
-    setTimeout("loader();", 200);
-    $(this).parent().siblings().children("li").removeClass('active');
+    $(this).parent().children("li").removeClass('active');
     $(this).addClass('active');
     event.stopImmediatePropagation();
 });
-//  выход
-$('.exit').click(function () {
-    $('.manager').fadeOut(10).slideUp(200);
-    $('.login-content').fadeOut(10).slideUp(200);
-    $('.center-box').fadeIn(10).slideDown(50);
-    $('form[name=auth]').fadeIn(300).slideDown(50);
-});
-//  свичер
-$('.switch-box').disableSelection().click(function () {
-    $(this).toggleClass('status-off');
-    $(this).parents('tr').toggleClass('status-off');
-});
-//  табы
 clickTabList = function (event) {
-    $('.loader').show();
-    setTimeout("loader();", 200);
     $('.tab-list li').removeClass('active');
-    $('.three-content').css("top", 0);
-    $('.set-task').hide(300);
+    //$('.set-task').hide(300);
     var item = $(this).attr('class');
     switch (item) {
         case 'general':
@@ -161,12 +150,44 @@ $('.tab-list li').on('click', clickTabList);
 $('.tab-list li').click(function () {
     $(this).addClass('active');
 });
-$(".context-option").click(function (event) {
-    $(".context-option").removeClass("active");
-    $(this).toggleClass("active");
-    event.stopImmediatePropagation();
+$('.edit').click(function () {
+    $(this).toggleClass('active');
 });
+<<<<<<< HEAD
 $(".context-list .list").on("click", function (event) {
     $(this).parents(".context-option").removeClass("active");
     event.stopImmediatePropagation();
 });
+=======
+//  скроллинг
+function setHeightContentScroll() {
+    $('.setting-group').css("height", $(window).height() - 90);
+    $('.content-height').css("height", $(window).height() - 60);
+};
+setHeightContentScroll();
+$(window).resize(setHeightContentScroll);
+$('.content-scroll').mousewheel(function (e, delta) {
+    var scrollSize = 15;
+    if (delta > 0) {
+        if (parseInt($(this).css("top")) != 0) {
+            $(this).css("top", parseInt($(this).css("top")) + scrollSize * delta);
+        }
+    } else {
+        if ($(this).parent().height() + Math.abs(parseInt($(this).css("top"))) <= $(this).height()) {
+            $(this).css("top", parseInt($(this).css("top")) + scrollSize * delta);
+        }
+    }
+});
+$(".spoiler").click(function () {
+    $(this).toggleClass("active");
+    if($(this).hasClass("active")){
+        $(this).parents(".set-item").children(".graph-box").show()
+    }
+    else {
+        $(this).parents(".set-item").children(".graph-box").hide()
+    }
+});
+$(".loader").click(function(){
+    $(this).hide()
+})
+>>>>>>> add
