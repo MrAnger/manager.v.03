@@ -765,18 +765,22 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
-.add:hover {
+.add:hover, .delete:hover {
     opacity: 1;
 }
 
-.add:active {
+.add:active, .delete:active {
     opacity: .6;
 }
 
 .delete {
+    display: inline-block;
     width: 24px;
     height: 24px;
     background: url(../img/delete.png) no-repeat 50% 50%;
+    vertical-align: middle;
+    opacity: .3;
+    cursor: pointer;
 }
 
 .country .delete {
@@ -787,12 +791,10 @@ input[type=checkbox] {
     top: 4px;
     left: 0;
     background: url(../img/delete.png) no-repeat 50% 50%;
-    opacity: .3;
 }
 
 .country:hover .delete {
     display: block;
-    cursor: pointer;
 }
 
 .country .delete:hover {
@@ -863,7 +865,11 @@ input.geo {
     background: transparent;
 }
 
-input.geo:hover {
+input.ip {
+    border-color: transparent;
+}
+
+input.geo:hover, input.ip:hover {
     border-color: #ccc #aaa #aaa #ccc;
 }
 
