@@ -88,13 +88,16 @@ $('.content-scroll').mousewheel(function (e, delta) {
 });
 $(".spoiler").click(function () {
     $(this).toggleClass("active");
-    if($(this).hasClass("active")){
+    if ($(this).hasClass("active")) {
         $(this).parents(".set-item").children(".graph-box").show()
     }
     else {
         $(this).parents(".set-item").children(".graph-box").hide()
     }
 });
-$(".loader").click(function(){
+$(".loader").click(function () {
     $(this).hide()
-})
+});
+$(".add-box-wrap").click(function () {
+    $(this).hide()
+});

@@ -11,6 +11,52 @@
     <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
 </head>
 <body>
+<div class="add-box-wrap" style="display: none">
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="add-folder" style="display: none">
+                    <div class="label-block">
+                        <div class="label-text">Имя категории</div>
+                        <div class="text-line">
+                            <input type="text" value="" placeholder="Имя категории">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Добавить</button>
+                </form>
+                <form name="add-task" style="display: none">
+                    <div class="label-block">
+                        <div class="label-text">Имя задания</div>
+                        <div class="text-line">
+                            <input type="text" value="" placeholder="Имя задания">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Добавить</button>
+                </form>
+                <form name="add-iplist" style="display: none">
+                    <div class="label-block">
+                        <div class="label-text">Имя IP списка</div>
+                        <div class="text-line">
+                            <input type="text" value="" placeholder="Имя IP списка">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Добавить</button>
+                </form>
+                <form name="add-ip-range">
+                    <div class="label-block">
+                        <div class="label-text">IP-диапазоны</div>
+                        <div class="text-line">
+                            <textarea type="text" value="" placeholder="IP-диапазоны" wrap="off"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Добавить</button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
+</div>
 <div class="msg-box">
     <div class="msg-content" style="display: none">
         <div class="close"></div>
@@ -164,7 +210,7 @@
 <div class="manager">
 <div class="tasks-content">
 <div class="folders">
-    <div class="title">Категории</div>
+    <div class="title"><span>Категории</span><span class="add"></span></div>
     <div class="content-height">
         <ul class="item-list content-scroll" style="top:0;">
             <li>
@@ -262,7 +308,7 @@
     </div>
 </div>
 <div class="tasks">
-    <div class="title">Задания</div>
+    <div class="title"><span>Задания</span><span class="add"></span></div>
     <div class="content-height">
         <ul class="item-list content-scroll" style="top:0;">
             <li>
@@ -602,9 +648,60 @@
 </div>
 </div>
 </div>
-<div class="clear"></div>
 </div>
-<div class="iplists-content" style="display: none">iplist</div>
+<div class="iplists-content" style="display: none">
+    <div class="iplists">
+        <div class="title"><span>Списки диапазонов IP</span><span class="add"></span></div>
+        <div class="content-height">
+            <ul class="item-list content-scroll" style="top:0;">
+                <li>
+                    <span class="name">По-умолчанию</span>
+                    <span class="info">
+                        <span class="status on">Используется</span>
+                    </span>
+                    <span class="edit">
+                        <span class="edit-list">
+                            <span class="item copy">Дублировать</span>
+                            <span class="item delete">Удалить</span>
+                        </span>
+                    </span>
+                </li>
+                <li>
+                    <span class="name">По-умолчанию</span>
+                    <span class="info">
+                        <span class="status off">Не используется</span>
+                    </span>
+                    <span class="edit">
+                        <span class="edit-list">
+                            <span class="item copy">Дублировать</span>
+                            <span class="item delete">Удалить</span>
+                        </span>
+                    </span>
+                </li>
+                <li>
+                    <span class="name">По-умолчанию</span>
+                    <span class="info">
+                        <span class="status on">Используется</span>
+                    </span>
+                    <span class="edit">
+                        <span class="edit-list">
+                            <span class="item copy">Дублировать</span>
+                            <span class="item delete">Удалить</span>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="set-iplist">
+        <div class="title"><span>Диапазоны IP</span><span class="add"></span></div>
+        <div class="setting-group">
+            <div class="content-scroll" style="top:0;">
+                <input type="text" value="15" class="geo">
+            </div>
+        </div>
+    </div>
+</div>
 <div class="accounts-content" style="display: none">account</div>
 </div>
 </div>
