@@ -9,7 +9,8 @@
 			},
 			params: {
 				lngDataKey: "lng",
-				tokenKey: "token"
+				tokenKey: "token",
+				authKey: "systemAuth"
 			}
 		},
 		data: {
@@ -18,7 +19,7 @@
 			}
 		},
 		utils: {
-			showMsg: MsgShow,
+			showNotice: NoticeShow,
 			checkType: CheckType
 		},
 		methods: {
@@ -41,9 +42,11 @@
 
 		//check input data
 		if(!CheckType(inputs.mail.value, TYPE.MAIL)){
-			manager.utils.showMsg(manager.lng.form.auth.mail.error, "error");
+			manager.utils.showNotice(manager.lng.form.auth.mail.error, "error");
+			$(inputs.mail).focus();
 		}else if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
-			manager.utils.showMsg(manager.lng.form.auth.password.error, "error");
+			manager.utils.showNotice(manager.lng.form.auth.password.error, "error");
+			$(inputs.password).focus();
 		}else{
 			api.methods.Auth({
 				mail: inputs.mail.value,
@@ -51,11 +54,11 @@
 				remember: inputs.remember.checked,
 				exception: {
 					NotMatch: function(){
-						manager.utils.showMsg(manager.lng.exception.query.auth.NotMatch, "error");
+						manager.utils.showNotice(manager.lng.exception.query.auth.NotMatch, "error");
 						$(inputs.password).focus();
 					},
 					SessionLimit: function(){
-						manager.utils.showMsg(manager.lng.exception.query.auth.SessionLimit, "error");
+						manager.utils.showNotice(manager.lng.exception.query.auth.SessionLimit, "error");
 					}
 				},
 				callback: function(data){
@@ -71,14 +74,24 @@
 	});
 
 	//utils
-	function MsgShow(text, type){
+	function NoticeShow(text, type){
 		var types = {
 			error: "false",
 			success: "true"
 		},
 			selector = ".msg-content[default]",
 			parent = $(selector).parent(),
-			msg = $(selector).clone().addClass(types[type]).removeAttr("default").appendTo(parent).children(".content").html(text);
+			msg = $(selector).clone().addClass(types[type]).removeAttr("default").appendTo(parent).hide();
+
+		$(msg).find(".text").html(text);
+		$(msg).effect("drop", {
+			"direction": "down",
+			"mode": "show"
+		}, function(){
+			setTimeout(function(){
+				$(msg).find(".close").click();
+			}, 5 * 1000);
+		});
 	};
 	function TranslatePage(){
 		$("[wa_lang]").each(function(key, el){
@@ -285,7 +298,7 @@
 		//Api Exception
 		$.each(api.options.exception, function(key, val){
 			api.options.exception[key] = function(){
-				manager.utils.showMsg(manager.lng.exception.general[key], "error");
+				manager.utils.showNotice(manager.lng.exception.general[key], "error");
 			};
 		});
 

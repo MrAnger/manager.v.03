@@ -108,3 +108,8 @@ $(".show-box").disableSelection().click(function (event) {
 	}
 	event.stopImmediatePropagation();
 });
+$(document).on("click", ".msg-box .msg-content .close", function(e){
+	$(this).parent().fadeOut("fast", function(){
+		$(this).remove();
+	});
+});

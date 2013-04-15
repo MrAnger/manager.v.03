@@ -83,7 +83,8 @@
     <div class="lang">
         <ul class="lng-check">
             <li>
-                <span class="lng-item rus active" wa_lang="{language.ru}" onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
+                <span class="lng-item rus active" wa_lang="{language.ru}"
+                      onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
             </li>
             <li>
                 <span class="lng-item eng" wa_lang="{language.en}" disable></span>
@@ -103,13 +104,16 @@
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.auth.mail.text}"></div>
                     <div class="text-line">
-                        <input name="mail" type="text" value placeholder wa_lang="{form.auth.mail.placeholder|attr:placeholder}">
+                        <input name="mail" type="text" value placeholder
+                               wa_lang="{form.auth.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.auth.password.text}"></div>
                     <div class="text-line">
-                        <input name="password" class="password" type="password" value placeholder wa_lang="{form.auth.password.placeholder|attr:placeholder}"><span class="show-box"></span>
+                        <input name="password" class="password" type="password" value placeholder
+                               wa_lang="{form.auth.password.placeholder|attr:placeholder}"><span
+                            class="show-box"></span>
                     </div>
                 </div>
                 <div class="label-text">
@@ -119,11 +123,13 @@
                 <button type="submit" class="btn" wa_lang="{form.auth.enter.text}"></button>
             </div>
             <div class="sign-other">
-                <div class="other-text" wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
+                <div class="other-text"
+                     wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
                     <b>{NOT_HAVE_ACCOUNT}</b> {GO_REGISTRATION}
                     <span class="link">{REGISTER}</span>.
                 </div>
-                <div class="other-text" wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
+                <div class="other-text"
+                     wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
                     <b>{FORGOT_PASSWORD}</b> {PASSWORD_RECOVERY}
                     <span class="link">{REMEMBER_PASSWORD}</span>.
                 </div>
@@ -147,7 +153,8 @@
                 <div class="label-block">
                     <div class="label-text">Пароль</div>
                     <div class="text-line">
-                        <input class="password" type="password" value="" placeholder="Пароль"><span class="show-box"></span>
+                        <input class="password" type="password" value="" placeholder="Пароль"><span
+                            class="show-box"></span>
                     </div>
                 </div>
                 <div class="agreement">Нажимая кнопку «<b>Отправить</b>», Вы соглашаетесь с <a href="#">Правилами</a> и
@@ -182,8 +189,12 @@
                 <button type="submit" class="btn">Восстановить</button>
             </div>
             <div class="sign-other">
-                <div class="other-text">На указанный email будет выслан код подтверждения, который необходимо ввести на следующем этапе восстановления.</div>
-                <div class="other-text">Введите полученный код в соответствующее поле для завершения процесса восстановления доступа.</div>
+                <div class="other-text">На указанный email будет выслан код подтверждения, который необходимо ввести на
+                    следующем этапе восстановления.
+                </div>
+                <div class="other-text">Введите полученный код в соответствующее поле для завершения процесса
+                    восстановления доступа.
+                </div>
             </div>
         </form>
     </div>
@@ -552,12 +563,14 @@
                         <div class="set-name">Россия</div>
                         <div class="mark-box">
                             <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="80" class="geo"><span>%</span>
+                                <span class="option-name">Установлено</span><input type="text" value="80"
+                                                                                   class="geo"><span>%</span>
 
                                 <div class="mark-range" style="width: 80%"></div>
                             </div>
                             <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="40" class="geo" readonly><span>%</span>
+                                <span class="option-name">Получено</span><input type="text" value="40" class="geo"
+                                                                                readonly><span>%</span>
 
                                 <div class="mark-range" style="width: 40%"></div>
                             </div>
@@ -568,12 +581,14 @@
                         <div class="set-name">Украина</div>
                         <div class="mark-box">
                             <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="50" class="geo"><span>%</span>
+                                <span class="option-name">Установлено</span><input type="text" value="50"
+                                                                                   class="geo"><span>%</span>
 
                                 <div class="mark-range" style="width: 50%"></div>
                             </div>
                             <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="10" class="geo" readonly><span>%</span>
+                                <span class="option-name">Получено</span><input type="text" value="10" class="geo"
+                                                                                readonly><span>%</span>
 
                                 <div class="mark-range" style="width: 10%"></div>
                             </div>
@@ -584,12 +599,14 @@
                         <div class="set-name">Польша</div>
                         <div class="mark-box">
                             <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="10" class="geo"><span>%</span>
+                                <span class="option-name">Установлено</span><input type="text" value="10"
+                                                                                   class="geo"><span>%</span>
 
                                 <div class="mark-range" style="width: 10%"></div>
                             </div>
                             <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="1" class="geo" readonly><span>%</span>
+                                <span class="option-name">Получено</span><input type="text" value="1" class="geo"
+                                                                                readonly><span>%</span>
 
                                 <div class="mark-range" style="width: 1%"></div>
                             </div>
@@ -600,12 +617,14 @@
                         <div class="set-name">Казахстан</div>
                         <div class="mark-box">
                             <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="15" class="geo"><span>%</span>
+                                <span class="option-name">Установлено</span><input type="text" value="15"
+                                                                                   class="geo"><span>%</span>
 
                                 <div class="mark-range" style="width: 15%"></div>
                             </div>
                             <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="5" class="geo" readonly><span>%</span>
+                                <span class="option-name">Получено</span><input type="text" value="5" class="geo"
+                                                                                readonly><span>%</span>
 
                                 <div class="mark-range" style="width: 5%"></div>
                             </div>
