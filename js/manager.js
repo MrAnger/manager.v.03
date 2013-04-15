@@ -9,10 +9,7 @@
 			},
 			params: {
 				lngDataKey: "lng",
-				tokenKey: "token",
-				authKey: "systemAuth",
-				authToken: "systemAuthToken",
-				authDate: "systemAuthDate"
+				tokenKey: "token"
 			}
 		},
 		data: {
@@ -71,16 +68,20 @@
 					manager.methods.setToken(data.token);
 					if(!inputs.remember.checked) DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
 
-					//prepare data save on browser
-					DataStorage.set(manager.options.params.authKey, 1);
-					DataStorage.set(manager.options.params.authDate, new Date().getTime());
-					DataStorage.set(manager.options.params.authToken, manager.methods.getToken());
-
-					//submit auth form and reload page with setted params
+					//submit auth form
 					$(form).attr("wa_auth", 1);
-					$(form).submit();
+					$(form).find("button[type=submit]").click();
+					form_clear();
+					alert("GO GO GO");
 				}
 			});
+		};
+
+		function form_clear(){
+			$(inputs.mail).val("");
+			$(inputs.password).val("");
+			inputs.remember.checked = false;
+			$(form).attr("wa_auth", 0);
 		};
 
 		return false;
@@ -349,12 +350,5 @@
 		//Translate document
 		TranslatePage();
 		$(document).bind("DOMNodeInserted", TranslatePage);
-
-		if(DataStorage.get(manager.options.params.authKey) == 1){
-			DataStorage.set(manager.options.params.authKey, 0);
-
-			$("form[name=auth]").attr("wa_auth", 1);
-
-		};
 	});
 })(jQuery);
