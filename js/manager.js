@@ -19,8 +19,6 @@
 		},
 		utils: {
 			showMsg: MsgShow,
-			cookie: Cookie,
-			dataStorage: DataStorage,
 			checkType: CheckType
 		},
 		methods: {
@@ -33,25 +31,19 @@
 		}
 	};
 
-	var forms = {
-		auth: "auth",
-		register: "reg",
-		forgotPassword: "forgot"
-	};
-
 	//set auth form
-	$("form[name='"+forms.auth+"']").live("submit", function(e){
+	$(document).on("submit", "form[name='auth']", function(e){
 		var inputs = {
-			mail: this["email"],
+			mail: this["mail"],
 			password: this["password"],
 			remember: this["remember"]
 		};
 
 		//check input data
 		if(!CheckType(inputs.mail.value, TYPE.MAIL)){
-			manager.utils.showMsg(manager.lng.sign.in.email_error, "error");
+			manager.utils.showMsg(manager.lng.form.auth.mail.error, "error");
 		}else if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
-			manager.utils.showMsg(manager.lng.sign.in.password_error, "error");
+			manager.utils.showMsg(manager.lng.form.auth.password.error, "error");
 		}else{
 			api.methods.Auth({
 				mail: inputs.mail.value,
@@ -71,11 +63,6 @@
 					if(inputs.remember.checked){
 						DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
 					};
-
-					$('.center-box').hide();
-					$('.center-box form').hide();
-					$('.manager').fadeIn(550).slideDown(500);
-					$('.login-content').fadeIn(550).slideDown(500);
 				}
 			});
 		};
@@ -86,39 +73,71 @@
 	//utils
 	function MsgShow(text, type){
 		var types = {
-			error: "error"
+			error: "false",
+			success: "true"
 		},
 			selector = ".msg-content[default]",
 			parent = $(selector).parent(),
 			msg = $(selector).clone().addClass(types[type]).removeAttr("default").appendTo(parent).children(".content").html(text);
 	};
 	function TranslatePage(){
-		$("[translate='0']").each(function(key, el){
+		$("[wa_lang]").each(function(key, el){
 			try{
-				var lngPath = $(el).attr("name").split("-");
-				var lng = $.extend(true, {}, manager.lng);
-				$.each(lngPath, function(key, path){lng = lng[path];});
-
-				if($(el).attr("traslatetype")){
-					switch($(el).attr("traslatetype")){
-						case "attribute":
-							$(el).attr($(el).attr("translateattribute"), lng[$(el).attr("lang")]);
-							break;
-					};
-				}else{
-					$(el).html(lng[$(el).attr("lang")]);
+				var defOptions = {
+					element: el,
+					text: manager.lng,
+					place: false,
+					attr: false
 				};
+				$.each($(el).attr("wa_lang").match(/{[^{}]*}/g), function(key, lng_str){
+					var opt = $.extend(true, {}, defOptions);
+					lng_str = lng_str.slice(1, -1);
+					//fetch lng string
+					var endOfText = ((lng_str.indexOf("|") == -1) ? lng_str.length : lng_str.indexOf("|")),
+						textPath = lng_str.substr(0,endOfText),
+						lngOptions = lng_str.substr(endOfText+1);
+					$.each(textPath.split("."), function(key, val){opt.text = opt.text[val];});
+					$.each(lngOptions.split(";"),function(key, val){
+						var param_arr = val.split(":");
+						if(param_arr.length == 2){
+							opt[param_arr[0]] = param_arr[1];
+						}else{
+							opt[param_arr[0]] = null;
+						};
+					});
+					//translate element
+					if(opt.attr){
+						var text = (($(el).attr(opt.attr) !== undefined) ? $(el).attr(opt.attr) : "");
 
-				$(el).attr("translate", "1");
-			}catch(error){
+						if(opt.place){
+							text = text.replace(new RegExp("{"+opt.place+"}",'ig'), opt.text);
+						}else{
+							text = opt.text;
+						};
+
+						$(el).attr(opt.attr, text);
+					}else{
+						var text = (($(el).html() !== undefined) ? $(el).html() : "");
+
+						if(opt.place){
+							text = text.replace(new RegExp("{"+opt.place+"}",'ig'), opt.text);
+						}else{
+							text = opt.text;
+						};
+
+						$(el).html(text);
+					};
+				});
+				$(el).removeAttr("wa_lang");
+			}catch(e){
 				if(console && console.log){
-					console.log("Error localization:");
+					console.log("Error on translate element:");
 					console.log(el);
 				};
 			};
 		});
 	};
-	var Cookie = {
+	var Cookie = manager.utils.cookie = {
 		get : function(name){
 			var cookie = " " + document.cookie;
 			var search = " " + name + "=";
@@ -156,7 +175,7 @@
 			return exdate.toGMTString();
 		}
 	};
-	var DataStorage = {
+	var DataStorage = manager.utils.dataStorage = {
 		get: function(name){
 			if(window.localStorage){
 				return window.localStorage[name];
@@ -179,7 +198,7 @@
 			};
 		}
 	};
-	var Language = {
+	var Language = manager.utils.language = {
 		get: function(){
 			var lang = DataStorage.get(manager.options.params.lngDataKey);
 
@@ -238,7 +257,7 @@
 	//init
 	$(document).ready(function(e){
 		//set language
-		api.utils.addScript('js/'+Language.get()+'.js');
+		api.utils.addScript('js/lng/'+Language.get()+'.js');
 		//Api server
 		api.options.server = "http://node0.waspace-run.net:80/";
 		//Api Log

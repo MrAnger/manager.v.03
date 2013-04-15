@@ -3,10 +3,6 @@ function setHeightTaskContent() {
 };
 $(window).resize(setHeightTaskContent);
 $(document).ready(setHeightTaskContent);
-$(".lng-item").click(function () {
-    $(".lng-item").removeClass("active");
-    $(this).addClass("active");
-});
 $(".switch-box").click(function () {
     $(this).toggleClass("status-off");
 });
@@ -19,22 +15,6 @@ $(".switch-box").click(function () {
  $('.auth-success').hide();
  $('.auth-no-success').show();
  }); */
-$(".show-box").disableSelection().click(function (event) {
-    var el = $(this)
-    el.toggleClass("true")
-    var elData = el.parents(".text-line").children("input").val();
-    if (el.hasClass("true")) {
-        el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value='' placeholder='Пароль'>");
-        el.parents(".text-line").children("input[type=password]").remove();
-        el.parents(".text-line").children("input[type=text]").val(elData);
-    }
-    else {
-        el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value='' placeholder='Пароль'>");
-        el.parents(".text-line").children("input[type=text]").remove();
-        el.parents(".text-line").children("input[type=password]").val(elData);
-    }
-    event.stopImmediatePropagation();
-});
 $('.item-list li').click(function (event) {
     $(this).parent().children("li").removeClass('active');
     $(this).addClass('active');
@@ -95,9 +75,36 @@ $(".spoiler").click(function () {
         $(this).parents(".set-item").children(".graph-box").hide()
     }
 });
-$(".loader").click(function () {
-    $(this).hide()
-});
 $(".add-box-wrap").click(function () {
     $(this).hide()
+});
+
+//MrAnger edit script
+$(".lng-item").click(function(){
+	if(!$(this).hasAttribute("disable")){
+		$(".lng-item").removeClass("active");
+		$(this).addClass("active");
+	};
+});
+$(".show-box").disableSelection().click(function (event) {
+	var el = $(this)
+	el.toggleClass("true")
+	var elValue = el.parents(".text-line").children("input").val(),
+		name = el.parents(".text-line").children("input").attr("name"),
+		placeholder = el.parents(".text-line").children("input").attr("placeholder");
+	if (el.hasClass("true")) {
+		el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value placeholder>");
+		el.parents(".text-line").children("input[type=password]").remove();
+		el.parents(".text-line").children("input[type=text]").val(elValue);
+		if(name) el.parents(".text-line").children("input[type=text]").attr("name", name);
+		if(placeholder) el.parents(".text-line").children("input[type=text]").attr("placeholder", placeholder);
+	}
+	else {
+		el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value placeholder>");
+		el.parents(".text-line").children("input[type=text]").remove();
+		el.parents(".text-line").children("input[type=password]").val(elValue);
+		if(name) el.parents(".text-line").children("input[type=password]").attr("name", name);
+		if(placeholder) el.parents(".text-line").children("input[type=password]").attr("placeholder", placeholder);
+	}
+	event.stopImmediatePropagation();
 });

@@ -7,6 +7,10 @@ body {
     cursor: default;
 }
 
+[default] {
+    display: none;
+}
+
 .msg-box {
     position: fixed;
     bottom: 0;

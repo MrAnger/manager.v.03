@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Index</title>
+    <title></title>
     <meta charset="UTF-8">
     <meta name="robots" content="index, follow"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
+    <script type="text/javascript" src="js/api.js"></script>
+    <script type="text/javascript" src="js/manager.js"></script>
 </head>
 <body>
 <div class="add-box-wrap" style="display: none">
@@ -57,35 +59,15 @@
         </div>
     </div>
 </div>
-<div class="msg-box" style="display: none">
-    <div class="msg-content">
+<div class="msg-box">
+    <div class="msg-content" default>
         <div class="close"></div>
         <div class="content">
-            <div class="text">Обычное сообщение</div>
-        </div>
-    </div>
-    <div class="msg-content true">
-        <div class="close"></div>
-        <div class="content">
-            <div class="text">Сообщение об успешной операции</div>
-        </div>
-    </div>
-    <div class="msg-content false">
-        <div class="close"></div>
-        <div class="content">
-            <div class="text">Сообщение об ошибке</div>
-        </div>
-    </div>
-    <div class="msg-content warning">
-        <div class="close"></div>
-        <div class="content">
-            <div class="text">Предупреждающее действие</div>
-            <button type="submit" class="btn">Ок</button>
-            <button type="submit" class="btn cancel">Отмена</button>
+            <div class="text"></div>
         </div>
     </div>
 </div>
-<div class="loader" style="">
+<div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text">Пожалуйста, подождите ...</span>
     </div>
@@ -93,7 +75,7 @@
 <div class="header">
     <div class="auth-success" style="display: none">
         <div class="top-menu">
-            <span class="item active">Задания</span> <span class="item">IP-списки</span>
+            <span class="item active" wa_lang="{menu.top-menu.task}"></span> <span class="item">IP-списки</span>
         </div>
         <div class="account"><span>Вы авторизованы, </span><span class="link login">Creator</span> |
             <span class="link exit">Выход</span></div>
@@ -101,13 +83,13 @@
     <div class="lang">
         <ul class="lng-check">
             <li>
-                <span class="lng-item rus active">Русский</span>
+                <span class="lng-item rus active" wa_lang="{language.ru}" onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
             </li>
             <li>
-                <span class="lng-item eng">English</span>
+                <span class="lng-item eng" wa_lang="{language.en}" disable></span>
             </li>
             <li>
-                <span class="lng-item ukr">Українська</span>
+                <span class="lng-item ukr" wa_lang="{language.ua}" disable></span>
             </li>
         </ul>
     </div>
@@ -115,35 +97,35 @@
 <div class="main">
 <div class="auth-no-success">
     <div class="sign-block">
-        <form name="auth">
-            <div class="title">Вход в панель управления</div>
+        <form name="auth" method="POST">
+            <div class="title" wa_lang="{form.auth.title}"></div>
             <div class="sign-box">
                 <div class="label-block">
-                    <div class="label-text">Ваш email</div>
+                    <div class="label-text" wa_lang="{form.auth.mail.text}"></div>
                     <div class="text-line">
-                        <input type="text" value="" placeholder="Email">
+                        <input name="mail" type="text" value placeholder wa_lang="{form.auth.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
-                    <div class="label-text">Пароль</div>
+                    <div class="label-text" wa_lang="{form.auth.password.text}"></div>
                     <div class="text-line">
-                        <input class="password" type="password" value="" placeholder="Пароль"><span class="show-box"></span>
+                        <input name="password" class="password" type="password" value placeholder wa_lang="{form.auth.password.placeholder|attr:placeholder}"><span class="show-box"></span>
                     </div>
                 </div>
                 <div class="label-text">
-                    <label><input type="checkbox" class="hidden" name="remember">
-                        <span class="remember">Чужой компьютер</span></label>
+                    <label><input name="remember" type="checkbox" class="hidden">
+                        <span class="remember" wa_lang="{form.auth.remember.text}"></span></label>
                 </div>
-                <button type="submit" class="btn">Войти</button>
+                <button type="submit" class="btn" wa_lang="{form.auth.enter.text}"></button>
             </div>
             <div class="sign-other">
-                <div class="other-text">
-                    <b>Нет учетной записи?</b> Вы можете бесплатно создать аккаунт -
-                    <span class="link">регистрация</span>.
+                <div class="other-text" wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
+                    <b>{NOT_HAVE_ACCOUNT}</b> {GO_REGISTRATION}
+                    <span class="link">{REGISTER}</span>.
                 </div>
-                <div class="other-text">
-                    <b>Забыли пароль?</b> Воспользуйтесь функцией восстановления пароля -
-                    <span class="link">вспомнить пароль</span>.
+                <div class="other-text" wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
+                    <b>{FORGOT_PASSWORD}</b> {PASSWORD_RECOVERY}
+                    <span class="link">{REMEMBER_PASSWORD}</span>.
                 </div>
             </div>
         </form>
