@@ -10,7 +10,9 @@
 			params: {
 				lngDataKey: "lng",
 				tokenKey: "token",
-				authKey: "systemAuth"
+				authKey: "systemAuth",
+				authToken: "systemAuthToken",
+				authDate: "systemAuthDate"
 			}
 		},
 		data: {
@@ -20,7 +22,8 @@
 		},
 		utils: {
 			showNotice: NoticeShow,
-			checkType: CheckType
+			checkType: CheckType,
+			formatDate: formatDate
 		},
 		methods: {
 			getToken: function(){
@@ -34,11 +37,14 @@
 
 	//set auth form
 	$(document).on("submit", "form[name='auth']", function(e){
-		var inputs = {
+		var form = this, inputs = {
 			mail: this["mail"],
 			password: this["password"],
 			remember: this["remember"]
 		};
+
+		//check form auth data
+		if($(form).attr("wa_auth") == 1) return true;
 
 		//check input data
 		if(!CheckType(inputs.mail.value, TYPE.MAIL)){
@@ -63,9 +69,16 @@
 				},
 				callback: function(data){
 					manager.methods.setToken(data.token);
-					if(inputs.remember.checked){
-						DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
-					};
+					if(!inputs.remember.checked) DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
+
+					//prepare data save on browser
+					DataStorage.set(manager.options.params.authKey, 1);
+					DataStorage.set(manager.options.params.authDate, new Date().getTime());
+					DataStorage.set(manager.options.params.authToken, manager.methods.getToken());
+
+					//submit auth form and reload page with setted params
+					$(form).attr("wa_auth", 1);
+					$(form).submit();
 				}
 			});
 		};
@@ -149,6 +162,36 @@
 				};
 			};
 		});
+	};
+	function formatDate(formatDate, formatString){
+		var yyyy = formatDate.getFullYear();
+		var yy = yyyy.toString().substring(2);
+		var m = formatDate.getMonth() + 1;
+		var mm = m < 10 ? "0" + m : m;
+		var d = formatDate.getDate();
+		var dd = d < 10 ? "0" + d : d;
+
+		var h = formatDate.getHours();
+		var hh = h < 10 ? "0" + h : h;
+		var n = formatDate.getMinutes();
+		var nn = n < 10 ? "0" + n : n;
+		var s = formatDate.getSeconds();
+		var ss = s < 10 ? "0" + s : s;
+
+		formatString = formatString.replace(/yyyy/i, yyyy);
+		formatString = formatString.replace(/yy/i, yy);
+		formatString = formatString.replace(/mm/i, mm);
+		formatString = formatString.replace(/m/i, m);
+		formatString = formatString.replace(/dd/i, dd);
+		formatString = formatString.replace(/d/i, d);
+		formatString = formatString.replace(/hh/i, hh);
+		formatString = formatString.replace(/h/i, h);
+		formatString = formatString.replace(/nn/i, nn);
+		formatString = formatString.replace(/n/i, n);
+		formatString = formatString.replace(/ss/i, ss);
+		formatString = formatString.replace(/s/i, s);
+
+		return formatString;
 	};
 	var Cookie = manager.utils.cookie = {
 		get : function(name){
@@ -271,6 +314,7 @@
 	$(document).ready(function(e){
 		//set language
 		api.utils.addScript('js/lng/'+Language.get()+'.js');
+		$(".lang .lng-item[lng='"+Language.get()+"']").addClass("active");
 		//Api server
 		api.options.server = "http://node0.waspace-run.net:80/";
 		//Api Log
@@ -305,5 +349,12 @@
 		//Translate document
 		TranslatePage();
 		$(document).bind("DOMNodeInserted", TranslatePage);
+
+		if(DataStorage.get(manager.options.params.authKey) == 1){
+			DataStorage.set(manager.options.params.authKey, 0);
+
+			$("form[name=auth]").attr("wa_auth", 1);
+
+		};
 	});
 })(jQuery);

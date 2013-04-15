@@ -83,14 +83,14 @@
     <div class="lang">
         <ul class="lng-check">
             <li>
-                <span class="lng-item rus active" wa_lang="{language.ru}"
+                <span class="lng-item rus" wa_lang="{language.ru}" lng="ru-ru"
                       onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
             </li>
             <li>
-                <span class="lng-item eng" wa_lang="{language.en}" disable></span>
+                <span class="lng-item eng" wa_lang="{language.en}" lng="en-en"  disable></span>
             </li>
             <li>
-                <span class="lng-item ukr" wa_lang="{language.ua}" disable></span>
+                <span class="lng-item ukr" wa_lang="{language.ua}" lng="ua-ua"  disable></span>
             </li>
         </ul>
     </div>
@@ -98,7 +98,7 @@
 <div class="main">
 <div class="auth-no-success">
     <div class="sign-block">
-        <form name="auth" method="POST">
+        <form name="auth" method="POST" wa_auth="0">
             <div class="title" wa_lang="{form.auth.title}"></div>
             <div class="sign-box">
                 <div class="label-block">
@@ -120,7 +120,7 @@
                     <label><input name="remember" type="checkbox" class="hidden">
                         <span class="remember" wa_lang="{form.auth.remember.text}"></span></label>
                 </div>
-                <button type="submit" class="btn" wa_lang="{form.auth.enter.text}"></button>
+                <button name="submit" type="submit" class="btn" wa_lang="{form.auth.enter.text}"></button>
             </div>
             <div class="sign-other">
                 <div class="other-text"
