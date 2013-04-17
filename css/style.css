@@ -8,7 +8,7 @@ body {
 }
 
 [default] {
-    display: none;
+    display: none !important;
 }
 
 .msg-box {
