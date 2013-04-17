@@ -29,6 +29,32 @@ manager.lng = {
 			"forgotPassword": "Забыли пароль?",
 			"usePasswordRecovery": "Воспользуйтесь функцией восстановления пароля -",
 			"rememberPassword": "вспомнить пароль"
+		},
+		"reg":{
+			"title": "Регистрация аккаунта",
+			"login":{
+				"text": "Логин",
+				"placeholder": "Логин"
+			},
+			"mail":{
+				"text": "Ваш email",
+				"placeholder": "Email"
+			},
+			"password":{
+				"text": "Пароль",
+				"placeholder": "Пароль"
+			},
+			"agreement":{
+				"string1": "Нажимая кнопку",
+				"string2": "Вы соглашаетесь с",
+				"string3": "Правилами",
+				"string4": "и",
+				"string5": "Политикой Конфидециальности",
+				"string6": "сервиса WaspAce"
+			},
+			"send":{
+				"text": "Отправить"
+			}
 		}
 	},
 	"language":{

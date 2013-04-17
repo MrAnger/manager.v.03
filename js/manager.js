@@ -9,7 +9,10 @@
 			},
 			params: {
 				lngDataKey: "lng",
-				tokenKey: "token"
+				tokenKey: "token",
+				authStep: "authStep",
+				authStepNumber: "authStepNumber",
+				authStepToken: "authStepToken"
 			}
 		},
 		data: {
@@ -28,6 +31,81 @@
 			},
 			setToken: function(token){
 				manager.data.user.token = token;
+			},
+			authFormShow: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$("form[name=auth] input[type=text], form[name=auth] input[type=password]").val("");
+				$("form[name=auth] input[type=checkbox]").each(function(key, checkbox){checkbox.checked = false;});
+
+				$(".main .auth-no-success").show();
+				$("form[name=auth]").show();
+
+				data.callback();
+			},
+			authFormHide: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$(".main .auth-no-success").hide();
+				$("form[name=auth]").hide();
+
+				data.callback();
+			},
+			regFormShow: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$("[name=reg] input[type=text], [name=reg] input[type=password]").val("");
+
+				$(".main .auth-no-success").show();
+				$("[name=reg]").show();
+
+				data.callback();
+			},
+			regFormHide: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$(".main .auth-no-success").hide();
+				$("[name=reg]").hide();
+
+				data.callback();
+			},
+			managerFormShow: function(data){
+				data = $.extend(true, {
+					callback: function(){},
+					form: "default"
+				}, data);
+
+				$(".main .auth-success").show();
+				switch(data.form){
+					case "default":
+						$(".main .auth-success .account-content").show();
+						break;
+				};
+
+				data.callback();
+			},
+			managerFormHide: function(data){
+				data = $.extend(true, {
+					callback: function(){},
+					form: "default"
+				}, data);
+
+				$(".main .auth-success").hide();
+				switch(data.form){
+					case "default":
+						$(".main .auth-success .manager").children().hide();
+						break;
+				};
+
+				data.callback();
 			}
 		}
 	};
@@ -54,7 +132,7 @@
 			api.methods.Auth({
 				mail: inputs.mail.value,
 				password: inputs.password.value,
-				remember: inputs.remember.checked,
+				remember: !inputs.remember.checked,
 				exception: {
 					NotMatch: function(){
 						manager.utils.showNotice(manager.lng.exception.query.auth.NotMatch, "error");
@@ -70,18 +148,14 @@
 
 					//submit auth form
 					$(form).attr("wa_auth", 1);
+
+					DataStorage.set(manager.options.params.authStep, 1);
+					DataStorage.set(manager.options.params.authStepNumber, 1);
+					DataStorage.set(manager.options.params.authStepToken, manager.methods.getToken());
+
 					$(form).find("button[type=submit]").click();
-					form_clear();
-					alert("GO GO GO");
 				}
 			});
-		};
-
-		function form_clear(){
-			$(inputs.mail).val("");
-			$(inputs.password).val("");
-			inputs.remember.checked = false;
-			$(form).attr("wa_auth", 0);
 		};
 
 		return false;
@@ -350,5 +424,19 @@
 		//Translate document
 		TranslatePage();
 		$(document).bind("DOMNodeInserted", TranslatePage);
+
+		//check start program
+		if(DataStorage.get(manager.options.params.authStep) == 1){
+			if(DataStorage.get(manager.options.params.authStepNumber) == 1){
+				DataStorage.set(manager.options.params.authStepNumber, 2);
+				window.location.href = "";
+			}else if(DataStorage.get(manager.options.params.authStepNumber) == 2){
+				DataStorage.set(manager.options.params.authStep, 0);
+				manager.methods.setToken(DataStorage.get(manager.options.params.authStepToken));
+				manager.methods.managerFormShow();
+			};
+		}else{
+			manager.methods.authFormShow();
+		};
 	});
 })(jQuery);

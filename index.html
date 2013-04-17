@@ -96,9 +96,9 @@
     </div>
 </div>
 <div class="main">
-<div class="auth-no-success">
+<div class="auth-no-success" style="display: none;">
     <div class="sign-block">
-        <form name="auth" method="POST" wa_auth="0">
+        <form name="auth" method="POST" wa_auth="0" style="display: none;">
             <div class="title" wa_lang="{form.auth.title}"></div>
             <div class="sign-box">
                 <div class="label-block">
@@ -126,7 +126,7 @@
                 <div class="other-text"
                      wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
                     <b>{NOT_HAVE_ACCOUNT}</b> {GO_REGISTRATION}
-                    <span class="link">{REGISTER}</span>.
+                    <span class="link" onclick="manager.methods.authFormHide(); manager.methods.regFormShow();">{REGISTER}</span>.
                 </div>
                 <div class="other-text"
                      wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
@@ -135,44 +135,43 @@
                 </div>
             </div>
         </form>
-        <iframe name="iframe" style="display: none;"></iframe>
-        <form name="reg" style="display: none">
-            <div class="title">Регистрация аккаунта</div>
+        <div name="reg" style="display: none">
+            <div class="title" wa_lang="{form.reg.title}"></div>
             <div class="sign-box">
                 <div class="label-block">
-                    <div class="label-text">Логин</div>
+                    <div class="label-text" wa_lang="{form.reg.login.text}"></div>
                     <div class="text-line">
-                        <input type="text" value="" placeholder="Логин">
+                        <input type="text" value placeholder wa_lang="{form.reg.login.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
-                    <div class="label-text">Ваш email</div>
+                    <div class="label-text" wa_lang="{form.reg.mail.text}"></div>
                     <div class="text-line">
-                        <input type="text" value="" placeholder="Email">
+                        <input type="text" value placeholder wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
-                    <div class="label-text">Пароль</div>
+                    <div class="label-text" wa_lang="{form.reg.password.text}"></div>
                     <div class="text-line">
-                        <input class="password" type="password" value="" placeholder="Пароль"><span
+                        <input class="password" type="password" value placeholder wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
                             class="show-box"></span>
                     </div>
                 </div>
-                <div class="agreement">Нажимая кнопку «<b>Отправить</b>», Вы соглашаетесь с <a href="#">Правилами</a> и
-                    <a href="#">Политикой Конфидециальности</a> сервиса WaspAce.
+                <div class="agreement" wa_lang="{form.reg.agreement.string1|place:string1}{form.reg.send.text|place:send}{form.reg.agreement.string2|place:string2}{form.reg.agreement.string3|place:string3}{form.reg.agreement.string4|place:string4}{form.reg.agreement.string5|place:string5}{form.reg.agreement.string6|place:string6}">{STRING1} «<b>{SEND}</b>», {STRING2} <a href="#">{STRING3}</a> {STRING4}
+                    <a href="#">{STRING5}</a> {STRING6}.
                 </div>
-                <button type="submit" class="btn">Отправить</button>
+                <button type="submit" class="btn" wa_lang="{form.reg.send.text}"></button>
             </div>
             <div class="sign-other">
                 <div class="other-text"><b>Есть учетная запись?</b> Перейдите в панель управления аккаунтом -
-                    <span class="link">авторизация</span></div>
+                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">авторизация</span></div>
                 <div class="other-text">
                     <b>Забыли пароль?</b> Необходимо восстановить доступ с помощью функции
                     <span class="link">вспомнить пароль</span>.
                 </div>
             </div>
-        </form>
-        <form name="forgot" style="display: none">
+        </div>
+        <div name="forgot" style="display: none">
             <div class="title">Восстановление аккаунта</div>
             <div class="sign-box">
                 <div class="label-block">
@@ -197,10 +196,10 @@
                     восстановления доступа.
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-<div class="auth-success">
+<div class="auth-success" style="display: none;">
 <div class="manager">
 <div class="tasks-content" style="display: none">
 <div class="folders">
