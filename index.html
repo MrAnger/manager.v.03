@@ -5,14 +5,65 @@
     <meta charset="UTF-8">
     <meta name="robots" content="index, follow"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/manager.js"></script>
 </head>
 <body>
+<div class="console-box">
+    <div class="console-title">WebManager Консоль</div>
+    <div class="open-box" style="display: none">
+        <div class="console-text">
+            <div class="content">
+                <p>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64
+                    Safari/537.31</p>
+
+                <p>17/04/2013 21:42:07<br>
+                    Send to server:<br>
+                    -------------------<br>
+                    {"Action":"Sign in","Data":{"Mail":"skv.max@mail.ru","Password":"vfrcbvrf","Remember":false}}
+                </p>
+                <p>
+                    17/04/2013 21:42:09<br>
+                    Recive from server:<br>
+                    ------------------------<br>
+                    {"Status":"Query error","Error":"Not match"}
+                </p>
+                <p>
+                    17/04/2013 21:42:09<br>
+                    Recive from server:<br>
+                    ------------------------<br>
+                    {"Status":"Query error","Error":"Not match"}
+                </p>
+                <p>
+                    17/04/2013 21:42:09<br>
+                    Recive from server:<br>
+                    ------------------------<br>
+                    {"Status":"Query error","Error":"Not match"}
+                </p>
+                <p>
+                    17/04/2013 21:42:09<br>
+                    Recive from server:<br>
+                    ------------------------<br>
+                    {"Status":"Query error","Error":"Not match"}
+                </p>
+            </div>
+        </div>
+        <div class="console-send" style="">
+            <div class="option"><span class="clear"></span><span class="save"></span><span class="copy"></span><span class="save"></span></div>
+            <div class="text-line">
+                <input type="text" value="">
+            </div>
+            <div class="text-line">
+                <input type="submit" class="btn" value="Отправить">
+            </div>
+        </div>
+    </div>
+</div>
 <div class="add-box-wrap" style="display: none">
     <div class="add-box">
         <div class="add-box-content">
@@ -67,6 +118,19 @@
         </div>
     </div>
 </div>
+<div class="confirm-box">
+    <div class="confirm-content">
+        <div class="content">
+            <div class="close"></div>
+            <div class="title">Предупреждение</div>
+            <div class="text">При выполнении данной операции отмена невозможна! Вы хотите продолжить?</div>
+            <div class="buttons">
+                <button name="submit" type="submit" class="btn">Да</button>
+                <button name="submit" type="submit" class="btn cancel">Нет</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text">Пожалуйста, подождите ...</span>
@@ -87,10 +151,10 @@
                       onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
             </li>
             <li>
-                <span class="lng-item eng" wa_lang="{language.en}" lng="en-en"  disable></span>
+                <span class="lng-item eng" wa_lang="{language.en}" lng="en-en" disable></span>
             </li>
             <li>
-                <span class="lng-item ukr" wa_lang="{language.ua}" lng="ua-ua"  disable></span>
+                <span class="lng-item ukr" wa_lang="{language.ua}" lng="ua-ua" disable></span>
             </li>
         </ul>
     </div>
@@ -153,18 +217,22 @@
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.password.text}"></div>
                     <div class="text-line">
-                        <input class="password" type="password" value placeholder wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
+                        <input class="password" type="password" value placeholder
+                               wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
                             class="show-box"></span>
                     </div>
                 </div>
-                <div class="agreement" wa_lang="{form.reg.agreement.string1|place:string1}{form.reg.send.text|place:send}{form.reg.agreement.string2|place:string2}{form.reg.agreement.string3|place:string3}{form.reg.agreement.string4|place:string4}{form.reg.agreement.string5|place:string5}{form.reg.agreement.string6|place:string6}">{STRING1} «<b>{SEND}</b>», {STRING2} <a href="#">{STRING3}</a> {STRING4}
+                <div class="agreement"
+                     wa_lang="{form.reg.agreement.string1|place:string1}{form.reg.send.text|place:send}{form.reg.agreement.string2|place:string2}{form.reg.agreement.string3|place:string3}{form.reg.agreement.string4|place:string4}{form.reg.agreement.string5|place:string5}{form.reg.agreement.string6|place:string6}">
+                    {STRING1} «<b>{SEND}</b>», {STRING2} <a href="#">{STRING3}</a> {STRING4}
                     <a href="#">{STRING5}</a> {STRING6}.
                 </div>
                 <button type="submit" class="btn" wa_lang="{form.reg.send.text}"></button>
             </div>
             <div class="sign-other">
                 <div class="other-text"><b>Есть учетная запись?</b> Перейдите в панель управления аккаунтом -
-                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">авторизация</span></div>
+                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">авторизация</span>
+                </div>
                 <div class="other-text">
                     <b>Забыли пароль?</b> Необходимо восстановить доступ с помощью функции
                     <span class="link">вспомнить пароль</span>.
