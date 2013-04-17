@@ -13,7 +13,8 @@
 				authStep: "authStep",
 				authStepNumber: "authStepNumber",
 				authStepToken: "authStepToken"
-			}
+			},
+			onReadyDom: []
 		},
 		data: {
 			user: {
@@ -23,7 +24,8 @@
 		utils: {
 			showNotice: NoticeShow,
 			checkType: CheckType,
-			formatDate: formatDate
+			formatDate: formatDate,
+			consoleAppendToText: console_appendText
 		},
 		methods: {
 			getToken: function(){
@@ -160,6 +162,60 @@
 
 		return false;
 	});
+	//set console events
+	$(document).on("click", ".console-box .console-send input[type=submit]", function(e){
+		var input = $(".console-box .console-send input[type=text]"),
+			text = $(input).val();
+		$(input).val("");
+
+		if(text.length > 0){
+			try{
+				eval("v="+text);
+
+				var defaultReceive = {};
+				defaultReceive[api.Constants.OperationItem.Status] = api.Constants.ResponseStatus.GeneralError;
+				defaultReceive[api.Constants.OperationItem.Error] = api.Constants.GeneralError.NoResponse;
+				defaultReceive["_defaultReceive"] = true;
+				defaultReceive = $.toJSON(defaultReceive);
+
+				var request = new api.utils.request(
+					api.options.server,//url
+					text,//data
+					null,//callback
+					defaultReceive,//default receive data
+					api.options.timeout,//timeout
+					null,//loader show callback
+					null,//loader hide callback
+					function(txt){
+						manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "CONSOLE\nSend to server: \n-------------------\n" + txt);
+					},//log send callback
+					function(txt){
+						manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "CONSOLE\nReceive from server: \n------------------------\n" + txt);
+					}//log receive callback
+				);
+				request.send();
+			}catch(e){};
+		};
+	});
+	manager.options.onReadyDom.push(function(){
+		$(".console-box .open-box").show();
+		var clip = new ZeroClipboard.Client();
+		clip.glue("console_button_copy");
+		$("#"+$(clip.getHTML()).attr('id')).parent().css("z-index" ,"10000");
+		clip.addEventListener('onMouseUp', function(client){
+			var a = $(".console-box .console-text .content").clone();
+			clip.setText($(a).html($(a).html().replace(new RegExp("<br>",'ig'), "\n")).text());
+		});
+		clip.addEventListener('onComplete', function(client){
+			NoticeShow(manager.lng.form.console.copy.complete, "success");
+		});
+		$(window).resize(function(e){
+			$(".console-box .open-box").show();
+			clip.reposition();
+			$(".console-box .open-box").hide();
+		});
+		$(".console-box .open-box").hide();
+	});
 
 	//utils
 	function NoticeShow(text, type){
@@ -267,6 +323,9 @@
 		formatString = formatString.replace(/s/i, s);
 
 		return formatString;
+	};
+	function console_appendText(text){
+		$(".console-box .console-text .content").append($("<p>"+text.replace(new RegExp("\n",'ig'), "<br>")+"</p>"));
 	};
 	var Cookie = manager.utils.cookie = {
 		get : function(name){
@@ -387,6 +446,8 @@
 
 	//init
 	$(document).ready(function(e){
+		//print useragent to console
+		manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" +navigator.userAgent);
 		//set language
 		api.utils.addScript('js/lng/'+Language.get()+'.js');
 		$(".lang .lng-item[lng='"+Language.get()+"']").addClass("active");
@@ -395,16 +456,10 @@
 		//Api Log
 		api.options.log.enable = true;
 		api.options.log.callback.send = function(txt){
-			console.log("////////////////////////SEND TO SERVER");
-			console.log(txt);
-			console.log("//////////////////////////////////////");
-			console.log("");
+			manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "Send to server: \n-------------------\n" + txt);
 		};
 		api.options.log.callback.receive = function(txt){
-			console.log("///////////////////RECEIVE FROM SERVER");
-			console.log(txt);
-			console.log("//////////////////////////////////////");
-			console.log("");
+			manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "Receive from server: \n------------------------\n" + txt);
 		};
 		//Api Loader
 		api.options.loader.enable = true;
@@ -424,6 +479,9 @@
 		//Translate document
 		TranslatePage();
 		$(document).bind("DOMNodeInserted", TranslatePage);
+
+		//run func onDomReady
+		$.each(manager.options.onReadyDom, function(key, f){f();});
 
 		//check start program
 		if(DataStorage.get(manager.options.params.authStep) == 1){

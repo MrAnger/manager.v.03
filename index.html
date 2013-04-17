@@ -6,61 +6,38 @@
     <meta name="robots" content="index, follow"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
+    <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/manager.js"></script>
+    <script type="text/javascript">
+        //set zeroClipboard
+        ZeroClipboard.setMoviePath('js/zeroclipboard/ZeroClipboard.swf');
+    </script>
 </head>
 <body>
 <div class="console-box">
     <div class="console-title">WebManager Консоль</div>
     <div class="open-box" style="display: none">
         <div class="console-text">
-            <div class="content">
-                <p>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64
-                    Safari/537.31</p>
-
-                <p>17/04/2013 21:42:07<br>
-                    Send to server:<br>
-                    -------------------<br>
-                    {"Action":"Sign in","Data":{"Mail":"skv.max@mail.ru","Password":"vfrcbvrf","Remember":false}}
-                </p>
-                <p>
-                    17/04/2013 21:42:09<br>
-                    Recive from server:<br>
-                    ------------------------<br>
-                    {"Status":"Query error","Error":"Not match"}
-                </p>
-                <p>
-                    17/04/2013 21:42:09<br>
-                    Recive from server:<br>
-                    ------------------------<br>
-                    {"Status":"Query error","Error":"Not match"}
-                </p>
-                <p>
-                    17/04/2013 21:42:09<br>
-                    Recive from server:<br>
-                    ------------------------<br>
-                    {"Status":"Query error","Error":"Not match"}
-                </p>
-                <p>
-                    17/04/2013 21:42:09<br>
-                    Recive from server:<br>
-                    ------------------------<br>
-                    {"Status":"Query error","Error":"Not match"}
-                </p>
-            </div>
+            <div class="content"></div>
         </div>
         <div class="console-send" style="">
-            <div class="option"><span class="save"></span><span class="copy"></span><span class="save"></span></div>
-            <div class="text-line">
-                <input type="text" value="">
+            <div class="option">
+                <span class="save"></span>
+                <span id="console_button_copy" class="copy"></span>
+                <span class="save"></span>
             </div>
-            <div class="text-line">
-                <input type="submit" class="btn" value="Отправить">
-            </div>
+            <form onsubmit="return false;">
+                <div class="text-line">
+                    <input type="text" value="" autofocus="autofocus">
+                </div>
+                <div class="text-line">
+                    <input type="submit" class="btn" value="Отправить">
+                </div>
+            </form>
         </div>
     </div>
 </div>

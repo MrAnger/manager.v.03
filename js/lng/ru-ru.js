@@ -55,6 +55,11 @@ manager.lng = {
 			"send":{
 				"text": "Отправить"
 			}
+		},
+		"console":{
+			"copy":{
+				"complete": "Информация успешно скопирована."
+			}
 		}
 	},
 	"language":{

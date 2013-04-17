@@ -811,6 +811,16 @@
 			if(!data[api.Constants.OperationItem.Data]) data[api.Constants.OperationItem.Data] = {};
 			data[api.Constants.OperationItem.Data][key] = value;
 		};
+		this.setDataRaw = function(raw){
+			try{
+				raw = eval("v="+raw);
+				data = raw;
+
+				return true;
+			}catch(e){
+				return false;
+			};
+		};
 		this.toCode = function(){
 			return $.toJSON(data);
 		};

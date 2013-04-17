@@ -113,3 +113,6 @@ $(document).on("click", ".msg-box .msg-content .close", function(e){
 		$(this).remove();
 	});
 });
+$(".console-box .console-title").click(function(e){
+	$(".console-box .open-box").toggle("fast")
+});
