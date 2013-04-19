@@ -108,7 +108,7 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			ConfirmResetAccountPassword: function(data){
+			ConfirmResetPassword: function(data){
 				data = $.extend(true, {
 					exception: {
 						InvalidCode: function(){}

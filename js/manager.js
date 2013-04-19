@@ -19,7 +19,8 @@
 		data: {
 			user: {
 				token: false
-			}
+			},
+			elem: {}
 		},
 		utils: {
 			showNotice: NoticeShow,
@@ -45,7 +46,11 @@
 				$(".main .auth-no-success").show();
 				$("form[name=auth]").show();
 
-				data.callback();
+				data.callback({
+					form: "form[name=auth]",
+					mail: "form[name=auth] input[name=mail]",
+					password: "form[name=auth] input[name=password]"
+				});
 			},
 			authFormHide: function(data){
 				data = $.extend(true, {
@@ -79,6 +84,31 @@
 
 				data.callback();
 			},
+			forgotFormShow: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$("form[name=auth] input[type=text]").val("");
+				$("form[name=auth] input[type=password]").val("");
+				$("form[name=auth] input[name=forgot_code], form[name=auth] input[name=forgot_password]").attr("disabled", "disabled");
+				$("form[name=auth]").attr("wa_step", 0);
+
+				$(".main .auth-no-success").show();
+				$("form[name=forgot]").show();
+
+				data.callback();
+			},
+			forgotFormHide: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$(".main .auth-no-success").hide();
+				$("form[name=forgot]").hide();
+
+				data.callback();
+			},
 			managerFormShow: function(data){
 				data = $.extend(true, {
 					callback: function(){},
@@ -86,10 +116,19 @@
 				}, data);
 
 				$(".main .auth-success").show();
+				$(".header .auth-success").show();
 				switch(data.form){
-					case "default":
+					case "task":
+						$(".main .auth-success .tasks-content").show();
+						break;
+					case "iplist":
+						$(".main .auth-success .iplists-content").show();
+						break;
+					case "account":
 						$(".main .auth-success .account-content").show();
 						break;
+					default:
+						$(".main .auth-success .tasks-content").show();
 				};
 
 				data.callback();
@@ -101,6 +140,7 @@
 				}, data);
 
 				$(".main .auth-success").hide();
+				$(".header .auth-success").hide();
 				switch(data.form){
 					case "default":
 						$(".main .auth-success .manager").children().hide();
@@ -112,7 +152,69 @@
 		}
 	};
 
-	//set auth form
+	//SET CONSOLE FORM
+	$(document).on("click", ".console-box .console-send input[type=submit]", function(e){
+		var input = $(".console-box .console-send input[type=text]"),
+			text = $(input).val();
+		$(input).val("");
+
+		if(text.length > 0){
+			try{
+				if(JSON && JSON.parse)JSON.parse(text);
+				else eval("v="+text);
+
+				var defaultReceive = {};
+				defaultReceive[api.Constants.OperationItem.Status] = api.Constants.ResponseStatus.GeneralError;
+				defaultReceive[api.Constants.OperationItem.Error] = api.Constants.GeneralError.NoResponse;
+				defaultReceive["_defaultReceive"] = true;
+				defaultReceive = $.toJSON(defaultReceive);
+
+				var request = new api.utils.request(
+					api.options.server,//url
+					text,//data
+					null,//callback
+					defaultReceive,//default receive data
+					api.options.timeout,//timeout
+					null,//loader show callback
+					null,//loader hide callback
+					function(txt){
+						manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "CONSOLE\nSend to server: \n-------------------\n" + txt);
+					},//log send callback
+					function(txt){
+						manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "CONSOLE\nReceive from server: \n-------------------\n" + txt);
+					}//log receive callback
+				);
+				request.send();
+			}catch(e){};
+		};
+	});
+	manager.options.onReadyDom.push(function(){
+		var consoleBox = $(".console-box .open-box"),
+			clip = manager.data.elem.console_clip = new ZeroClipboard.Client();
+
+		$(consoleBox).show();
+		clip.glue("console_button_copy");
+		$("#"+$(clip.getHTML()).attr('id')).parent().css("z-index" ,"10000");
+
+		clip.addEventListener('onMouseUp', function(client){
+			var html = $(".console-box .console-text .content").html();
+			html = html.replace(new RegExp("<br>",'ig'), "\n").replace(new RegExp("<p>",'ig'), "").replace(new RegExp("</p>",'ig'), "\n\n");
+			clip.setText(html);
+		});
+		clip.addEventListener('onComplete', function(client){
+			NoticeShow(manager.lng.form.console.copy.complete, "success");
+		});
+		$(window).resize(function(e){
+			$(consoleBox).show();
+			clip.reposition();
+			$(consoleBox).hide();
+		});
+
+		$(consoleBox).hide();
+	});
+	//SET CONSOLE FORM
+
+	//SET AUTH FORM
 	$(document).on("submit", "form[name='auth']", function(e){
 		var form = this, inputs = {
 			mail: this["mail"],
@@ -162,60 +264,137 @@
 
 		return false;
 	});
-	//set console events
-	$(document).on("click", ".console-box .console-send input[type=submit]", function(e){
-		var input = $(".console-box .console-send input[type=text]"),
-			text = $(input).val();
-		$(input).val("");
+	//SET AUTH FORM
 
-		if(text.length > 0){
-			try{
-				eval("v="+text);
-
-				var defaultReceive = {};
-				defaultReceive[api.Constants.OperationItem.Status] = api.Constants.ResponseStatus.GeneralError;
-				defaultReceive[api.Constants.OperationItem.Error] = api.Constants.GeneralError.NoResponse;
-				defaultReceive["_defaultReceive"] = true;
-				defaultReceive = $.toJSON(defaultReceive);
-
-				var request = new api.utils.request(
-					api.options.server,//url
-					text,//data
-					null,//callback
-					defaultReceive,//default receive data
-					api.options.timeout,//timeout
-					null,//loader show callback
-					null,//loader hide callback
-					function(txt){
-						manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "CONSOLE\nSend to server: \n-------------------\n" + txt);
-					},//log send callback
-					function(txt){
-						manager.utils.consoleAppendToText(formatDate(new Date(), 'dd/mm/yyyy hh:nn:ss') + "\n" + "CONSOLE\nReceive from server: \n------------------------\n" + txt);
-					}//log receive callback
-				);
-				request.send();
-			}catch(e){};
+	//SET REG FORM
+	$(document).on("submit", "form[name='reg']", function(e){
+		var form = this, inputs = {
+			mail: this["reg_mail"],
+			password: this["reg_password"],
+			login: this["reg_login"]
 		};
+
+		//check input data
+		if(!CheckType(inputs.login.value, TYPE.LOGIN)){
+			manager.utils.showNotice(manager.lng.form.reg.login.error, "error");
+			$(inputs.login).focus();
+		}else if(!CheckType(inputs.mail.value, TYPE.MAIL)){
+			manager.utils.showNotice(manager.lng.form.reg.mail.error, "error");
+			$(inputs.mail).focus();
+		}else if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
+			manager.utils.showNotice(manager.lng.form.reg.password.error, "error");
+			$(inputs.password).focus();
+		}else{
+			api.methods.Register({
+				mail: inputs.mail.value,
+				password: inputs.password.value,
+				login: inputs.login.value,
+				exception: {
+					MailExists: function(){
+						manager.utils.showNotice(manager.lng.exception.query.reg.MailExists, "error");
+						$(inputs.mail).focus();
+					},
+					LoginExists: function(){
+						manager.utils.showNotice(manager.lng.exception.query.reg.LoginExists, "error");
+						$(inputs.login).focus();
+					},
+					Forbidden: function(){
+						manager.utils.showNotice(manager.lng.exception.query.reg.Forbidden, "error");
+					}
+				},
+				callback: function(data){
+					NoticeShow(manager.lng.form.reg.success, "success");
+
+					var mail = inputs.mail.value,
+						pass = inputs.password.value;
+
+					manager.methods.regFormHide({callback: function(){
+						manager.methods.authFormShow({callback: function(data){
+							$(data.mail).val(mail);
+							$(data.password).val(pass);
+							$(data.form).submit();
+						}});
+					}});
+				}
+			});
+		};
+
+		return false;
 	});
-	manager.options.onReadyDom.push(function(){
-		$(".console-box .open-box").show();
-		var clip = new ZeroClipboard.Client();
-		clip.glue("console_button_copy");
-		$("#"+$(clip.getHTML()).attr('id')).parent().css("z-index" ,"10000");
-		clip.addEventListener('onMouseUp', function(client){
-			var a = $(".console-box .console-text .content").clone();
-			clip.setText($(a).html($(a).html().replace(new RegExp("<br>",'ig'), "\n")).text());
-		});
-		clip.addEventListener('onComplete', function(client){
-			NoticeShow(manager.lng.form.console.copy.complete, "success");
-		});
-		$(window).resize(function(e){
-			$(".console-box .open-box").show();
-			clip.reposition();
-			$(".console-box .open-box").hide();
-		});
-		$(".console-box .open-box").hide();
+	//SET REG FORM
+
+	//SET FORGOT FORM
+	$(document).on("submit", "form[name='forgot']", function(e){
+		var form = this, inputs = {
+			mail: this["forgot_mail"],
+			code: this["forgot_code"],
+			password: this["forgot_password"]
+		};
+
+		if($(form).attr("wa_step") == 0){
+			//check input data
+			if(!CheckType(inputs.mail.value, TYPE.MAIL)){
+				manager.utils.showNotice(manager.lng.form.forgot.mail.error, "error");
+				$(inputs.mail).focus();
+			}else{
+				api.methods.ResetPassword({
+					mail: inputs.mail.value,
+					callback: function(){
+						NoticeShow(manager.lng.form.forgot.success.step1, "success");
+						$(inputs.mail).attr("disabled", "disabled");
+						$(inputs.code).removeAttr("disabled");
+						$(inputs.code).focus();
+						$(inputs.password).removeAttr("disabled");
+						$(form).attr("wa_step", 1);
+					},
+					exception: {
+						NotFound: function(){
+							NoticeShow(manager.lng.exception.query.resetPassword.NotFound, "error");
+							$(inputs.mail).focus();
+						}
+					}
+				});
+			};
+		}else if($(form).attr("wa_step") == 1){
+			//check input data
+			if(!CheckType(inputs.code.value, TYPE.CODE_CONFIRM)){
+				manager.utils.showNotice(manager.lng.form.forgot.code.error, "error");
+				$(inputs.code).focus();
+			}else if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
+				manager.utils.showNotice(manager.lng.form.forgot.password.error, "error");
+				$(inputs.password).focus();
+			}else{
+				api.methods.ConfirmResetPassword({
+					mail: inputs.mail.value,
+					code: inputs.code.value,
+					password: inputs.password.value,
+					callback: function(){
+						NoticeShow(manager.lng.form.forgot.success.step2, "success");
+						manager.methods.forgotFormHide({
+							callback: function(){
+								manager.methods.authFormShow({
+									callback: function(data){
+										$(data.mail).val(inputs.mail.value);
+										$(data.password).val(inputs.password.value);
+										$(data.form).submit();
+									}
+								});
+							}
+						});
+					},
+					exception: {
+						InvalidCode: function(){
+							NoticeShow(manager.lng.exception.query.confirmResetPassword.InvalidCode, "error");
+							$(inputs.code).focus();
+						}
+					}
+				});
+			};
+		};
+
+		return false;
 	});
+	//SET FORGOT FORM
 
 	//utils
 	function NoticeShow(text, type){
@@ -223,6 +402,7 @@
 			error: "false",
 			success: "true"
 		},
+			timeout_destroy = true,
 			selector = ".msg-content[default]",
 			parent = $(selector).parent(),
 			msg = $(selector).clone().addClass(types[type]).removeAttr("default").appendTo(parent).hide();
@@ -233,7 +413,17 @@
 			"mode": "show"
 		}, function(){
 			setTimeout(function(){
-				$(msg).find(".close").click();
+				if(timeout_destroy) $(msg).find(".close").click();
+			}, 5 * 1000);
+		});
+		$(msg).hover(function(){
+			console.log("1");
+			timeout_destroy = false;
+		}, function(){
+			console.log("2");
+			timeout_destroy = true;
+			setTimeout(function(){
+				if(timeout_destroy) $(msg).find(".close").click();
 			}, 5 * 1000);
 		});
 	};
@@ -421,6 +611,12 @@
 			regexp: api.Constants.Limit.Account.Password.Regexp,
 			min: api.Constants.Limit.Account.Password.Length.Min,
 			max: api.Constants.Limit.Account.Password.Length.Max
+		},
+		CODE_CONFIRM: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Confirm.Code.Regexp,
+			min:  api.Constants.Limit.Confirm.Code.Length.Min,
+			max:  api.Constants.Limit.Confirm.Code.Length.Max
 		}
 	};
 	function CheckType(_data, _type, _allowEmpty){

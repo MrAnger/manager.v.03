@@ -19,7 +19,7 @@
 </head>
 <body>
 <div class="console-box">
-    <div class="console-title">WebManager Консоль</div>
+    <div class="console-title" wa_lang="{form.console.title}"></div>
     <div class="open-box" style="display: none">
         <div class="console-text">
             <div class="content"></div>
@@ -35,7 +35,7 @@
                     <input type="text" value="" autofocus="autofocus">
                 </div>
                 <div class="text-line">
-                    <input type="submit" class="btn" value="Отправить">
+                    <input type="submit" class="btn" value wa_lang="{form.console.send.text|attr:value}">
                 </div>
             </form>
         </div>
@@ -172,29 +172,29 @@
                 <div class="other-text"
                      wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
                     <b>{FORGOT_PASSWORD}</b> {PASSWORD_RECOVERY}
-                    <span class="link">{REMEMBER_PASSWORD}</span>.
+                    <span class="link" onclick="manager.methods.authFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
                 </div>
             </div>
         </form>
-        <div name="reg" style="display: none">
+        <form name="reg" method="POST" style="display: none">
             <div class="title" wa_lang="{form.reg.title}"></div>
             <div class="sign-box">
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.login.text}"></div>
                     <div class="text-line">
-                        <input type="text" value placeholder wa_lang="{form.reg.login.placeholder|attr:placeholder}">
+                        <input name="reg_login" type="text" value placeholder wa_lang="{form.reg.login.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.mail.text}"></div>
                     <div class="text-line">
-                        <input type="text" value placeholder wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
+                        <input name="reg_mail" type="text" value placeholder wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.password.text}"></div>
                     <div class="text-line">
-                        <input class="password" type="password" value placeholder
+                        <input name="reg_password" class="password" type="password" value placeholder
                                wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
                             class="show-box"></span>
                     </div>
@@ -207,41 +207,43 @@
                 <button type="submit" class="btn" wa_lang="{form.reg.send.text}"></button>
             </div>
             <div class="sign-other">
-                <div class="other-text"><b>Есть учетная запись?</b> Перейдите в панель управления аккаунтом -
-                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">авторизация</span>
+                <div class="other-text" wa_lang="{form.reg.other.haveAccount|place:have_account}{form.reg.other.goToManagerPanel|place:go_to_manager_panel}{form.reg.other.auth|place:auth}"><b>{HAVE_ACCOUNT}</b> {GO_TO_MANAGER_PANEL}
+                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">{AUTH}</span>
                 </div>
-                <div class="other-text">
-                    <b>Забыли пароль?</b> Необходимо восстановить доступ с помощью функции
-                    <span class="link">вспомнить пароль</span>.
+                <div class="other-text" wa_lang="{form.reg.other.forgotPassword|place:forgot_password}{form.reg.other.restoreAccess|place:restore_access}{form.reg.other.rememberPassword|place:remember_password}">
+                    <b>{FORGOT_PASSWORD}</b> {RESTORE_ACCESS}
+                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
                 </div>
             </div>
-        </div>
-        <div name="forgot" style="display: none">
-            <div class="title">Восстановление аккаунта</div>
+        </form>
+        <form name="forgot" method="POST" wa_step="0" style="display: none">
+            <div class="title" wa_lang="{form.forgot.title}"></div>
             <div class="sign-box">
                 <div class="label-block">
-                    <div class="label-text">Ваш email</div>
+                    <div class="label-text" wa_lang="{form.forgot.mail.text}"></div>
                     <div class="text-line">
-                        <input type="text" value="" placeholder="Email">
+                        <input name="forgot_mail" type="text" value placeholder wa_lang="{form.forgot.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
-                    <div class="label-text">Код подтверждения</div>
+                    <div class="label-text" wa_lang="{form.forgot.code.text}"></div>
                     <div class="text-line">
-                        <input type="text" value="" placeholder="Код подтверждения">
+                        <input name="forgot_code" type="text" value placeholder disabled wa_lang="{form.forgot.code.placeholder|attr:placeholder}">
                     </div>
                 </div>
-                <button type="submit" class="btn">Восстановить</button>
+                <div class="label-block">
+                    <div class="label-text" wa_lang="{form.forgot.password.text}"></div>
+                    <div class="text-line">
+                        <input name="forgot_password" class="password" type="password" value disabled placeholder wa_lang="{form.forgot.password.placeholder|attr:placeholder}"><span class="show-box"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn" wa_lang="{form.forgot.restore}"></button>
             </div>
             <div class="sign-other">
-                <div class="other-text">На указанный email будет выслан код подтверждения, который необходимо ввести на
-                    следующем этапе восстановления.
-                </div>
-                <div class="other-text">Введите полученный код в соответствующее поле для завершения процесса
-                    восстановления доступа.
-                </div>
+                <div class="other-text" wa_lang="{form.forgot.other.string1}"></div>
+                <div class="other-text" wa_lang="{form.forgot.other.string2}"></div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 <div class="auth-success" style="display: none;">

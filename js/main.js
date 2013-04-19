@@ -91,13 +91,15 @@ $(".show-box").disableSelection().click(function (event) {
 	el.toggleClass("true")
 	var elValue = el.parents(".text-line").children("input").val(),
 		name = el.parents(".text-line").children("input").attr("name"),
-		placeholder = el.parents(".text-line").children("input").attr("placeholder");
+		placeholder = el.parents(".text-line").children("input").attr("placeholder"),
+		disabled = el.parents(".text-line").children("input").hasAttribute("disabled");
 	if (el.hasClass("true")) {
 		el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value placeholder>");
 		el.parents(".text-line").children("input[type=password]").remove();
 		el.parents(".text-line").children("input[type=text]").val(elValue);
 		if(name) el.parents(".text-line").children("input[type=text]").attr("name", name);
 		if(placeholder) el.parents(".text-line").children("input[type=text]").attr("placeholder", placeholder);
+		if(disabled) el.parents(".text-line").children("input[type=text]").attr("disabled", "disabled");
 	}
 	else {
 		el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value placeholder>");
@@ -105,6 +107,7 @@ $(".show-box").disableSelection().click(function (event) {
 		el.parents(".text-line").children("input[type=password]").val(elValue);
 		if(name) el.parents(".text-line").children("input[type=password]").attr("name", name);
 		if(placeholder) el.parents(".text-line").children("input[type=password]").attr("placeholder", placeholder);
+		if(disabled) el.parents(".text-line").children("input[type=password]").attr("disabled", "disabled");
 	}
 	event.stopImmediatePropagation();
 });
@@ -114,5 +117,17 @@ $(document).on("click", ".msg-box .msg-content .close", function(e){
 	});
 });
 $(".console-box .console-title").click(function(e){
-	$(".console-box .open-box").toggle("fast")
+	var box = $(".console-box .open-box"),
+		input = $(".console-box .console-send input[type=text]");
+
+	if($(box).css("display") == "none"){
+		$(box).show("fast", function(){
+			manager.data.elem.console_clip.show();
+			$(input).focus();
+		});
+	}else{
+		$(box).hide("fast", function(){
+			manager.data.elem.console_clip.hide();
+		});
+	};
 });
