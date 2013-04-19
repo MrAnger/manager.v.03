@@ -131,3 +131,10 @@ $(".console-box .console-title").click(function(e){
 		});
 	};
 });
+$(".top-menu .item").click(function(e){
+	$(".top-menu .item").removeClass("active");
+	$(this).addClass("active");
+});
+$(".account [name=login]").click(function(e){
+	$(".top-menu .item").removeClass("active");
+});

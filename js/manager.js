@@ -117,6 +117,7 @@
 
 				$(".main .auth-success").show();
 				$(".header .auth-success").show();
+				$(".main .auth-success .manager").children().hide();
 				switch(data.form){
 					case "task":
 						$(".main .auth-success .tasks-content").show();
@@ -146,6 +147,18 @@
 						$(".main .auth-success .manager").children().hide();
 						break;
 				};
+
+				data.callback();
+			},
+			logOut: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				manager.methods.managerFormHide({callback: function(){
+					DataStorage.del(manager.options.params.tokenKey);
+					manager.methods.authFormShow();
+				}});
 
 				data.callback();
 			}
@@ -249,6 +262,7 @@
 				callback: function(data){
 					manager.methods.setToken(data.token);
 					if(!inputs.remember.checked) DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
+					else DataStorage.del(manager.options.params.tokenKey);
 
 					//submit auth form
 					$(form).attr("wa_auth", 1);
@@ -690,7 +704,12 @@
 				manager.methods.managerFormShow();
 			};
 		}else{
-			manager.methods.authFormShow();
+			if(DataStorage.get(manager.options.params.tokenKey)){
+				manager.methods.setToken(DataStorage.get(manager.options.params.tokenKey));
+				manager.methods.managerFormShow();
+			}else{
+				manager.methods.authFormShow();
+			};
 		};
 	});
 })(jQuery);

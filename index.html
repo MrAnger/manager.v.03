@@ -110,16 +110,16 @@
 </div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
-        <span class="loader-text">Пожалуйста, подождите ...</span>
+        <span class="loader-text" wa_lang="{loader.text}"></span>
     </div>
 </div>
 <div class="header">
     <div class="auth-success" style="display: none">
         <div class="top-menu">
-            <span class="item active" wa_lang="{menu.top-menu.task}"></span> <span class="item">IP-списки</span>
+            <span class="item active" wa_lang="{menu.top-menu.task}" onclick="manager.methods.managerFormShow({form: 'task'})"></span> <span class="item" wa_lang="{menu.top-menu.iplist}" onclick="manager.methods.managerFormShow({form: 'iplist'})"></span>
         </div>
-        <div class="account"><span>Вы авторизованы, </span><span class="link login">Creator</span> |
-            <span class="link exit">Выход</span></div>
+        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login" onclick="manager.methods.managerFormShow({form: 'account'})">User Login</span> |
+            <span class="link exit" onclick="manager.methods.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
     </div>
     <div class="lang">
         <ul class="lng-check">

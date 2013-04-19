@@ -1,8 +1,14 @@
 manager.lng = {
 	"menu":{
 		"top-menu": {
-			"task": "Задания"
+			"task": "Задания",
+			"iplist": "IP-списки",
+			"youAuth": "Вы авторизованы, ",
+			"exit": "Выход"
 		}
+	},
+	"loader":{
+		"text": "Пожалуйста, подождите ..."
 	},
 	"form":{
 		"auth":{
