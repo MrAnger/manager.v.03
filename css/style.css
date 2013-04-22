@@ -572,7 +572,7 @@ input[type=checkbox] {
 }
 
 .item-list li .info {
-	padding: 3px 0;
+	padding: 3px;
 	margin-left: 31px;
 	font-size: .85em;
 	color: #999;
