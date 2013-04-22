@@ -113,6 +113,19 @@ $(".confirm-box [name=yes]").click(function(e){
 $(".confirm-box [name=no]").click(function(e){
 	$(this).parents(".confirm-box").find(".close").click();
 });
+$(document).keydown(function(e){
+	if(e.keyCode == 27){
+		$(".add-box-wrap, .confirm-box").each(function(key, el){
+			if($(el).css("display") != "none") $(el).find(".close").click();
+		});
+	}else if(e.keyCode == 13){
+		$(".confirm-box").each(function(key, el){
+			if($(el).css("display") != "none"){
+				$(el).find("[name=yes]").click();
+			};
+		});
+	};
+});
 $(".tab-list li").each(function(key, el){
 	var tab_content = $(this).parents(".tab-box").find(".tab-box-content [name='"+$(this).attr("name")+"']");
 	if($(this).hasClass("active")) $(tab_content).show();
@@ -127,15 +140,16 @@ $(".tab-list li").each(function(key, el){
 	$(this).parents(".tab-box").find(".tab-box-content [name='"+name+"']").show();
 });
 $(".spoiler").each(function(key, el){
-	//if($(this).hasClass("active")) $(this);
+	var content = $(el).parents(".set-item").find(".spoiler-box-content");
+	if($(el).hasClass("active")) $(content).show();
+	else $(content).hide();
 }).click(function(){
-	/*$(this).toggleClass("active");
-	if ($(this).hasClass("active")) {
-		$(this).parents(".set-item").children(".graph-box").show()
-	}
-	else {
-		$(this).parents(".set-item").children(".graph-box").hide()
-	}*/
-	//spoiler-box-content
-
+		var content = $(this).parents(".set-item").find(".spoiler-box-content");
+		if($(this).hasClass("active")){
+			$(this).removeClass("active");
+			$(content).hide("fast");
+		}else{
+			$(this).addClass("active");
+			$(content).show("fast");
+		};
 });
