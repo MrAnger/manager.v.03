@@ -1005,7 +1005,7 @@ input[readonly].geo {
 .console-title {
     position: absolute;
     top: -30px;
-    left:0;
+    left: 0;
     height: 30px;
     line-height: 30px;
     padding: 0 15px;
@@ -1044,6 +1044,7 @@ input[readonly].geo {
 .console-box .content p:nth-child(2n) {
     background: #ebebeb;
 }
+
 .console-box .option {
     display: inline-block;
 }
@@ -1063,10 +1064,12 @@ input[readonly].geo {
     height: 170px;
     background: #3E3E3E;
 }
+
 .console-send {
     padding: 0 5px 5px;
     text-align: right;
 }
+
 embed:hover .copy {
     opacity: 1;
 }
@@ -1076,7 +1079,9 @@ embed:hover .copy {
     vertical-align: middle;
 }
 
-
-
-
-
+.not-content {
+    padding: 5px 10px;
+    font-size: .85em;
+    font-style: italic;
+    opacity: .6;
+}
