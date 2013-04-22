@@ -121,6 +121,7 @@
 				switch(data.form){
 					case "task":
 						$(".main .auth-success .tasks-content").show();
+						manager.methods.loadFolders();
 						break;
 					case "iplist":
 						$(".main .auth-success .iplists-content").show();
@@ -129,7 +130,7 @@
 						$(".main .auth-success .account-content").show();
 						break;
 					default:
-						$(".main .auth-success .tasks-content").show();
+						manager.methods.managerFormShow($.extend(true, data, {form: "task"}));
 				};
 
 				data.callback();
@@ -155,12 +156,95 @@
 					callback: function(){}
 				}, data);
 
-				manager.methods.managerFormHide({callback: function(){
-					DataStorage.del(manager.options.params.tokenKey);
-					manager.methods.authFormShow();
-				}});
+				api.methods.logOut({
+					token: manager.methods.getToken(),
+					callback: function(){
+						manager.methods.managerFormHide({callback: function(){
+							DataStorage.del(manager.options.params.tokenKey);
+							manager.methods.authFormShow();
+						}});
+					}
+				});
 
 				data.callback();
+			},
+			loadFolders: function(){
+				//delete all printed folders
+				$("[wa_folder]:not([default])").remove();
+				//get folders and print
+				api.methods.getFolders({
+					token: manager.methods.getToken(),
+					callback: function(folders){
+						folders.sort(function(a,b){return a.id- b.id;});
+						$.each(folders, function(key, folder){
+							manager.methods.folder.addHtml(folder);
+						});
+					}
+				});
+			},
+			folder: {
+				addHtml: function(param){
+					var layout = $("[wa_folder][default]"),
+						parent = $(layout).parent(),
+						html = $(layout).clone().removeAttr("default").appendTo(parent);
+
+					$(html).find("[name=view_folderId]").html(param.id);
+					$(html).find("[name=view_folderName]").html(param.name);
+					$(html).find("[name=view_taskCount]").html(param.task_count);
+				},
+				addMsgShow: function(){
+					var msg = $("#msg_addFolder").fadeIn("fast"),
+						input = $(msg).find("[name=folder_name]");
+
+					$(input).val("");
+					$(input).focus();
+				},
+				addMsgHide: function(){
+					$("#msg_addFolder .add-box .close").click();
+				},
+				renameMsgShow: function(el){
+					var msg = $("#msg_renameFolder").fadeIn("fast"),
+						input_name = $(msg).find("[name=folder_name]"),
+						input_id = $(msg).find("[name=folder_id]"),
+						folder = $(el).parents("[wa_folder]");
+
+					$(input_name).val($(folder).find("[name=view_folderName]").html());
+					$(input_name).focus();
+					$(input_id).val($(folder).find("[name=view_folderId]").html());
+				},
+				renameMsgHide: function(){
+					$("#msg_renameFolder .add-box .close").click();
+				},
+				deleteMsgShow: function(el){
+					var msg = $("#confirm_deleteFolder").fadeIn("fast"),
+						folder = $(el).parents("[wa_folder]");
+
+					$(msg).find("[name=id]").val(manager.methods.folder.getId(folder));
+				},
+				deleteMsgHide: function(){
+					$("#confirm_deleteFolder .close").click();
+				},
+				getHtml: function(id){
+					var output = false;
+
+					$("[wa_folder]:not([default])").each(function(key, folder){
+						if($(folder).find("[name=view_folderId]").html() == id) output = folder;
+					});
+
+					return output;
+				},
+				getId: function(folder){
+					return $(folder).find("[name=view_folderId]").html();
+				},
+				getName: function(folder){
+					return $(folder).find("[name=view_folderName]").html();
+				},
+				setName: function(folder, name){
+					$(folder).find("[name=view_folderName]").html(name);
+				},
+				setCountTask: function(folder, count){
+					$(folder).find("[name=view_taskCount]").html(count);
+				}
 			}
 		}
 	};
@@ -207,6 +291,8 @@
 
 		$(consoleBox).show();
 		clip.glue("console_button_copy");
+		$(consoleBox).hide();
+		clip.hide();
 		$("#"+$(clip.getHTML()).attr('id')).parent().css("z-index" ,"10000");
 
 		clip.addEventListener('onMouseUp', function(client){
@@ -222,8 +308,6 @@
 			clip.reposition();
 			$(consoleBox).hide();
 		});
-
-		$(consoleBox).hide();
 	});
 	//SET CONSOLE FORM
 
@@ -246,7 +330,7 @@
 			manager.utils.showNotice(manager.lng.form.auth.password.error, "error");
 			$(inputs.password).focus();
 		}else{
-			api.methods.Auth({
+			api.methods.auth({
 				mail: inputs.mail.value,
 				password: inputs.password.value,
 				remember: !inputs.remember.checked,
@@ -299,7 +383,7 @@
 			manager.utils.showNotice(manager.lng.form.reg.password.error, "error");
 			$(inputs.password).focus();
 		}else{
-			api.methods.Register({
+			api.methods.register({
 				mail: inputs.mail.value,
 				password: inputs.password.value,
 				login: inputs.login.value,
@@ -351,7 +435,7 @@
 				manager.utils.showNotice(manager.lng.form.forgot.mail.error, "error");
 				$(inputs.mail).focus();
 			}else{
-				api.methods.ResetPassword({
+				api.methods.resetPassword({
 					mail: inputs.mail.value,
 					callback: function(){
 						NoticeShow(manager.lng.form.forgot.success.step1, "success");
@@ -378,7 +462,7 @@
 				manager.utils.showNotice(manager.lng.form.forgot.password.error, "error");
 				$(inputs.password).focus();
 			}else{
-				api.methods.ConfirmResetPassword({
+				api.methods.confirmResetPassword({
 					mail: inputs.mail.value,
 					code: inputs.code.value,
 					password: inputs.password.value,
@@ -409,6 +493,80 @@
 		return false;
 	});
 	//SET FORGOT FORM
+
+	//SET ADD NEW FOLDER FORM
+	$(document).on("submit","form[name=folder_add]", function(e){
+		var form = this, inputs = {
+			folder_name: this["folder_name"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.folder_name.value, TYPE.FOLDER_NAME)){
+			manager.utils.showNotice(manager.lng.form.folder_add.folder_name.error, "error");
+			$(inputs.folder_name).focus();
+		}else{
+			api.methods.addFolder({
+				token: manager.methods.getToken(),
+				name: inputs.folder_name.value,
+				exception: {
+					LimitExceeded: function(){
+						manager.utils.showNotice(manager.lng.exception.query.addFolder.LimitExceeded, "error");
+					}
+				},
+				callback: function(data){
+					manager.methods.folder.addMsgHide();
+					manager.methods.folder.addHtml({
+						name: inputs.folder_name.value,
+						id: data.id,
+						task_count: 0
+					});
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET ADD NEW FOLDER FORM
+
+	//SET RENAME FOLDER FORM
+	$(document).on("submit","form[name=folder_rename]", function(e){
+		var form = this, inputs = {
+			folder_name: this["folder_name"],
+			id: this["folder_id"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.folder_name.value, TYPE.FOLDER_NAME)){
+			manager.utils.showNotice(manager.lng.form.folder_rename.folder_name.error, "error");
+			$(inputs.folder_name).focus();
+		}else{
+			api.methods.renameFolder({
+				token: manager.methods.getToken(),
+				id: inputs.id.value,
+				name: inputs.folder_name.value,
+				callback: function(){
+					manager.methods.folder.setName(manager.methods.folder.getHtml(inputs.id.value), inputs.folder_name.value);
+					manager.methods.folder.renameMsgHide();
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET RENAME FOLDER FORM
+
+	$(document).on("click","#confirm_deleteFolder [name=yes]", function(e){
+		var Self = this,
+			id = $(Self).parents("#confirm_deleteFolder").find("[name=id]").val();
+
+		api.methods.deleteFolders({
+			token: manager.methods.getToken(),
+			ids: [id],
+			callback: function(){
+				$(manager.methods.folder.getHtml(id)).remove();
+			}
+		});
+	});
 
 	//utils
 	function NoticeShow(text, type){
@@ -631,6 +789,12 @@
 			regexp: api.Constants.Limit.Confirm.Code.Regexp,
 			min:  api.Constants.Limit.Confirm.Code.Length.Min,
 			max:  api.Constants.Limit.Confirm.Code.Length.Max
+		},
+		FOLDER_NAME: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Folder.Name.Regexp,
+			min:  api.Constants.Limit.Folder.Name.Length.Min,
+			max:  api.Constants.Limit.Folder.Name.Length.Max
 		}
 	};
 	function CheckType(_data, _type, _allowEmpty){
@@ -685,6 +849,14 @@
 				manager.utils.showNotice(manager.lng.exception.general[key], "error");
 			};
 		});
+		//exception wrong session id
+		api.options.exception.WrongSessionId = function(){
+			/*manager.methods.managerFormHide({callback: function(){
+				DataStorage.del(manager.options.params.tokenKey);
+				manager.methods.authFormShow();
+			}});*/
+			manager.methods.logOut();
+		};
 
 		//Translate document
 		TranslatePage();

@@ -28,7 +28,7 @@
 			}
 		},
 		methods: {
-			Auth: function(data){
+			auth: function(data){
 				data = $.extend(true, {
 					remember: false,
 					exception: {
@@ -40,7 +40,7 @@
 
 				var req = api.requestStorage.addRequest();
 
-				req.setOpCode(OperationCode.Auth);
+				req.setOpCode(OperationCode.auth);
 
 				req.addData(OperationItem.Mail, data.mail);
 				req.addData(OperationItem.Password, data.password);
@@ -53,7 +53,7 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			Register: function(data){
+			register: function(data){
 				data = $.extend(true, {
 					exception: {
 						MailExists: function(){},
@@ -75,14 +75,14 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			LogOut: function(data){
+			logOut: function(data){
 				data = $.extend(true, {
 					exception: {}
 				}, data);
 
 				var req = api.requestStorage.addRequest();
 
-				req.setOpCode(OperationCode.LogOut);
+				req.setOpCode(OperationCode.logOut);
 				req.setToken(data.token);
 
 				req.send(function(_data){
@@ -90,7 +90,7 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			ResetPassword: function(data){
+			resetPassword: function(data){
 				data = $.extend(true, {
 					exception: {
 						NotFound: function(){}
@@ -108,7 +108,7 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			ConfirmResetPassword: function(data){
+			confirmResetPassword: function(data){
 				data = $.extend(true, {
 					exception: {
 						InvalidCode: function(){}
@@ -117,7 +117,7 @@
 
 				var req = api.requestStorage.addRequest();
 
-				req.setOpCode(OperationCode.Confirm.ResetPassword);
+				req.setOpCode(OperationCode.Confirm.resetPassword);
 
 				req.addData(OperationItem.Mail, data.mail);
 				req.addData(OperationItem.CodeConfirm, data.code);
@@ -128,7 +128,7 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			ConfirmRegister: function(data){
+			confirmRegister: function(data){
 
 				data = $.extend(true, {
 					exception: {
@@ -138,7 +138,7 @@
 
 				var req = api.requestStorage.addRequest();
 
-				req.setOpCode(OperationCode.Confirm.Register);
+				req.setOpCode(OperationCode.Confirm.register);
 				req.setToken(data.token);
 
 				req.addData(OperationItem.Mail, data.mail);
@@ -146,6 +146,89 @@
 
 				req.send(function(_data){
 					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getFolders: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.Folders);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.Folders]) $.each(_data[OperationItem.Folders], function(key, folder){
+						output.push({
+							id: folder[OperationItem.IdFolder],
+							name: folder[OperationItem.Name],
+							task_count: 0
+						});
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			addFolder: function(data){
+				data = $.extend(true, {
+					exception: {
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Add.Folder);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.id = _data[OperationItem.IdFolder];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			renameFolder: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.FolderName);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.id);
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			deleteFolders: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Delete.Folders);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdsFolder, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			}
@@ -165,8 +248,8 @@
 
 	api.Constants = {
 		OperationCode : {
-			Auth : 'Sign in',
-			LogOut: 'Sign out',
+			auth : 'Sign in',
+			logOut: 'Sign out',
 			Registration : 'Sign up',
 			Activate : 'Activate',
 			Transfer2XXBalance: 'Transfer 2xx balance',
@@ -250,10 +333,10 @@
 			},
 
 			Confirm: {
-				Register: 'Confirm sign up',
+				register: 'Confirm sign up',
 				SetAccountPassword: 'Confirm set password',
 				SendCredits: 'Confirm send credits',
-				ResetPassword: 'Confirm reset password'
+				resetPassword: 'Confirm reset password'
 			},
 
 			Send: {
@@ -805,7 +888,7 @@
 			data[api.Constants.OperationItem.Action] = opCode;
 		};
 		this.setToken = function(token){
-			data[api.Constants.OperationItem.Token] = token;
+			SelfObj.addData(api.Constants.OperationItem.Token, token);
 		};
 		this.addData = function(key, value){
 			if(!data[api.Constants.OperationItem.Data]) data[api.Constants.OperationItem.Data] = {};
