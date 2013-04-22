@@ -1064,8 +1064,16 @@ input[readonly].geo {
     background: #3E3E3E;
 }
 .console-send {
-    padding: 0 5px 5px;
+    padding: 0 5px;
     text-align: right;
+}
+embed:hover .copy {
+    opacity: 1;
+}
+
+.console-send form {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 
