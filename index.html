@@ -6,7 +6,8 @@
     <meta name="robots" content="index, follow"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript"
+            src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
     <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
@@ -96,7 +97,8 @@
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.folder_add.folder_name.text}"></div>
                         <div class="text-line">
-                            <input name="folder_name" type="text" value placeholder wa_lang="{form.folder_add.folder_name.placeholder|attr:placeholder}">
+                            <input name="folder_name" type="text" value placeholder
+                                   wa_lang="{form.folder_add.folder_name.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <button type="submit" class="btn" wa_lang="{form.folder_add.send}"></button>
@@ -113,10 +115,12 @@
             <div class="content">
                 <form name="folder_rename" onsubmit="return false;">
                     <input name="folder_id" type="hidden">
+
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.folder_rename.folder_name.text}"></div>
                         <div class="text-line">
-                            <input name="folder_name" type="text" value placeholder wa_lang="{form.folder_rename.placeholder|attr:placeholder}">
+                            <input name="folder_name" type="text" value placeholder
+                                   wa_lang="{form.folder_rename.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <button type="submit" class="btn" wa_lang="{form.folder_rename.send}"></button>
@@ -136,6 +140,7 @@
 </div>
 <div id="confirm_deleteFolder" class="confirm-box" style="display: none">
     <input name="id" type="hidden">
+
     <div class="confirm-content">
         <div class="content">
             <div class="close"></div>
@@ -156,9 +161,14 @@
 <div class="header">
     <div class="auth-success" style="display: none">
         <div class="top-menu">
-            <span class="item active" wa_lang="{menu.top-menu.task}" onclick="manager.methods.managerFormShow({form: 'task'})"></span> <span class="item" wa_lang="{menu.top-menu.iplist}" onclick="manager.methods.managerFormShow({form: 'iplist'})"></span>
+            <span class="item active" wa_lang="{menu.top-menu.task}"
+                  onclick="manager.methods.managerFormShow({form: 'task'})"></span> <span class="item"
+                                                                                          wa_lang="{menu.top-menu.iplist}"
+                                                                                          onclick="manager.methods.managerFormShow({form: 'iplist'})"></span>
         </div>
-        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login" onclick="manager.methods.managerFormShow({form: 'account'})">User Login</span> |
+        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login"
+                                                                                  onclick="manager.methods.managerFormShow({form: 'account'})">User Login</span>
+            |
             <span class="link exit" onclick="manager.methods.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
     </div>
     <div class="lang">
@@ -222,13 +232,15 @@
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.login.text}"></div>
                     <div class="text-line">
-                        <input name="reg_login" type="text" value placeholder wa_lang="{form.reg.login.placeholder|attr:placeholder}">
+                        <input name="reg_login" type="text" value placeholder
+                               wa_lang="{form.reg.login.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.mail.text}"></div>
                     <div class="text-line">
-                        <input name="reg_mail" type="text" value placeholder wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
+                        <input name="reg_mail" type="text" value placeholder
+                               wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
@@ -247,10 +259,14 @@
                 <button type="submit" class="btn" wa_lang="{form.reg.send.text}"></button>
             </div>
             <div class="sign-other">
-                <div class="other-text" wa_lang="{form.reg.other.haveAccount|place:have_account}{form.reg.other.goToManagerPanel|place:go_to_manager_panel}{form.reg.other.auth|place:auth}"><b>{HAVE_ACCOUNT}</b> {GO_TO_MANAGER_PANEL}
-                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">{AUTH}</span>
+                <div class="other-text"
+                     wa_lang="{form.reg.other.haveAccount|place:have_account}{form.reg.other.goToManagerPanel|place:go_to_manager_panel}{form.reg.other.auth|place:auth}">
+                    <b>{HAVE_ACCOUNT}</b> {GO_TO_MANAGER_PANEL}
+                    <span class="link"
+                          onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">{AUTH}</span>
                 </div>
-                <div class="other-text" wa_lang="{form.reg.other.forgotPassword|place:forgot_password}{form.reg.other.restoreAccess|place:restore_access}{form.reg.other.rememberPassword|place:remember_password}">
+                <div class="other-text"
+                     wa_lang="{form.reg.other.forgotPassword|place:forgot_password}{form.reg.other.restoreAccess|place:restore_access}{form.reg.other.rememberPassword|place:remember_password}">
                     <b>{FORGOT_PASSWORD}</b> {RESTORE_ACCESS}
                     <span class="link" onclick="manager.methods.regFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
                 </div>
@@ -262,19 +278,23 @@
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.forgot.mail.text}"></div>
                     <div class="text-line">
-                        <input name="forgot_mail" type="text" value placeholder wa_lang="{form.forgot.mail.placeholder|attr:placeholder}">
+                        <input name="forgot_mail" type="text" value placeholder
+                               wa_lang="{form.forgot.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.forgot.code.text}"></div>
                     <div class="text-line">
-                        <input name="forgot_code" type="text" value placeholder disabled wa_lang="{form.forgot.code.placeholder|attr:placeholder}">
+                        <input name="forgot_code" type="text" value placeholder disabled
+                               wa_lang="{form.forgot.code.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.forgot.password.text}"></div>
                     <div class="text-line">
-                        <input name="forgot_password" class="password" type="password" value disabled placeholder wa_lang="{form.forgot.password.placeholder|attr:placeholder}"><span class="show-box"></span>
+                        <input name="forgot_password" class="password" type="password" value disabled placeholder
+                               wa_lang="{form.forgot.password.placeholder|attr:placeholder}"><span
+                            class="show-box"></span>
                     </div>
                 </div>
                 <button type="submit" class="btn" wa_lang="{form.forgot.restore}"></button>
@@ -290,7 +310,9 @@
 <div class="manager">
 <div class="tasks-content" style="display: none">
 <div class="folders">
-    <div class="title"><span>Категории</span><span class="add" onclick="manager.methods.folder.addMsgShow();"></span></div>
+    <div class="title"><span wa_lang="{form.folder.title}"></span><span class="add"
+                                                                        onclick="manager.methods.folder.addMsgShow();"></span>
+    </div>
     <div class="content-height">
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_folder default>
@@ -301,13 +323,16 @@
                     <span name="view_folderName"></span>
                 </span>
             <span class="info">
-                <span wa_lang="{form.folder.task_count|place:task_count}">{TASK_COUNT}</span> - <span name="view_taskCount"></span>
+                <span wa_lang="{form.folder.task_count|place:task_count}">{TASK_COUNT}</span> - <span
+                    name="view_taskCount"></span>
             </span>
             <span class="edit">
                 <span class="edit-list">
-                    <span class="item rename" wa_lang="{menu.edit-menu.rename}" onclick="manager.methods.folder.renameMsgShow(this);"></span>
+                    <span class="item rename" wa_lang="{menu.edit-menu.rename}"
+                          onclick="manager.methods.folder.renameMsgShow(this);"></span>
                     <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" style="display: none;"></span>
-                    <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="manager.methods.folder.deleteMsgShow(this);"></span>
+                    <span class="item delete" wa_lang="{menu.edit-menu.delete}"
+                          onclick="manager.methods.folder.deleteMsgShow(this);"></span>
                 </span>
             </span>
             </li>
@@ -315,68 +340,28 @@
     </div>
 </div>
 <div class="tasks">
-    <div class="title"><span>Задания</span><span class="add"></span></div>
+    <div class="title"><span wa_lang="{form.task.title}"></span><span class="add"></span></div>
     <div class="content-height">
         <ul class="item-list content-scroll" style="top:0;">
-            <li>
-                <span class="name"><span class="item-id">ID 1</span>По-умолчанию</span>
-            <span class="info">
-                <span class="status on">Включено</span>
-            </span>
-            <span class="edit">
-                <span class="edit-list">
-                    <span class="item move">Переместить</span>
-                    <span class="item copy">Дублировать</span>
-                    <span class="item set-in">Настройки в</span>
-                    <span class="item set-of">Настройки из</span>
-                    <span class="item delete">Удалить</span>
+            <li wa_task default>
+                <span class="name">
+                    <span class="item-id" wa_lang="{form.task.id|place:id}">{ID}
+                        <span name="view_taskId"></span>
+                    </span>
+                    <span name="view_taskName"></span>
                 </span>
-            </span>
-            </li>
-            <li class="active">
-                <span class="name"><span class="item-id">ID 2</span>По-умолчанию</span>
-            <span class="info">
-                <span class="status on">Включено</span>
-            </span>
-            <span class="edit">
-                <span class="edit-list">
-                    <span class="item move">Переместить</span>
-                    <span class="item copy">Дублировать</span>
-                    <span class="item set-in">Настройки в</span>
-                    <span class="item set-of">Настройки из</span>
-                    <span class="item delete">Удалить</span>
+                <span class="info">
+                    <span class="status" name="view_taskStatus"></span>
                 </span>
-            </span>
-            </li>
-            <li>
-                <span class="name"><span class="item-id">ID 3</span>По-умолчанию</span>
-            <span class="info">
-                <span class="status off">Выключено</span>
-            </span>
-            <span class="edit">
-                <span class="edit-list">
-                    <span class="item move">Переместить</span>
-                    <span class="item copy">Дублировать</span>
-                    <span class="item set-in">Настройки в</span>
-                    <span class="item set-of">Настройки из</span>
-                    <span class="item delete">Удалить</span>
+                <span class="edit">
+                    <span class="edit-list">
+                        <span class="item move" wa_lang="{menu.edit-menu.move}" style="display: none;"></span>
+                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" style="display: none;"></span>
+                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}" style="display: none;"></span>
+                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}" style="display: none;"></span>
+                        <span class="item delete" wa_lang="{menu.edit-menu.delete}"></span>
+                    </span>
                 </span>
-            </span>
-            </li>
-            <li>
-                <span class="name"><span class="item-id">ID 4</span>По-умолчанию</span>
-            <span class="info">
-                <span class="status on">Включено</span>
-            </span>
-            <span class="edit">
-                <span class="edit-list">
-                    <span class="item move">Переместить</span>
-                    <span class="item copy">Дублировать</span>
-                    <span class="item set-in">Настройки в</span>
-                    <span class="item set-of">Настройки из</span>
-                    <span class="item delete">Удалить</span>
-                </span>
-            </span>
             </li>
         </ul>
     </div>
@@ -395,12 +380,14 @@
         </div>
     </div>
 </div>
+<div class="tab-box">
 <ul class="tab-list">
     <li class="general active">Основные</li>
     <li class="audit">Аудитория</li>
     <li class="targeting">Таргетинг</li>
     <li class="statistics">Статистика</li>
 </ul>
+<div class="tab-box-content">
 <div class="setting-group">
 <div class="content-scroll" style="top:0;">
 <form>
@@ -662,6 +649,8 @@
         </div>
     </div>
 </form>
+</div>
+</div>
 </div>
 </div>
 </div>

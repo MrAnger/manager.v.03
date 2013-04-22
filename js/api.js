@@ -231,6 +231,47 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			getTasks: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.Tasks);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.Tasks]) $.each(_data[OperationItem.Tasks], function(key, task){
+						output.push({
+							folderId: data.folderId,
+							taskId: task[OperationItem.IdTask],
+							name: task[OperationItem.Name],
+							listId: task[OperationItem.IdList],
+							afterClick: task[OperationItem.AfterClick],
+							beforeClick: task[OperationItem.BeforeClick],
+							allowProxy: task[OperationItem.AllowProxy],
+							ignoreGU: task[OperationItem.IgnoreGU],
+							growth: task[OperationItem.Growth],
+							domain: task[OperationItem.Domain],
+							profile: task[OperationItem.Profile],
+							frozen: task[OperationItem.Frozen],
+							listMode: task[OperationItem.ListMode],
+							rangeSize: task[OperationItem.RangeSize],
+							uniquePeriod: task[OperationItem.UniquePeriod],
+							mask: task[OperationItem.Mask],
+							days: task[OperationItem.Days],
+							extSource: task[OperationItem.ExtSource]
+						});
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {
@@ -386,7 +427,7 @@
 			IdMask: 'Mask ID',
 			RangeSize: 'Range size',
 			Mask: 'Mask',
-			UniqPeriod: 'Unique period',
+			UniquePeriod: 'Unique period',
 			Masks: 'Masks',
 			Folders: 'Folders',
 			IdFolder: 'Folder ID',

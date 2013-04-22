@@ -6,30 +6,6 @@ $(document).ready(setHeightTaskContent);
 $(".switch-box").click(function () {
     $(this).toggleClass("status-off");
 });
-clickTabList = function (event) {
-    $('.tab-list li').removeClass('active');
-    //$('.set-task').hide(300);
-    var item = $(this).attr('class');
-    switch (item) {
-        case 'general':
-            $('.set-task[name=set-general]').fadeIn(300);
-            break;
-        case 'targeting':
-            $('.set-task[name=set-targeting]').fadeIn(300);
-            break;
-        case 'audit':
-            $('.set-task[name=set-audit]').fadeIn(300);
-            break;
-        case 'statistics':
-            $('.set-task[name=set-stat]').fadeIn(300);
-            break;
-    }
-    $(this).toggleClass('active');
-};
-$('.tab-list li').on('click', clickTabList);
-$('.tab-list li').click(function () {
-    $(this).addClass('active');
-});
 //  скроллинг
 function setHeightContentScroll() {
     $('.setting-group').css("height", $(window).height() - 90);
@@ -113,7 +89,7 @@ $(".console-box .console-title").click(function(e){
 	};
 });
 $(".top-menu .item").click(function(e){
-	$(".top-menu .item").removeClass("active");
+	$(this).parents(".top-menu").find(".item").removeClass("active");
 	$(this).addClass("active");
 });
 $(".account [name=login]").click(function(e){
@@ -129,6 +105,9 @@ $(document).click(function(e){
 $(document).on("click", ".item-list li", function(e){
 	$(this).parent().children("li").removeClass('active');
 	$(this).addClass('active');
+});
+$(document).on("click", "[wa_folder]", function(e){
+	manager.methods.loadTasks($(this).find("[name=view_folderId]").html());
 });
 $(".add-box-wrap .close").click(function(e){
 	$(this).parents(".add-box-wrap").fadeOut("fast");
@@ -154,4 +133,11 @@ $(document).keydown(function(e){
 			};
 		});
 	};
+});
+$(".tab-list li").click(function(e){
+	var name = $(this).attr("name");
+	$(this).parents(".tab-list").children("li").removeClass("active");
+	$(this).addClass('active');
+
+	//$(this).parents(".tab-box").find()
 });

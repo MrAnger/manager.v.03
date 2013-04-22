@@ -179,10 +179,27 @@
 						$.each(folders, function(key, folder){
 							manager.methods.folder.addHtml(folder);
 						});
+
+						$(manager.methods.folder.getFolderHtml()).eq(0).click();
 					}
 				});
 			},
-			folder: {
+			loadTasks: function(folderId){
+				//delete all printed folders
+				$(manager.methods.task.getTasksHtml()).remove();
+				//get tasks and print
+				api.methods.getTasks({
+					token: manager.methods.getToken(),
+					folderId: folderId,
+					callback: function(tasks){
+						tasks.sort(function(a,b){return a.taskId - b.taskId;});
+						$.each(tasks, function(key, task){
+							manager.methods.task.addHtml(task);
+						});
+					}
+				});
+			},
+			folder:{
 				addHtml: function(param){
 					var layout = $("[wa_folder][default]"),
 						parent = $(layout).parent(),
@@ -244,6 +261,31 @@
 				},
 				setCountTask: function(folder, count){
 					$(folder).find("[name=view_taskCount]").html(count);
+				},
+				getFolderHtml: function(){
+					return $("[wa_folder]:not([default])");
+				}
+			},
+			task:{
+				addHtml: function(param){
+					var layout = $("[wa_task][default]"),
+						parent = $(layout).parent(),
+						html = $(layout).clone().removeAttr("default").appendTo(parent);
+
+					$(html).find("[name=view_taskId]").html(param.taskId);
+					$(html).find("[name=view_taskName]").html(param.name);
+					manager.methods.task.setStatusHtml(html, !param.frozen);
+				},
+				setStatusHtml: function(task, status){
+					var el = $(task).find("[name=view_taskStatus]");
+					if(status){
+						$(el).removeClass("on off").addClass("on").html(manager.lng.form.task.status.on);
+					}else{
+						$(el).removeClass("on off").addClass("off").html(manager.lng.form.task.status.off);
+					};
+				},
+				getTasksHtml: function(){
+					return $("[wa_task]:not([default])");
 				}
 			}
 		}
@@ -555,6 +597,7 @@
 	});
 	//SET RENAME FOLDER FORM
 
+	//SET CONFIRM DELETE FOLDER
 	$(document).on("click","#confirm_deleteFolder [name=yes]", function(e){
 		var Self = this,
 			id = $(Self).parents("#confirm_deleteFolder").find("[name=id]").val();
@@ -567,6 +610,7 @@
 			}
 		});
 	});
+	//SET CONFIRM DELETE FOLDER
 
 	//utils
 	function NoticeShow(text, type){
