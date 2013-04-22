@@ -126,12 +126,16 @@ $(".tab-list li").each(function(key, el){
 
 	$(this).parents(".tab-box").find(".tab-box-content [name='"+name+"']").show();
 });
-$(".spoiler").click(function () {
-	$(this).toggleClass("active");
+$(".spoiler").each(function(key, el){
+	//if($(this).hasClass("active")) $(this);
+}).click(function(){
+	/*$(this).toggleClass("active");
 	if ($(this).hasClass("active")) {
 		$(this).parents(".set-item").children(".graph-box").show()
 	}
 	else {
 		$(this).parents(".set-item").children(".graph-box").hide()
-	}
+	}*/
+	//spoiler-box-content
+
 });
