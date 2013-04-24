@@ -408,22 +408,22 @@
 <div class="title">
 	<div class="task-info">
 		<div class="condition">
-			<span class="name">Статус</span>
+			<span class="name" wa_lang="{form.task_setting.status}"></span>
                 <span class="switch-box">
                     <span class="switcher"></span><input type="hidden" value="true">
                 </span>
 		</div>
 		<div class="cost">
-			<span class="name">Стоимость</span><span class="num">10.00</span>
+			<span class="name" wa_lang="{form.task_setting.cost}"></span><span class="num" name="view_taskCost">0.00</span>
 		</div>
 	</div>
 </div>
 <div class="tab-box">
 <ul class="tab-list">
-	<li class="general active" name="general">Основные</li>
-	<li class="audit" name="audit">Аудитория</li>
-	<li class="targeting" name="targeting">Таргетинг</li>
-	<li class="statistics" name="statistics">Статистика</li>
+	<li class="general active" name="general" wa_lang="{form.task_setting.tabs.general}"></li>
+	<li class="audit" name="audit" wa_lang="{form.task_setting.tabs.audit}"></li>
+	<li class="targeting" name="targeting" wa_lang="{form.task_setting.tabs.targeting}"></li>
+	<li class="statistics" name="statistics" wa_lang="{form.task_setting.tabs.stat}"></li>
 </ul>
 <div class="tab-box-content">
 <div class="setting-group">
@@ -431,96 +431,99 @@
 <form name="task-setting" onsubmit="return false;">
 <div name="general">
 	<div class="label-block">
-		<div class="label-text">Имя</div>
+		<div class="label-text" wa_lang="{form.task_setting.name.text}"></div>
 		<div class="text-line">
-			<input type="text" value="По-умолчанию" placeholder="Имя">
+			<input name="name" type="text" value placeholder wa_lang="{form.task_setting.name.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text">Домен</div>
+		<div class="label-text" wa_lang="{form.task_setting.domain.text}"></div>
 		<div class="text-line">
-			<input type="text" value="" placeholder="Домен">
+			<input name="domain" type="text" value placeholder wa_lang="{form.task_setting.domain.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text">URL внешнего источника</div>
+		<div class="label-text" wa_lang="{form.task_setting.extSource.text}"></div>
 		<div class="text-line">
-			<input type="text" value="" placeholder="URL внешнего источника">
+			<input name="extSource" type="text" value="" placeholder wa_lang="{form.task_setting.extSource.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text">Основное время выполнения</div>
+		<div class="label-text" wa_lang="{form.task_setting.beforeClick.text}"></div>
 		<div class="text-line">
-			<input type="text" value="0" class="number">
+			<input name="beforeClick" type="text" value class="number" wa_lang="{form.task_setting.beforeClick.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text"><label><input type="checkbox">Использовать маску для клика</label></div>
+		<div class="label-text"><label><input name="use_mask" type="checkbox"><span wa_lang="{form.task_setting.use_mask}"></span></label></div>
 	</div>
-	<div class="label-block">
-		<div class="text-line">
-			<textarea placeholder="Маска"></textarea>
+	<div name="use-mask-setting">
+		<div class="label-block">
+			<div class="text-line">
+				<textarea name="mask" placeholder wa_lang="{form.task_setting.mask.placeholder|attr:placeholder}"></textarea>
+			</div>
 		</div>
-	</div>
-	<div class="label-block">
-		<div class="label-text">Время выполнения после клика</div>
-		<div class="text-line">
-			<input type="text" value="0" class="number">
+		<div class="label-block">
+			<div class="label-text" wa_lang="{form.task_setting.afterClick.text}"></div>
+			<div class="text-line">
+				<input name="afterClick" type="text" value class="number" wa_lang="{form.task_setting.afterClick.placeholder|attr:placeholder}">
+			</div>
 		</div>
-	</div>
-	<div class="label-block">
-		<div class="label-text"><label><input type="checkbox">Игнорировать глобальную уникальность</label></div>
+		<div class="label-block">
+			<div class="label-text"><label><input name="ignoreGU" type="checkbox"><span wa_lang="{form.task_setting.ignoreGU}"></span></label></div>
+		</div>
 	</div>
 </div>
 <div name="audit">
 	<div class="label-block">
-		<div class="label-text">Размер разброса IP в подсети</div>
+		<div class="label-text" wa_lang="{form.task_setting.rangeSize.text}"></div>
 		<div class="text-line">
-			<input type="text" value="0" class="number">
+			<input name="rangeSize" type="text" value class="number">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text">Время уникальности IP</div>
+		<div class="label-text" wa_lang="{form.task_setting.uniquePeriod.text}"></div>
 		<div class="text-line">
-			<input type="text" value="0" class="number">
+			<input name="uniquePeriod" type="text" class="number" wa_lang="{form.task_setting.uniquePeriod.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text">Количество дней работы задания (дней)</div>
+		<div class="label-text" wa_lang="{form.task_setting.growth.text}"></div>
 		<div class="text-line">
-			<input type="text" value="0" class="number">
+			<input name="growth" type="text" class="number" wa_lang="{form.task_setting.growth.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text">Суточный прирост(в %)</div>
+		<div class="label-text" wa_lang="{form.task_setting.days.text}"></div>
 		<div class="text-line">
-			<input type="text" value="0.00" class="number">
+			<input name="days" type="text" value class="number" wa_lang="{form.task_setting.days.placeholder|attr:placeholder}">
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text"><label><input type="checkbox">Запретить трафик с прокси</label></div>
+		<div class="label-text"><label><input name="allowProxy" type="checkbox"><span wa_lang="{form.task_setting.disableProxy}"></span></label></div>
 	</div>
 	<div class="label-block">
-		<div class="label-text"><label><input type="checkbox">Использовать профиль</label></div>
+		<div class="label-text"><label><input name="use_profile" type="checkbox"><span wa_lang="{form.task_setting.use_profile}"></span></label></div>
 	</div>
-	<div class="label-block">
-		<div class="text-line">
-			<input type="text" value="" placeholder="Профиль">
+	<div name="use_profile_setting">
+		<div class="label-block">
+			<div class="text-line">
+				<input name="profile" type="text" value placeholder wa_lang="{form.task_setting.profile.placeholder|attr:placeholder}">
+			</div>
 		</div>
 	</div>
 	<div class="label-block">
-		<div class="label-text"><label><input type="checkbox">Фильтровать трафик IP-списками</label></div>
-		<div class="text-line">
-			<select>
-				<option></option>
-				<option></option>
-				<option></option>
-				<option></option>
-			</select>
-		</div>
-		<div class="label-text">
-			<label><input type="radio" name="iplist">Как черный список</label>
-			<label><input type="radio" name="iplist">Как белый список</label>
+		<div class="label-text"><label><input name="use_listIp" type="checkbox"><span wa_lang="{form.task_setting.listId.text}"></span></label></div>
+		<div name="use_listIp_setting">
+			<div class="text-line">
+				<select name="listId"></select>
+			</div>
+			<div name="listIp-option">
+				<div class="label-text">
+					<label><input type="radio" name="listIp-type" value="true"><span wa_lang="{form.task_setting.use_as_blackList}"></span></label>
+					<label><input type="radio" name="listIp-type" value="false"><span wa_lang="{form.task_setting.use_as_whiteList}"></span></label>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -694,7 +697,7 @@
 		</div>
 	</div>
 </div>
-<button type="submit" class="btn">Сохранить</button>
+<button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
 </form>
 </div>
 </div>

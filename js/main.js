@@ -155,3 +155,18 @@ $(".spoiler").each(function(key, el){
 			$(content).show("fast");
 		};
 });
+$("[name=task-setting] input[name=use_mask]").change(function(e){
+	var mask = $("[name=task-setting] [name=mask]"),
+		afterClick = $("[name=task-setting] [name=afterClick]"),
+		ignoreGU = $("[name=task-setting] [name=ignoreGU]")[0],
+		container_mask_setting = $("[name=task-setting] [name=use-mask-setting]");
+
+	if(this.checked){
+		$(container_mask_setting).show("fast");
+	}else{
+		$(container_mask_setting).hide("fast");
+		$(mask).val("");
+		$(afterClick).val("");
+		ignoreGU.checked = false;
+	};
+}).click().click();
