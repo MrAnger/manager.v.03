@@ -87,8 +87,10 @@ $(".account [name=login]").click(function(e){
 	$(".top-menu .item").removeClass("active");
 });
 $(document).on("click", ".edit", function(e){
+	var hasClass = $(this).hasClass("active");
 	$(".edit").removeClass("active");
-	$(this).toggleClass('active');
+	if(hasClass) $(this).removeClass("active");
+	else $(this).addClass("active");
 	e.stopImmediatePropagation();
 });
 $(document).click(function(e){
@@ -99,7 +101,7 @@ $(document).on("click", ".item-list li", function(e){
 	$(this).addClass('active');
 });
 $(document).on("click", "[wa_folder]", function(e){
-	manager.methods.loadTasks($(this).find("[name=view_folderId]").html());
+	manager.methods.loadTasks(manager.methods.folder.getParam(this, "id"));
 });
 $(".add-box-wrap .close").click(function(e){
 	$(this).parents(".add-box-wrap").fadeOut("fast");

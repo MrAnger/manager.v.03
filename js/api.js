@@ -272,6 +272,66 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			addTask: function(data){
+				data = $.extend(true, {
+					exception: {
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Add.Task);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.Name, data.name);
+				req.addData(OperationItem.IdList, data.listId);
+				req.addData(OperationItem.AfterClick, data.afterClick);
+				req.addData(OperationItem.BeforeClick, data.beforeClick);
+				req.addData(OperationItem.AllowProxy, data.allowProxy);
+				req.addData(OperationItem.IgnoreGU, data.ignoreGU);
+				req.addData(OperationItem.Growth, data.growth);
+				req.addData(OperationItem.Domain, data.domain);
+				req.addData(OperationItem.Profile, data.profile);
+				req.addData(OperationItem.ListMode, data.listMode);
+				req.addData(OperationItem.RangeSize, data.rangeSize);
+				req.addData(OperationItem.UniquePeriod, data.uniquePeriod);
+				req.addData(OperationItem.Mask, data.mask);
+				req.addData(OperationItem.Days, data.days);
+				req.addData(OperationItem.ExtSource, data.extSource);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.taskId = _data[OperationItem.IdTask];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getIpLists: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.IPLists);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.IPLists]) $.each(_data[OperationItem.IPLists], function(key, list){
+						output.push({
+							id: list[OperationItem.IdList],
+							name: list[OperationItem.Name]
+						});
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {

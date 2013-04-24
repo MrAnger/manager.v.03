@@ -1,321 +1,355 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-    <meta charset="UTF-8">
-    <meta name="robots" content="index, follow"/>
-    <link type="text/css" rel="stylesheet" href="css/style.css"/>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
-    <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
-    <script type="text/javascript" src="js/api.js"></script>
-    <script type="text/javascript" src="js/manager.js"></script>
-    <script type="text/javascript">
-        //set zeroClipboard
-        ZeroClipboard.setMoviePath('js/zeroclipboard/ZeroClipboard.swf');
-    </script>
+	<title></title>
+	<meta charset="UTF-8">
+	<meta name="robots" content="index, follow"/>
+	<link type="text/css" rel="stylesheet" href="css/style.css"/>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript"
+	        src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
+	<script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="js/manager.js"></script>
+	<script type="text/javascript">
+		//set zeroClipboard
+		ZeroClipboard.setMoviePath('js/zeroclipboard/ZeroClipboard.swf');
+	</script>
 </head>
 <body>
 <div class="console-box">
-    <div class="console-title" wa_lang="{form.console.title}"></div>
-    <div class="open-box" style="display: none">
-        <div class="console-text">
-            <div class="content"></div>
-        </div>
-        <div class="console-send" style="">
-            <div class="option">
-                <span class="save"></span>
-                <span id="console_button_copy" class="copy"></span>
-                <span class="save"></span>
-            </div>
-            <form onsubmit="return false;">
-                <div class="text-line">
-                    <input type="text" value="" autofocus="autofocus">
-                </div>
-                <div class="text-line">
-                    <input type="submit" class="btn" value wa_lang="{form.console.send.text|attr:value}">
-                </div>
-            </form>
-        </div>
-    </div>
+	<div class="console-title" wa_lang="{form.console.title}"></div>
+	<div class="open-box" style="display: none">
+		<div class="console-text">
+			<div class="content"></div>
+		</div>
+		<div class="console-send" style="">
+			<div class="option">
+				<span class="save"></span>
+				<span id="console_button_copy" class="copy"></span>
+				<span class="save"></span>
+			</div>
+			<form onsubmit="return false;">
+				<div class="text-line">
+					<input type="text" value="" autofocus="autofocus">
+				</div>
+				<div class="text-line">
+					<input type="submit" class="btn" value wa_lang="{form.console.send.text|attr:value}">
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 <div class="add-box-wrap" style="display: none">
-    <div class="add-box">
-        <div class="add-box-content">
-            <div class="close"></div>
-            <div class="content">
-                <form name="add-folder">
-                    <div class="label-block">
-                        <div class="label-text">Имя категории</div>
-                        <div class="text-line">
-                            <input type="text" value="" placeholder="Имя категории">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-                <form name="add-task">
-                    <div class="label-block">
-                        <div class="label-text">Имя задания</div>
-                        <div class="text-line">
-                            <input type="text" value="" placeholder="Имя задания">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-                <form name="add-iplist">
-                    <div class="label-block">
-                        <div class="label-text">Имя IP списка</div>
-                        <div class="text-line">
-                            <input type="text" value="" placeholder="Имя IP списка">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-                <form name="add-ip-range">
-                    <div class="label-block">
-                        <div class="label-text">IP-диапазоны</div>
-                        <div class="text-line">
-                            <textarea placeholder="IP-диапазоны" wrap="off"></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-            </div>
-            <div class="footer"></div>
-        </div>
-    </div>
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="add-folder">
+					<div class="label-block">
+						<div class="label-text">Имя категории</div>
+						<div class="text-line">
+							<input type="text" value="" placeholder="Имя категории">
+						</div>
+					</div>
+					<button type="submit" class="btn">Добавить</button>
+				</form>
+				<form name="add-task">
+					<div class="label-block">
+						<div class="label-text">Имя задания</div>
+						<div class="text-line">
+							<input type="text" value="" placeholder="Имя задания">
+						</div>
+					</div>
+					<button type="submit" class="btn">Добавить</button>
+				</form>
+				<form name="add-iplist">
+					<div class="label-block">
+						<div class="label-text">Имя IP списка</div>
+						<div class="text-line">
+							<input type="text" value="" placeholder="Имя IP списка">
+						</div>
+					</div>
+					<button type="submit" class="btn">Добавить</button>
+				</form>
+				<form name="add-ip-range">
+					<div class="label-block">
+						<div class="label-text">IP-диапазоны</div>
+						<div class="text-line">
+							<textarea placeholder="IP-диапазоны" wrap="off"></textarea>
+						</div>
+					</div>
+					<button type="submit" class="btn">Добавить</button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
 </div>
 <div id="msg_addFolder" class="add-box-wrap" style="display: none">
-    <div class="add-box">
-        <div class="add-box-content">
-            <div class="close"></div>
-            <div class="content">
-                <form name="folder_add" onsubmit="return false;">
-                    <div class="label-block">
-                        <div class="label-text" wa_lang="{form.folder_add.folder_name.text}"></div>
-                        <div class="text-line">
-                            <input name="folder_name" type="text" value placeholder
-                                   wa_lang="{form.folder_add.folder_name.placeholder|attr:placeholder}">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn" wa_lang="{form.folder_add.send}"></button>
-                </form>
-            </div>
-            <div class="footer"></div>
-        </div>
-    </div>
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="folder_add" onsubmit="return false;">
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.folder_add.folder_name.text}"></div>
+						<div class="text-line">
+							<input name="folder_name" type="text" value placeholder
+							       wa_lang="{form.folder_add.folder_name.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{form.folder_add.send}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
 </div>
 <div id="msg_renameFolder" class="add-box-wrap" style="display: none">
-    <div class="add-box">
-        <div class="add-box-content">
-            <div class="close"></div>
-            <div class="content">
-                <form name="folder_rename" onsubmit="return false;">
-                    <input name="folder_id" type="hidden">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="folder_rename" onsubmit="return false;">
+					<input name="folder_id" type="hidden">
 
-                    <div class="label-block">
-                        <div class="label-text" wa_lang="{form.folder_rename.folder_name.text}"></div>
-                        <div class="text-line">
-                            <input name="folder_name" type="text" value placeholder
-                                   wa_lang="{form.folder_rename.placeholder|attr:placeholder}">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn" wa_lang="{form.folder_rename.send}"></button>
-                </form>
-            </div>
-            <div class="footer"></div>
-        </div>
-    </div>
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.folder_rename.folder_name.text}"></div>
+						<div class="text-line">
+							<input name="folder_name" type="text" value placeholder
+							       wa_lang="{form.folder_rename.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{form.folder_rename.send}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
+<div id="msg_addTask" class="add-box-wrap" style="display: none">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="task_add" onsubmit="return false;">
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.task_add.name.text}"></div>
+						<div class="text-line">
+							<input name="task_name" type="text" value placeholder
+							       wa_lang="{form.task_add.name.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.task_add.domain.text}"></div>
+						<div class="text-line">
+							<input name="task_domain" type="text" value placeholder
+							       wa_lang="{form.task_add.domain.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.task_add.extSource.text}"></div>
+						<div class="text-line">
+							<input name="task_extSource" type="text" value placeholder
+							       wa_lang="{form.task_add.extSource.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{form.task_add.send}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
 </div>
 <div class="msg-box">
-    <div class="msg-content" default>
-        <div class="close"></div>
-        <div class="content">
-            <div class="text"></div>
-        </div>
-    </div>
+	<div class="msg-content" default>
+		<div class="close"></div>
+		<div class="content">
+			<div class="text"></div>
+		</div>
+	</div>
 </div>
 <div id="confirm_deleteFolder" class="confirm-box" style="display: none">
-    <input name="id" type="hidden">
+	<input name="id" type="hidden">
 
-    <div class="confirm-content">
-        <div class="content">
-            <div class="close"></div>
-            <div class="title" name="title" wa_lang="{form.folder_delete.title}"></div>
-            <div class="text" name="text" wa_lang="{form.folder_delete.text}"></div>
-            <div class="buttons">
-                <button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
-                <button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
-            </div>
-        </div>
-    </div>
+	<div class="confirm-content">
+		<div class="content">
+			<div class="close"></div>
+			<div class="title" name="title" wa_lang="{form.folder_delete.title}"></div>
+			<div class="text" name="text" wa_lang="{form.folder_delete.text}"></div>
+			<div class="buttons">
+				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="loader" style="display: none;">
-    <div class="loader-content">
-        <span class="loader-text" wa_lang="{loader.text}"></span>
-    </div>
+	<div class="loader-content">
+		<span class="loader-text" wa_lang="{loader.text}"></span>
+	</div>
 </div>
 <div class="header">
-    <div class="auth-success" style="display: none">
-        <div class="top-menu">
+	<div class="auth-success" style="display: none">
+		<div class="top-menu">
             <span class="item active" wa_lang="{menu.top-menu.task}"
                   onclick="manager.methods.managerFormShow({form: 'task'})"></span> <span class="item"
                                                                                           wa_lang="{menu.top-menu.iplist}"
                                                                                           onclick="manager.methods.managerFormShow({form: 'iplist'})"></span>
-        </div>
-        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login"
-                                                                                  onclick="manager.methods.managerFormShow({form: 'account'})">User Login</span>
-            |
-            <span class="link exit" onclick="manager.methods.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
-    </div>
-    <div class="lang">
-        <ul class="lng-check">
-            <li>
+		</div>
+		<div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login"
+		                                                                          onclick="manager.methods.managerFormShow({form: 'account'})">User Login</span>
+			|
+			<span class="link exit" onclick="manager.methods.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
+	</div>
+	<div class="lang">
+		<ul class="lng-check">
+			<li>
                 <span class="lng-item rus" wa_lang="{language.ru}" lng="ru-ru"
                       onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
-            </li>
-            <li>
-                <span class="lng-item eng" wa_lang="{language.en}" lng="en-en" disable></span>
-            </li>
-            <li>
-                <span class="lng-item ukr" wa_lang="{language.ua}" lng="ua-ua" disable></span>
-            </li>
-        </ul>
-    </div>
+			</li>
+			<li>
+				<span class="lng-item eng" wa_lang="{language.en}" lng="en-en" disable></span>
+			</li>
+			<li>
+				<span class="lng-item ukr" wa_lang="{language.ua}" lng="ua-ua" disable></span>
+			</li>
+		</ul>
+	</div>
 </div>
 <div class="main">
 <div class="auth-no-success" style="display: none;">
-    <div class="sign-block">
-        <form name="auth" method="POST" wa_auth="0" style="display: none;">
-            <div class="title" wa_lang="{form.auth.title}"></div>
-            <div class="sign-box">
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.auth.mail.text}"></div>
-                    <div class="text-line">
-                        <input name="mail" type="text" value placeholder
-                               wa_lang="{form.auth.mail.placeholder|attr:placeholder}">
-                    </div>
-                </div>
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.auth.password.text}"></div>
-                    <div class="text-line">
-                        <input name="password" class="password" type="password" value placeholder
-                               wa_lang="{form.auth.password.placeholder|attr:placeholder}"><span
-                            class="show-box"></span>
-                    </div>
-                </div>
-                <div class="label-text">
-                    <label><input name="remember" type="checkbox" class="hidden">
-                        <span class="remember" wa_lang="{form.auth.remember.text}"></span></label>
-                </div>
-                <button name="submit" type="submit" class="btn" wa_lang="{form.auth.enter.text}"></button>
-            </div>
-            <div class="sign-other">
-                <div class="other-text"
-                     wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
-                    <b>{NOT_HAVE_ACCOUNT}</b> {GO_REGISTRATION}
-                    <span class="link" onclick="manager.methods.authFormHide(); manager.methods.regFormShow();">{REGISTER}</span>.
-                </div>
-                <div class="other-text"
-                     wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
-                    <b>{FORGOT_PASSWORD}</b> {PASSWORD_RECOVERY}
-                    <span class="link" onclick="manager.methods.authFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
-                </div>
-            </div>
-        </form>
-        <form name="reg" method="POST" style="display: none">
-            <div class="title" wa_lang="{form.reg.title}"></div>
-            <div class="sign-box">
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.reg.login.text}"></div>
-                    <div class="text-line">
-                        <input name="reg_login" type="text" value placeholder
-                               wa_lang="{form.reg.login.placeholder|attr:placeholder}">
-                    </div>
-                </div>
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.reg.mail.text}"></div>
-                    <div class="text-line">
-                        <input name="reg_mail" type="text" value placeholder
-                               wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
-                    </div>
-                </div>
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.reg.password.text}"></div>
-                    <div class="text-line">
-                        <input name="reg_password" class="password" type="password" value placeholder
-                               wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
-                            class="show-box"></span>
-                    </div>
-                </div>
-                <div class="agreement"
-                     wa_lang="{form.reg.agreement.string1|place:string1}{form.reg.send.text|place:send}{form.reg.agreement.string2|place:string2}{form.reg.agreement.string3|place:string3}{form.reg.agreement.string4|place:string4}{form.reg.agreement.string5|place:string5}{form.reg.agreement.string6|place:string6}">
-                    {STRING1} «<b>{SEND}</b>», {STRING2} <a href="#">{STRING3}</a> {STRING4}
-                    <a href="#">{STRING5}</a> {STRING6}.
-                </div>
-                <button type="submit" class="btn" wa_lang="{form.reg.send.text}"></button>
-            </div>
-            <div class="sign-other">
-                <div class="other-text"
-                     wa_lang="{form.reg.other.haveAccount|place:have_account}{form.reg.other.goToManagerPanel|place:go_to_manager_panel}{form.reg.other.auth|place:auth}">
-                    <b>{HAVE_ACCOUNT}</b> {GO_TO_MANAGER_PANEL}
+	<div class="sign-block">
+		<form name="auth" method="POST" wa_auth="0" style="display: none;">
+			<div class="title" wa_lang="{form.auth.title}"></div>
+			<div class="sign-box">
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.auth.mail.text}"></div>
+					<div class="text-line">
+						<input name="mail" type="text" value placeholder
+						       wa_lang="{form.auth.mail.placeholder|attr:placeholder}">
+					</div>
+				</div>
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.auth.password.text}"></div>
+					<div class="text-line">
+						<input name="password" class="password" type="password" value placeholder
+						       wa_lang="{form.auth.password.placeholder|attr:placeholder}"><span
+							class="show-box"></span>
+					</div>
+				</div>
+				<div class="label-text">
+					<label><input name="remember" type="checkbox" class="hidden">
+						<span class="remember" wa_lang="{form.auth.remember.text}"></span></label>
+				</div>
+				<button name="submit" type="submit" class="btn" wa_lang="{form.auth.enter.text}"></button>
+			</div>
+			<div class="sign-other">
+				<div class="other-text"
+				     wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
+					<b>{NOT_HAVE_ACCOUNT}</b> {GO_REGISTRATION}
+					<span class="link" onclick="manager.methods.authFormHide(); manager.methods.regFormShow();">{REGISTER}</span>.
+				</div>
+				<div class="other-text"
+				     wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
+					<b>{FORGOT_PASSWORD}</b> {PASSWORD_RECOVERY}
+					<span class="link" onclick="manager.methods.authFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
+				</div>
+			</div>
+		</form>
+		<form name="reg" method="POST" style="display: none">
+			<div class="title" wa_lang="{form.reg.title}"></div>
+			<div class="sign-box">
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.reg.login.text}"></div>
+					<div class="text-line">
+						<input name="reg_login" type="text" value placeholder
+						       wa_lang="{form.reg.login.placeholder|attr:placeholder}">
+					</div>
+				</div>
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.reg.mail.text}"></div>
+					<div class="text-line">
+						<input name="reg_mail" type="text" value placeholder
+						       wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
+					</div>
+				</div>
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.reg.password.text}"></div>
+					<div class="text-line">
+						<input name="reg_password" class="password" type="password" value placeholder
+						       wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
+							class="show-box"></span>
+					</div>
+				</div>
+				<div class="agreement"
+				     wa_lang="{form.reg.agreement.string1|place:string1}{form.reg.send.text|place:send}{form.reg.agreement.string2|place:string2}{form.reg.agreement.string3|place:string3}{form.reg.agreement.string4|place:string4}{form.reg.agreement.string5|place:string5}{form.reg.agreement.string6|place:string6}">
+					{STRING1} «<b>{SEND}</b>», {STRING2} <a href="#">{STRING3}</a> {STRING4}
+					<a href="#">{STRING5}</a> {STRING6}.
+				</div>
+				<button type="submit" class="btn" wa_lang="{form.reg.send.text}"></button>
+			</div>
+			<div class="sign-other">
+				<div class="other-text"
+				     wa_lang="{form.reg.other.haveAccount|place:have_account}{form.reg.other.goToManagerPanel|place:go_to_manager_panel}{form.reg.other.auth|place:auth}">
+					<b>{HAVE_ACCOUNT}</b> {GO_TO_MANAGER_PANEL}
                     <span class="link"
                           onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">{AUTH}</span>
-                </div>
-                <div class="other-text"
-                     wa_lang="{form.reg.other.forgotPassword|place:forgot_password}{form.reg.other.restoreAccess|place:restore_access}{form.reg.other.rememberPassword|place:remember_password}">
-                    <b>{FORGOT_PASSWORD}</b> {RESTORE_ACCESS}
-                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
-                </div>
-            </div>
-        </form>
-        <form name="forgot" method="POST" wa_step="0" style="display: none">
-            <div class="title" wa_lang="{form.forgot.title}"></div>
-            <div class="sign-box">
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.forgot.mail.text}"></div>
-                    <div class="text-line">
-                        <input name="forgot_mail" type="text" value placeholder
-                               wa_lang="{form.forgot.mail.placeholder|attr:placeholder}">
-                    </div>
-                </div>
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.forgot.code.text}"></div>
-                    <div class="text-line">
-                        <input name="forgot_code" type="text" value placeholder disabled
-                               wa_lang="{form.forgot.code.placeholder|attr:placeholder}">
-                    </div>
-                </div>
-                <div class="label-block">
-                    <div class="label-text" wa_lang="{form.forgot.password.text}"></div>
-                    <div class="text-line">
-                        <input name="forgot_password" class="password" type="password" value disabled placeholder
-                               wa_lang="{form.forgot.password.placeholder|attr:placeholder}"><span
-                            class="show-box"></span>
-                    </div>
-                </div>
-                <button type="submit" class="btn" wa_lang="{form.forgot.restore}"></button>
-            </div>
-            <div class="sign-other">
-                <div class="other-text" wa_lang="{form.forgot.other.string1}"></div>
-                <div class="other-text" wa_lang="{form.forgot.other.string2}"></div>
-            </div>
-        </form>
-    </div>
+				</div>
+				<div class="other-text"
+				     wa_lang="{form.reg.other.forgotPassword|place:forgot_password}{form.reg.other.restoreAccess|place:restore_access}{form.reg.other.rememberPassword|place:remember_password}">
+					<b>{FORGOT_PASSWORD}</b> {RESTORE_ACCESS}
+					<span class="link" onclick="manager.methods.regFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
+				</div>
+			</div>
+		</form>
+		<form name="forgot" method="POST" wa_step="0" style="display: none">
+			<div class="title" wa_lang="{form.forgot.title}"></div>
+			<div class="sign-box">
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.forgot.mail.text}"></div>
+					<div class="text-line">
+						<input name="forgot_mail" type="text" value placeholder
+						       wa_lang="{form.forgot.mail.placeholder|attr:placeholder}">
+					</div>
+				</div>
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.forgot.code.text}"></div>
+					<div class="text-line">
+						<input name="forgot_code" type="text" value placeholder disabled
+						       wa_lang="{form.forgot.code.placeholder|attr:placeholder}">
+					</div>
+				</div>
+				<div class="label-block">
+					<div class="label-text" wa_lang="{form.forgot.password.text}"></div>
+					<div class="text-line">
+						<input name="forgot_password" class="password" type="password" value disabled placeholder
+						       wa_lang="{form.forgot.password.placeholder|attr:placeholder}"><span
+							class="show-box"></span>
+					</div>
+				</div>
+				<button type="submit" class="btn" wa_lang="{form.forgot.restore}"></button>
+			</div>
+			<div class="sign-other">
+				<div class="other-text" wa_lang="{form.forgot.other.string1}"></div>
+				<div class="other-text" wa_lang="{form.forgot.other.string2}"></div>
+			</div>
+		</form>
+	</div>
 </div>
 <div class="auth-success" style="display: none;">
 <div class="manager">
 <div class="tasks-content" style="display: none">
 <div class="folders">
-    <div class="title"><span wa_lang="{form.folder.title}"></span><span class="add"
-                                                                        onclick="manager.methods.folder.addMsgShow();"></span>
-    </div>
-    <div class="content-height">
-        <ul class="item-list content-scroll" style="top:0;">
-            <li wa_folder default>
+	<div class="title"><span wa_lang="{form.folder.title}"></span><span class="add"
+	                                                                    onclick="manager.methods.folder.addMsgShow();"></span>
+	</div>
+	<div class="content-height">
+		<ul class="item-list content-scroll" style="top:0;">
+			<li wa_folder default>
                 <span class="name">
                     <span class="item-id" wa_lang="{form.folder.folder_id|place:folder_id}">{FOLDER_ID}
                         <span name="view_folderId"></span>
@@ -324,7 +358,7 @@
                 </span>
             <span class="info">
                 <span wa_lang="{form.folder.task_count|place:task_count}">{TASK_COUNT}</span> - <span
-                    name="view_taskCount"></span>
+		            name="view_taskCount"></span>
             </span>
             <span class="edit">
                 <span class="edit-list">
@@ -335,16 +369,18 @@
                           onclick="manager.methods.folder.deleteMsgShow(this);"></span>
                 </span>
             </span>
-            </li>
-        </ul>
-        <div class="not-content">Нет контента блеать ...</div>
-    </div>
+			</li>
+		</ul>
+		<div class="not-content" style="display: none;" wa_lang="{form.folder.not_have_folder}"></div>
+	</div>
 </div>
 <div class="tasks">
-    <div class="title"><span wa_lang="{form.task.title}"></span><span class="add"></span></div>
-    <div class="content-height">
-        <ul class="item-list content-scroll" style="top:0;">
-            <li wa_task default>
+	<div class="title"><span wa_lang="{form.task.title}"></span><span class="add"
+	                                                                  onclick="manager.methods.task.addMsgShow();"></span>
+	</div>
+	<div class="content-height">
+		<ul class="item-list content-scroll" style="top:0;">
+			<li wa_task default>
                 <span class="name">
                     <span class="item-id" wa_lang="{form.task.id|place:id}">{ID}
                         <span name="view_taskId"></span>
@@ -363,301 +399,302 @@
                         <span class="item delete" wa_lang="{menu.edit-menu.delete}"></span>
                     </span>
                 </span>
-            </li>
-        </ul>
-        <div class="not-content">Нет контента блеать ...</div>
-    </div>
+			</li>
+		</ul>
+		<div class="not-content" style="display: none;" wa_lang="{form.task.not_have_task}"></div>
+	</div>
 </div>
 <div class="set-task">
 <div class="title">
-    <div class="task-info">
-        <div class="condition">
-            <span class="name">Статус</span>
+	<div class="task-info">
+		<div class="condition">
+			<span class="name">Статус</span>
                 <span class="switch-box">
                     <span class="switcher"></span><input type="hidden" value="true">
                 </span>
-        </div>
-        <div class="cost">
-            <span class="name">Стоимость</span><span class="num">10.00</span>
-        </div>
-    </div>
+		</div>
+		<div class="cost">
+			<span class="name">Стоимость</span><span class="num">10.00</span>
+		</div>
+	</div>
 </div>
 <div class="tab-box">
 <ul class="tab-list">
-    <li class="general active" name="general">Основные</li>
-    <li class="audit" name="audit">Аудитория</li>
-    <li class="targeting" name="targeting">Таргетинг</li>
-    <li class="statistics" name="statistics">Статистика</li>
+	<li class="general active" name="general">Основные</li>
+	<li class="audit" name="audit">Аудитория</li>
+	<li class="targeting" name="targeting">Таргетинг</li>
+	<li class="statistics" name="statistics">Статистика</li>
 </ul>
 <div class="tab-box-content">
 <div class="setting-group">
 <div class="content-scroll" style="top:0;">
-<form name="general">
-    <div class="label-block">
-        <div class="label-text">Имя</div>
-        <div class="text-line">
-            <input type="text" value="По-умолчанию" placeholder="Имя">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">Домен</div>
-        <div class="text-line">
-            <input type="text" value="" placeholder="Домен">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">URL внешнего источника</div>
-        <div class="text-line">
-            <input type="text" value="" placeholder="URL внешнего источника">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">Основное время выполнения</div>
-        <div class="text-line">
-            <input type="text" value="0" class="number">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text"><label><input type="checkbox">Использовать маску для клика</label></div>
-    </div>
-    <div class="label-block">
-        <div class="text-line">
-            <textarea placeholder="Маска"></textarea>
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">Время выполнения после клика</div>
-        <div class="text-line">
-            <input type="text" value="0" class="number">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text"><label><input type="checkbox">Игнорировать глобальную уникальность</label></div>
-    </div>
-    <button type="submit" class="btn">Сохранить</button>
-</form>
-<form name="audit">
-    <div class="label-block">
-        <div class="label-text">Размер разброса IP в подсети</div>
-        <div class="text-line">
-            <input type="text" value="0" class="number">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">Время уникальности IP</div>
-        <div class="text-line">
-            <input type="text" value="0" class="number">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">Количество дней работы задания (дней)</div>
-        <div class="text-line">
-            <input type="text" value="0" class="number">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text">Суточный прирост(в %)</div>
-        <div class="text-line">
-            <input type="text" value="0.00" class="number">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text"><label><input type="checkbox">Запретить трафик с прокси</label></div>
-    </div>
-    <div class="label-block">
-        <div class="label-text"><label><input type="checkbox">Использовать профиль</label></div>
-    </div>
-    <div class="label-block">
-        <div class="text-line">
-            <input type="text" value="" placeholder="Профиль">
-        </div>
-    </div>
-    <div class="label-block">
-        <div class="label-text"><label><input type="checkbox">Фильтровать трафик IP-списками</label></div>
-        <div class="text-line">
-            <select>
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
-            </select>
-        </div>
-        <div class="label-text">
-            <label><input type="radio" name="iplist">Как черный список</label>
-            <label><input type="radio" name="iplist">Как белый список</label>
-        </div>
-    </div>
-    <button type="submit" class="btn">Сохранить</button>
-</form>
-<form name="targeting">
-    <div class="tab-content">
-        <div class="set-item">
-            <div class="name">
-                <div class="spoiler">Суточный таргетинг</div>
-            </div>
-            <div class="spoiler-box-content">
-                <div class="graph-box">
-                    graph 1
-                </div>
-            </div>
-        </div>
-        <div class="set-item">
-            <div class="name">
-                <div class="spoiler">Недельный таргетинг</div>
-            </div>
-            <div class="spoiler-box-content">
-                <div class="graph-box">
-                    graph 2
-                </div>
-            </div>
-        </div>
-        <div class="set-item">
-            <div class="name">
-                <div class="spoiler">Геотаргетинг</div>
-            </div>
-            <div class="spoiler-box-content">
-                <div class="graph-box">
-                    <div class="label-text">Поиск стран</div>
-                    <div class="text-line">
-                        <input type="text" value="" placeholder="Введите текст для поиска">
-                    </div>
-                    <div class="label-text">Список стран</div>
-                    <div class="text-line">
-                        <select size="8" multiple="multiple">
-                            <option>Австрия</option>
-                            <option>Азербайджан</option>
-                            <option>Армения</option>
-                            <option>Белоруссия</option>
-                            <option>Бельгия</option>
-                            <option>Болгария</option>
-                            <option>Великобритания</option>
-                            <option>Венгрия</option>
-                            <option>Германия</option>
-                            <option>Греция</option>
-                            <option>Грузия</option>
-                            <option>Дания</option>
-                            <option>Европейский союз</option>
-                            <option>Израиль</option>
-                            <option>Ирландия</option>
-                            <option>Испания</option>
-                            <option>Италия</option>
-                            <option>Казахстан</option>
-                            <option>Канада</option>
-                            <option>Латвия</option>
-                            <option>Литва</option>
-                            <option>Молдавия</option>
-                            <option>Нидерланды</option>
-                            <option>Норвегия</option>
-                            <option>Польша</option>
-                            <option>Португалия</option>
-                            <option>Россия</option>
-                            <option>Румыния</option>
-                            <option>США</option>
-                            <option>Словения</option>
-                            <option>Турция</option>
-                            <option>Украина</option>
-                            <option>Финляндия</option>
-                            <option>Франция</option>
-                            <option>Хорватия</option>
-                            <option>Чехия</option>
-                            <option>Швейцария</option>
-                            <option>Швеция</option>
-                            <option>Эстония</option>
-                        </select>
-                    </div>
-                    <div class="label-text">Выбранные страны</div>
-                    <div class="geo-selected">
-                        <div class="country">
-                            <div class="set-name">Россия</div>
-                            <div class="mark-box">
-                                <div class="mark set">
-                                    <span class="option-name">Установлено</span><input type="text" value="80"
-                                                                                       class="geo"><span>%</span>
+<form name="task-setting" onsubmit="return false;">
+<div name="general">
+	<div class="label-block">
+		<div class="label-text">Имя</div>
+		<div class="text-line">
+			<input type="text" value="По-умолчанию" placeholder="Имя">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">Домен</div>
+		<div class="text-line">
+			<input type="text" value="" placeholder="Домен">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">URL внешнего источника</div>
+		<div class="text-line">
+			<input type="text" value="" placeholder="URL внешнего источника">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">Основное время выполнения</div>
+		<div class="text-line">
+			<input type="text" value="0" class="number">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text"><label><input type="checkbox">Использовать маску для клика</label></div>
+	</div>
+	<div class="label-block">
+		<div class="text-line">
+			<textarea placeholder="Маска"></textarea>
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">Время выполнения после клика</div>
+		<div class="text-line">
+			<input type="text" value="0" class="number">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text"><label><input type="checkbox">Игнорировать глобальную уникальность</label></div>
+	</div>
+</div>
+<div name="audit">
+	<div class="label-block">
+		<div class="label-text">Размер разброса IP в подсети</div>
+		<div class="text-line">
+			<input type="text" value="0" class="number">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">Время уникальности IP</div>
+		<div class="text-line">
+			<input type="text" value="0" class="number">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">Количество дней работы задания (дней)</div>
+		<div class="text-line">
+			<input type="text" value="0" class="number">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text">Суточный прирост(в %)</div>
+		<div class="text-line">
+			<input type="text" value="0.00" class="number">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text"><label><input type="checkbox">Запретить трафик с прокси</label></div>
+	</div>
+	<div class="label-block">
+		<div class="label-text"><label><input type="checkbox">Использовать профиль</label></div>
+	</div>
+	<div class="label-block">
+		<div class="text-line">
+			<input type="text" value="" placeholder="Профиль">
+		</div>
+	</div>
+	<div class="label-block">
+		<div class="label-text"><label><input type="checkbox">Фильтровать трафик IP-списками</label></div>
+		<div class="text-line">
+			<select>
+				<option></option>
+				<option></option>
+				<option></option>
+				<option></option>
+			</select>
+		</div>
+		<div class="label-text">
+			<label><input type="radio" name="iplist">Как черный список</label>
+			<label><input type="radio" name="iplist">Как белый список</label>
+		</div>
+	</div>
+</div>
+<div name="targeting">
+	<div class="tab-content">
+		<div class="set-item">
+			<div class="name">
+				<div class="spoiler">Суточный таргетинг</div>
+			</div>
+			<div class="spoiler-box-content">
+				<div class="graph-box">
+					graph 1
+				</div>
+			</div>
+		</div>
+		<div class="set-item">
+			<div class="name">
+				<div class="spoiler">Недельный таргетинг</div>
+			</div>
+			<div class="spoiler-box-content">
+				<div class="graph-box">
+					graph 2
+				</div>
+			</div>
+		</div>
+		<div class="set-item">
+			<div class="name">
+				<div class="spoiler">Геотаргетинг</div>
+			</div>
+			<div class="spoiler-box-content">
+				<div class="graph-box">
+					<div class="label-text">Поиск стран</div>
+					<div class="text-line">
+						<input type="text" value="" placeholder="Введите текст для поиска">
+					</div>
+					<div class="label-text">Список стран</div>
+					<div class="text-line">
+						<select size="8" multiple="multiple">
+							<option>Австрия</option>
+							<option>Азербайджан</option>
+							<option>Армения</option>
+							<option>Белоруссия</option>
+							<option>Бельгия</option>
+							<option>Болгария</option>
+							<option>Великобритания</option>
+							<option>Венгрия</option>
+							<option>Германия</option>
+							<option>Греция</option>
+							<option>Грузия</option>
+							<option>Дания</option>
+							<option>Европейский союз</option>
+							<option>Израиль</option>
+							<option>Ирландия</option>
+							<option>Испания</option>
+							<option>Италия</option>
+							<option>Казахстан</option>
+							<option>Канада</option>
+							<option>Латвия</option>
+							<option>Литва</option>
+							<option>Молдавия</option>
+							<option>Нидерланды</option>
+							<option>Норвегия</option>
+							<option>Польша</option>
+							<option>Португалия</option>
+							<option>Россия</option>
+							<option>Румыния</option>
+							<option>США</option>
+							<option>Словения</option>
+							<option>Турция</option>
+							<option>Украина</option>
+							<option>Финляндия</option>
+							<option>Франция</option>
+							<option>Хорватия</option>
+							<option>Чехия</option>
+							<option>Швейцария</option>
+							<option>Швеция</option>
+							<option>Эстония</option>
+						</select>
+					</div>
+					<div class="label-text">Выбранные страны</div>
+					<div class="geo-selected">
+						<div class="country">
+							<div class="set-name">Россия</div>
+							<div class="mark-box">
+								<div class="mark set">
+									<span class="option-name">Установлено</span><input type="text" value="80"
+									                                                   class="geo"><span>%</span>
 
-                                    <div class="mark-range" style="width: 80%"></div>
-                                </div>
-                                <div class="mark value">
-                                    <span class="option-name">Получено</span><input type="text" value="40" class="geo"
-                                                                                    readonly><span>%</span>
+									<div class="mark-range" style="width: 80%"></div>
+								</div>
+								<div class="mark value">
+									<span class="option-name">Получено</span><input type="text" value="40" class="geo"
+									                                                readonly><span>%</span>
 
-                                    <div class="mark-range" style="width: 40%"></div>
-                                </div>
-                            </div>
-                            <span class="delete"></span>
-                        </div>
-                        <div class="country">
-                            <div class="set-name">Украина</div>
-                            <div class="mark-box">
-                                <div class="mark set">
-                                    <span class="option-name">Установлено</span><input type="text" value="50"
-                                                                                       class="geo"><span>%</span>
+									<div class="mark-range" style="width: 40%"></div>
+								</div>
+							</div>
+							<span class="delete"></span>
+						</div>
+						<div class="country">
+							<div class="set-name">Украина</div>
+							<div class="mark-box">
+								<div class="mark set">
+									<span class="option-name">Установлено</span><input type="text" value="50"
+									                                                   class="geo"><span>%</span>
 
-                                    <div class="mark-range" style="width: 50%"></div>
-                                </div>
-                                <div class="mark value">
-                                    <span class="option-name">Получено</span><input type="text" value="10" class="geo"
-                                                                                    readonly><span>%</span>
+									<div class="mark-range" style="width: 50%"></div>
+								</div>
+								<div class="mark value">
+									<span class="option-name">Получено</span><input type="text" value="10" class="geo"
+									                                                readonly><span>%</span>
 
-                                    <div class="mark-range" style="width: 10%"></div>
-                                </div>
-                            </div>
-                            <span class="delete"></span>
-                        </div>
-                        <div class="country">
-                            <div class="set-name">Польша</div>
-                            <div class="mark-box">
-                                <div class="mark set">
-                                    <span class="option-name">Установлено</span><input type="text" value="10"
-                                                                                       class="geo"><span>%</span>
+									<div class="mark-range" style="width: 10%"></div>
+								</div>
+							</div>
+							<span class="delete"></span>
+						</div>
+						<div class="country">
+							<div class="set-name">Польша</div>
+							<div class="mark-box">
+								<div class="mark set">
+									<span class="option-name">Установлено</span><input type="text" value="10"
+									                                                   class="geo"><span>%</span>
 
-                                    <div class="mark-range" style="width: 10%"></div>
-                                </div>
-                                <div class="mark value">
-                                    <span class="option-name">Получено</span><input type="text" value="1" class="geo"
-                                                                                    readonly><span>%</span>
+									<div class="mark-range" style="width: 10%"></div>
+								</div>
+								<div class="mark value">
+									<span class="option-name">Получено</span><input type="text" value="1" class="geo"
+									                                                readonly><span>%</span>
 
-                                    <div class="mark-range" style="width: 1%"></div>
-                                </div>
-                            </div>
-                            <span class="delete"></span>
-                        </div>
-                        <div class="country">
-                            <div class="set-name">Казахстан</div>
-                            <div class="mark-box">
-                                <div class="mark set">
-                                    <span class="option-name">Установлено</span><input type="text" value="15"
-                                                                                       class="geo"><span>%</span>
+									<div class="mark-range" style="width: 1%"></div>
+								</div>
+							</div>
+							<span class="delete"></span>
+						</div>
+						<div class="country">
+							<div class="set-name">Казахстан</div>
+							<div class="mark-box">
+								<div class="mark set">
+									<span class="option-name">Установлено</span><input type="text" value="15"
+									                                                   class="geo"><span>%</span>
 
-                                    <div class="mark-range" style="width: 15%"></div>
-                                </div>
-                                <div class="mark value">
-                                    <span class="option-name">Получено</span><input type="text" value="5" class="geo"
-                                                                                    readonly><span>%</span>
+									<div class="mark-range" style="width: 15%"></div>
+								</div>
+								<div class="mark value">
+									<span class="option-name">Получено</span><input type="text" value="5" class="geo"
+									                                                readonly><span>%</span>
 
-                                    <div class="mark-range" style="width: 5%"></div>
-                                </div>
-                            </div>
-                            <span class="delete"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-<form name="statistics">
-    <div class="tab-content">
-        <div class="set-item">
-            <div class="name">
-                <div class="spoiler active">Сегодня</div>
-            </div>
-            <div class="spoiler-box-content">
-                <div class="graph-box">
-                    graph 4
-                </div>
-            </div>
-        </div>
-    </div>
+									<div class="mark-range" style="width: 5%"></div>
+								</div>
+							</div>
+							<span class="delete"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div name="statistics">
+	<div class="tab-content">
+		<div class="set-item">
+			<div class="name">
+				<div class="spoiler active">Сегодня</div>
+			</div>
+			<div class="spoiler-box-content">
+				<div class="graph-box">
+					graph 4
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<button type="submit" class="btn">Сохранить</button>
 </form>
 </div>
 </div>
@@ -666,12 +703,12 @@
 </div>
 </div>
 <div class="iplists-content" style="display: none">
-    <div class="iplists">
-        <div class="title"><span>Списки диапазонов IP</span><span class="add"></span></div>
-        <div class="content-height">
-            <ul class="item-list content-scroll" style="top:0;">
-                <li>
-                    <span class="name">По-умолчанию</span>
+	<div class="iplists">
+		<div class="title"><span>Списки диапазонов IP</span><span class="add"></span></div>
+		<div class="content-height">
+			<ul class="item-list content-scroll" style="top:0;">
+				<li>
+					<span class="name">По-умолчанию</span>
                     <span class="info">
                         <span class="status on">Используется</span>
                     </span>
@@ -681,9 +718,9 @@
                             <span class="item delete">Удалить</span>
                         </span>
                     </span>
-                </li>
-                <li>
-                    <span class="name">По-умолчанию</span>
+				</li>
+				<li>
+					<span class="name">По-умолчанию</span>
                     <span class="info">
                         <span class="status off">Не используется</span>
                     </span>
@@ -693,9 +730,9 @@
                             <span class="item delete">Удалить</span>
                         </span>
                     </span>
-                </li>
-                <li>
-                    <span class="name">По-умолчанию</span>
+				</li>
+				<li>
+					<span class="name">По-умолчанию</span>
                     <span class="info">
                         <span class="status on">Используется</span>
                     </span>
@@ -705,109 +742,109 @@
                             <span class="item delete">Удалить</span>
                         </span>
                     </span>
-                </li>
-            </ul>
-            <div class="not-content">Нет контента блеать ...</div>
-        </div>
-    </div>
-    <div class="set-iplist">
-        <div class="title"><span>Диапазоны IP</span><span class="add"></span></div>
-        <div class="setting-group">
-            <form>
-                <div class="content-scroll" style="top:0;">
-                    <table>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                    </table>
-                    <button type="submit" class="btn">Сохранить</button>
-                </div>
-            </form>
-            <div class="not-content">Нет контента блеать ...</div>
-        </div>
-    </div>
+				</li>
+			</ul>
+			<div class="not-content">Нет контента блеать ...</div>
+		</div>
+	</div>
+	<div class="set-iplist">
+		<div class="title"><span>Диапазоны IP</span><span class="add"></span></div>
+		<div class="setting-group">
+			<form>
+				<div class="content-scroll" style="top:0;">
+					<table>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
+							</td>
+							<td><span class="delete"></span></td>
+						</tr>
+					</table>
+					<button type="submit" class="btn">Сохранить</button>
+				</div>
+			</form>
+			<div class="not-content">Нет контента блеать ...</div>
+		</div>
+	</div>
 </div>
 <div class="account-content" style="display: none">
-    <div class="content-scroll" style="top:0;">
-        <table class="account-set">
-            <tr>
-                <td class="name">Баланс</td>
-                <td class="option"><span class="add"></span><span class="cost-move"></span></td>
-                <td class="value">1 000 000</td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-            </tr>
-            <tr>
-                <td class="name">Логин</td>
-                <td class="option"></td>
-                <td class="value">Creator</td>
-            </tr>
-            <tr>
-                <td class="name">Email</td>
-                <td class="option"></td>
-                <td class="value">ololo@olo.ru</td>
-            </tr>
-            <tr>
-                <td class="name">Пароль</td>
-                <td class="option"><span class="editing"></span></td>
-                <td class="value closed">Информация скрыта</td>
-            </tr>
-            <tr>
-                <td class="name">Гостевой ключ</td>
-                <td class="option"><span class="generate"></span><span class="copy"></span></td>
-                <td class="value">WUd|PxDcHaV9M7ex</td>
-            </tr>
-            <tr>
-                <td class="name">Статус аккаунта</td>
-                <td class="option">
+	<div class="content-scroll" style="top:0;">
+		<table class="account-set">
+			<tr>
+				<td class="name">Баланс</td>
+				<td class="option"><span class="add"></span><span class="cost-move"></span></td>
+				<td class="value">1 000 000</td>
+			</tr>
+			<tr>
+				<td colspan="3"></td>
+			</tr>
+			<tr>
+				<td class="name">Логин</td>
+				<td class="option"></td>
+				<td class="value">Creator</td>
+			</tr>
+			<tr>
+				<td class="name">Email</td>
+				<td class="option"></td>
+				<td class="value">ololo@olo.ru</td>
+			</tr>
+			<tr>
+				<td class="name">Пароль</td>
+				<td class="option"><span class="editing"></span></td>
+				<td class="value closed">Информация скрыта</td>
+			</tr>
+			<tr>
+				<td class="name">Гостевой ключ</td>
+				<td class="option"><span class="generate"></span><span class="copy"></span></td>
+				<td class="value">WUd|PxDcHaV9M7ex</td>
+			</tr>
+			<tr>
+				<td class="name">Статус аккаунта</td>
+				<td class="option">
                     <span class="switch-box status-off">
                         <span class="switcher"></span><input type="hidden" value="true">
                     </span>
-                </td>
-                <td class="value">Выключен</td>
-            </tr>
-        </table>
-    </div>
+				</td>
+				<td class="value">Выключен</td>
+			</tr>
+		</table>
+	</div>
 </div>
 </div>
 </div>

@@ -20,7 +20,8 @@
 			user: {
 				token: false
 			},
-			elem: {}
+			elem: {},
+			ipLists: []
 		},
 		utils: {
 			showNotice: NoticeShow,
@@ -122,6 +123,7 @@
 					case "task":
 						$(".main .auth-success .tasks-content").show();
 						manager.methods.loadFolders();
+						manager.methods.refreshDataIpLists();
 						break;
 					case "iplist":
 						$(".main .auth-success .iplists-content").show();
@@ -170,7 +172,7 @@
 			},
 			loadFolders: function(){
 				//delete all printed folders
-				$("[wa_folder]:not([default])").remove();
+				$(manager.methods.folder.getFoldersHtml()).remove();
 				//get folders and print
 				api.methods.getFolders({
 					token: manager.methods.getToken(),
@@ -180,7 +182,9 @@
 							manager.methods.folder.addHtml(folder);
 						});
 
-						$(manager.methods.folder.getFolderHtml()).eq(0).click();
+						$(manager.methods.folder.getFoldersHtml()).eq(0).click();
+
+						manager.methods.folder.toggleNotContent();
 					}
 				});
 			},
@@ -196,8 +200,22 @@
 						$.each(tasks, function(key, task){
 							manager.methods.task.addHtml(task);
 						});
+
+						manager.methods.task.toggleNotContent();
+
+						manager.methods.folder.setCountTask(manager.methods.folder.getHtml(folderId), tasks.length);
+
+						$(manager.methods.task.getTasksHtml()).eq(0).click();
 					}
 				});
+			},
+			refreshDataIpLists: function(){
+				api.methods.getIpLists({
+					token: manager.methods.getToken(),
+					callback: function(arr){
+						manager.data.ipLists = arr;
+					}
+				})
 			},
 			folder:{
 				addHtml: function(param){
@@ -205,9 +223,14 @@
 						parent = $(layout).parent(),
 						html = $(layout).clone().removeAttr("default").appendTo(parent);
 
-					$(html).find("[name=view_folderId]").html(param.id);
-					$(html).find("[name=view_folderName]").html(param.name);
-					$(html).find("[name=view_taskCount]").html(param.task_count);
+					//add param to html
+					$.each(param, function(key, val){
+						$('<input type="hidden" name="'+key+'" value="'+val+'">').appendTo(html);
+					});
+
+					manager.methods.folder.setIdHtml(html, param.id);
+					manager.methods.folder.setNameHtml(html, param.name);
+					manager.methods.folder.setCountTask(html, param.task_count);
 				},
 				addMsgShow: function(){
 					var msg = $("#msg_addFolder").fadeIn("fast"),
@@ -225,9 +248,9 @@
 						input_id = $(msg).find("[name=folder_id]"),
 						folder = $(el).parents("[wa_folder]");
 
-					$(input_name).val($(folder).find("[name=view_folderName]").html());
+					$(input_name).val(manager.methods.folder.getParam(folder, "name"));
 					$(input_name).focus();
-					$(input_id).val($(folder).find("[name=view_folderId]").html());
+					$(input_id).val(manager.methods.folder.getParam(folder, "id"));
 				},
 				renameMsgHide: function(){
 					$("#msg_renameFolder .add-box .close").click();
@@ -245,25 +268,44 @@
 					var output = false;
 
 					$("[wa_folder]:not([default])").each(function(key, folder){
-						if($(folder).find("[name=view_folderId]").html() == id) output = folder;
+						if($(folder).find("[name=id]").val() == id) output = folder;
 					});
 
 					return output;
 				},
 				getId: function(folder){
-					return $(folder).find("[name=view_folderId]").html();
+					return manager.methods.folder.getParam(folder, "id");
 				},
-				getName: function(folder){
-					return $(folder).find("[name=view_folderName]").html();
+				getFoldersHtml: function(){
+					return $("[wa_folder]:not([default])");
 				},
-				setName: function(folder, name){
-					$(folder).find("[name=view_folderName]").html(name);
+				toggleNotContent: function(){
+					var not_content = $(".folders .not-content");
+					if(manager.methods.folder.getFoldersHtml().length == 0) $(not_content).show();
+					else $(not_content).hide();
+				},
+				getActiveHtml: function(){
+					return $(".active[wa_folder]:not([default])");
+				},
+				getParam: function(folderHtml, param){
+					return $(folderHtml).find("input[name='"+param+"']").val();
+				},
+				setParam: function(folderHtml, param, val){
+					var el = $(folderHtml).find("input[name='"+param+"']");
+					if(el.length == 0){
+						$('<input type="hidden" name="'+param+'" value="'+val+'">').appendTo(folderHtml);
+					}else{
+						$(el).val(val);
+					};
+				},
+				setNameHtml: function(folderHtml, name){
+					$(folderHtml).find("[name=view_folderName]").html(name);
+				},
+				setIdHtml: function(folderHtml, id){
+					$(folderHtml).find("[name=view_folderId]").html(id);
 				},
 				setCountTask: function(folder, count){
 					$(folder).find("[name=view_taskCount]").html(count);
-				},
-				getFolderHtml: function(){
-					return $("[wa_folder]:not([default])");
 				}
 			},
 			task:{
@@ -272,20 +314,64 @@
 						parent = $(layout).parent(),
 						html = $(layout).clone().removeAttr("default").appendTo(parent);
 
-					$(html).find("[name=view_taskId]").html(param.taskId);
-					$(html).find("[name=view_taskName]").html(param.name);
-					manager.methods.task.setStatusHtml(html, !param.frozen);
+					//add param to html
+					$.each(param, function(key, val){
+						$('<input type="hidden" name="'+key+'" value="'+val+'">').appendTo(html);
+					});
+
+					manager.methods.task.setIdHtml(html, manager.methods.task.getParam(html, "taskId"));
+					manager.methods.task.setNameHtml(html, manager.methods.task.getParam(html, "name"));
+					manager.methods.task.setStatusHtml(html, !eval(manager.methods.task.getParam(html, "frozen")));
 				},
-				setStatusHtml: function(task, status){
-					var el = $(task).find("[name=view_taskStatus]");
+				setStatusHtml: function(taskHtml, status){
+					var el = $(taskHtml).find("[name=view_taskStatus]");
 					if(status){
 						$(el).removeClass("on off").addClass("on").html(manager.lng.form.task.status.on);
 					}else{
 						$(el).removeClass("on off").addClass("off").html(manager.lng.form.task.status.off);
 					};
 				},
+				setNameHtml: function(taskHtml, name){
+					$(taskHtml).find("[name=view_taskName]").html(name);
+				},
+				setIdHtml: function(taskHtml, id){
+					$(taskHtml).find("[name=view_taskId]").html(id);
+				},
 				getTasksHtml: function(){
 					return $("[wa_task]:not([default])");
+				},
+				getParam: function(taskHtml, param){
+					return $(taskHtml).find("input[name='"+param+"']").val();
+				},
+				setParam: function(taskHtml, param, val){
+					var el = $(taskHtml).find("input[name='"+param+"']");
+					if(el.length == 0){
+						$('<input type="hidden" name="'+param+'" value="'+val+'">').appendTo(taskHtml);
+					}else{
+						$(el).val(val);
+					};
+				},
+				addMsgShow: function(){
+					var msg = $("#msg_addTask").fadeIn("fast"),
+						input_taskName = $(msg).find("[name=task_name]"),
+						input_taskDomain = $(msg).find("[name=task_domain]"),
+						input_taskExtSource = $(msg).find("[name=task_extSource]");
+
+					$(input_taskName).val("");
+					$(input_taskDomain).val("");
+					$(input_taskExtSource).val("");
+					$(input_taskName).focus();
+				},
+				addMsgHide: function(){
+					$("#msg_addTask .add-box .close").click();
+				},
+				toggleNotContent: function(){
+					var not_content = $(".tasks .not-content");
+					if(manager.methods.task.getTasksHtml().length == 0) $(not_content).show();
+					else $(not_content).hide();
+				},
+				getActiveHtml: function(){
+					return $(".active[wa_task]:not([default])");
 				}
 			}
 		}
@@ -562,6 +648,7 @@
 						id: data.id,
 						task_count: 0
 					});
+					manager.methods.folder.toggleNotContent();
 				}
 			});
 		};
@@ -587,7 +674,8 @@
 				id: inputs.id.value,
 				name: inputs.folder_name.value,
 				callback: function(){
-					manager.methods.folder.setName(manager.methods.folder.getHtml(inputs.id.value), inputs.folder_name.value);
+					manager.methods.folder.setParam(manager.methods.folder.getHtml(inputs.id.value), "name", inputs.folder_name.value);
+					manager.methods.folder.setNameHtml(manager.methods.folder.getHtml(inputs.id.value), inputs.folder_name.value);
 					manager.methods.folder.renameMsgHide();
 				}
 			});
@@ -607,10 +695,76 @@
 			ids: [id],
 			callback: function(){
 				$(manager.methods.folder.getHtml(id)).remove();
+				manager.methods.folder.toggleNotContent();
 			}
 		});
 	});
 	//SET CONFIRM DELETE FOLDER
+
+	//SET ADD NEW TASK FORM
+	$(document).on("submit","form[name=task_add]", function(e){
+		var form = this, inputs = {
+			name: this["task_name"],
+			domain: this["task_domain"],
+			extSource: this["task_extSource"]
+		}, task_data = {
+			taskId: 0,
+			folderId: 0,
+			listId: 0,
+			afterClick: api.Constants.Limit.Task.AfterClick.Value.Default,
+			beforeClick: api.Constants.Limit.Task.BeforeClick.Value.Default,
+			allowProxy: false,
+			ignoreGU: false,
+			growth: 0,
+			domain: "",
+			profile: "",
+			frozen: false,
+			listMode: true,
+			rangeSize: api.Constants.Limit.Task.RangeSize.Value.Default,
+			uniquePeriod: api.Constants.Limit.Task.UniquePeriod.Value.Default,
+			name: "",
+			mask: "",
+			days: 0,
+			extSource: ""
+		};
+
+		//check input data
+		if(!CheckType(inputs.name.value, TYPE.TASK_NAME)){
+			manager.utils.showNotice(manager.lng.form.task_add.name.error, "error");
+			$(inputs.name).focus();
+		}else if(!CheckType(inputs.domain.value, TYPE.TASK_DOMAIN)){
+			manager.utils.showNotice(manager.lng.form.task_add.domain.error, "error");
+			$(inputs.domain).focus();
+		}else if(!CheckType(inputs.extSource.value, TYPE.TASK_EXTSOURCE)){
+			manager.utils.showNotice(manager.lng.form.task_add.extSource.error, "error");
+			$(inputs.extSource).focus();
+		}else{
+			$.extend(true, task_data, {
+				folderId: manager.methods.folder.getId(manager.methods.folder.getActiveHtml()),
+				name: inputs.name.value,
+				domain: inputs.domain.value,
+				extSource: inputs.extSource.value
+			});
+
+			api.methods.addTask($.extend(true, {}, task_data, {
+				token: manager.methods.getToken(),
+				exception: {
+					LimitExceeded: function(){
+						manager.utils.showNotice(manager.lng.exception.query.addTask.LimitExceeded, "error");
+					}
+				},
+				callback: function(receive_data){
+					manager.methods.task.addHtml($.extend(true, task_data, {
+						taskId: receive_data.taskId
+					}));
+					manager.methods.task.addMsgHide();
+				}
+			}));
+		};
+
+		return false;
+	});
+	//SET ADD NEW FOLDER FORM
 
 	//utils
 	function NoticeShow(text, type){
@@ -633,10 +787,8 @@
 			}, 5 * 1000);
 		});
 		$(msg).hover(function(){
-			console.log("1");
 			timeout_destroy = false;
 		}, function(){
-			console.log("2");
 			timeout_destroy = true;
 			setTimeout(function(){
 				if(timeout_destroy) $(msg).find(".close").click();
@@ -839,6 +991,24 @@
 			regexp: api.Constants.Limit.Folder.Name.Regexp,
 			min:  api.Constants.Limit.Folder.Name.Length.Min,
 			max:  api.Constants.Limit.Folder.Name.Length.Max
+		},
+		TASK_NAME: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Task.Name.Regexp,
+			min:  api.Constants.Limit.Task.Name.Length.Min,
+			max:  api.Constants.Limit.Task.Name.Length.Max
+		},
+		TASK_DOMAIN: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Task.Domain.Regexp,
+			min:  api.Constants.Limit.Task.Domain.Length.Min,
+			max:  api.Constants.Limit.Task.Domain.Length.Max
+		},
+		TASK_EXTSOURCE: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Task.ExtSource.Regexp,
+			min:  api.Constants.Limit.Task.ExtSource.Length.Min,
+			max:  api.Constants.Limit.Task.ExtSource.Length.Max
 		}
 	};
 	function CheckType(_data, _type, _allowEmpty){
