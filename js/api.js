@@ -166,7 +166,7 @@
 						output.push({
 							id: folder[OperationItem.IdFolder],
 							name: folder[OperationItem.Name],
-							task_count: 0
+							task_count: folder[OperationItem.Tasks]
 						});
 					});
 

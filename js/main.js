@@ -170,3 +170,27 @@ $("[name=task-setting] input[name=use_mask]").change(function(e){
 		ignoreGU.checked = false;
 	};
 }).click().click();
+$("[name=task-setting] input[name=use_profile]").change(function(e){
+	if(this.checked){
+		$("[name=task-setting] [name=use_profile_setting]").show("fast");
+	}else{
+		$("[name=task-setting] [name=use_profile_setting]").hide("fast");
+		$("[name=task-setting] [name=profile]").val("");
+	};
+}).click().click();
+$("[name=task-setting] input[name=use_listIp]").change(function(e){
+	if(this.checked){
+		$("[name=task-setting] [name=use_listIp_setting]").show("fast");
+	}else{
+		$("[name=task-setting] [name=use_listIp_setting]").hide("fast");
+		$("[name=task-setting] [name=listId]").val(0).change();
+	};
+}).click().click();
+$("[name=task-setting] [name=listId]").change(function(e){
+	if($(this).val() == 0 || $(this).val() == ""){
+		$("[name=task-setting] [name=listIp-option]").hide("fast");
+		$("[name=task-setting] [name=listIp-type][value=true]")[0].checked = true;
+	}else{
+		$("[name=task-setting] [name=listIp-option]").show("fast");
+	};
+}).change();

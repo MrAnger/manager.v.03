@@ -163,6 +163,7 @@
 					callback: function(){
 						manager.methods.managerFormHide({callback: function(){
 							DataStorage.del(manager.options.params.tokenKey);
+							manager.methods.setToken("");
 							manager.methods.authFormShow();
 						}});
 					}
@@ -961,6 +962,11 @@
 			window.location.href = "";
 		}
 	};
+	var DataFormat = manager.utils.dataFormat = {
+		int: function(int){
+			return int.toString().replace(/(?=(\d\d\d)+$)/g, ' ');
+		}
+	}
 	var TYPE = manager.type = {
 		LOGIN: {
 			dataType: "text",
@@ -1031,6 +1037,39 @@
 
 		return out;
 	};
+	function DayTargeting(_opt){
+		 var SelfObj = this,
+			 options = $.extend(true, {
+				 holder: document.body,
+				 graphOpt: {
+					 xaxis: {
+						 showValue: true,
+						 min: 0,
+						 max: 23,
+						 tickSize: 1
+					 },
+					 yaxis: {
+						 showValue: true,
+						 min:0,
+						 max: 50,
+						 tickSize: 5,
+						 tickFormatter: function (v) { return DataFormat.int(v); }
+					 },
+					 grid: {
+						 hoverable:true,
+						 clickable:true,
+						 color:"#222",
+						 backgroundColor: {
+							 colors:["rgba(50,50,50,1)", "rgba(35,35,35,1)"]
+						 },
+						 tickColor:"rgba(70,70,70,1)",
+						 labelMargin:5,
+						 borderWidth:0,
+						 mouseActiveRadius:8
+					 }
+				 }
+			 }, _opt);
+	};
 
 	//init
 	$(document).ready(function(e){
@@ -1065,11 +1104,11 @@
 		});
 		//exception wrong session id
 		api.options.exception.WrongSessionId = function(){
-			/*manager.methods.managerFormHide({callback: function(){
+			manager.methods.managerFormHide({callback: function(){
 				DataStorage.del(manager.options.params.tokenKey);
+				manager.methods.setToken("");
 				manager.methods.authFormShow();
-			}});*/
-			manager.methods.logOut();
+			}});
 		};
 
 		//Translate document
@@ -1085,8 +1124,12 @@
 				DataStorage.set(manager.options.params.authStepNumber, 2);
 				window.location.href = "";
 			}else if(DataStorage.get(manager.options.params.authStepNumber) == 2){
-				DataStorage.set(manager.options.params.authStep, 0);
 				manager.methods.setToken(DataStorage.get(manager.options.params.authStepToken));
+
+				DataStorage.del(manager.options.params.authStep);
+				DataStorage.del(manager.options.params.authStepToken);
+				DataStorage.del(manager.options.params.authStepNumber);
+
 				manager.methods.managerFormShow();
 			};
 		}else{

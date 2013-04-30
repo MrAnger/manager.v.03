@@ -516,11 +516,16 @@
 		<div class="label-text"><label><input name="use_listIp" type="checkbox"><span wa_lang="{form.task_setting.listId.text}"></span></label></div>
 		<div name="use_listIp_setting">
 			<div class="text-line">
-				<select name="listId"></select>
+				<select name="listId">
+					<option value="0"></option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
 			</div>
 			<div name="listIp-option">
 				<div class="label-text">
-					<label><input type="radio" name="listIp-type" value="true"><span wa_lang="{form.task_setting.use_as_blackList}"></span></label>
+					<label><input type="radio" name="listIp-type" value="true" checked><span wa_lang="{form.task_setting.use_as_blackList}"></span></label>
 					<label><input type="radio" name="listIp-type" value="false"><span wa_lang="{form.task_setting.use_as_whiteList}"></span></label>
 				</div>
 			</div>
@@ -531,7 +536,7 @@
 	<div class="tab-content">
 		<div class="set-item">
 			<div class="name">
-				<div class="spoiler">Суточный таргетинг</div>
+				<div class="spoiler active">Суточный таргетинг</div>
 			</div>
 			<div class="spoiler-box-content">
 				<div class="graph-box">
