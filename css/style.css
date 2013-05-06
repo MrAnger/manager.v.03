@@ -1114,12 +1114,6 @@ embed:hover .copy {
 	color: rgba(167, 118, 0, 1)
 }
 
-.graph-view {
-}
-
-.graph-value {
-}
-
 .graph-box {
 	display: block;
 	margin: 5px 10px;
@@ -1128,4 +1122,8 @@ embed:hover .copy {
 	background: #ebebeb;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
+}
+
+.geo-box {
+	margin: 5px 10px;
 }
