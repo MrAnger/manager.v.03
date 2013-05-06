@@ -802,10 +802,6 @@ input[type=checkbox] {
 	background-position: 0 -16px;
 }
 
-.graph-box {
-	padding: 5px 20px;
-}
-
 .geo-selected {
 	width: 400px;
 }
@@ -1084,4 +1080,52 @@ embed:hover .copy {
 	font-size: .85em;
 	font-style: italic;
 	opacity: .6;
+}
+
+.graph-view-set {
+	font-size: .9em;
+}
+
+.graph-view-set label {
+	display: inline-block;
+	padding: 5px 0;
+	margin-right: 10px;
+}
+
+.graph-set {
+	display: inline-block;
+	margin-right: 3px;
+	color: rgba(0, 90, 0, 1);
+}
+
+.graph-set.min {
+	color: rgba(64, 153, 255, 1)
+}
+
+.graph-set.max {
+	color: rgba(255, 95, 45, 1)
+}
+
+.graph-set.incomplete {
+	color: rgba(95, 0, 33, 1)
+}
+
+.graph-set.overload {
+	color: rgba(167, 118, 0, 1)
+}
+
+.graph-view {
+}
+
+.graph-value {
+}
+
+.graph-box {
+	display: block;
+	margin: 5px 10px;
+	width: 550px;
+	height: 300px;
+	background: #ebebeb;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
