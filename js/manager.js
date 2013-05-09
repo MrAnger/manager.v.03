@@ -21,13 +21,17 @@
 				token: false
 			},
 			elem: {},
-			ipLists: []
+			ipLists: [],
+			graphs: {}
 		},
 		utils: {
 			showNotice: NoticeShow,
 			checkType: CheckType,
 			formatDate: formatDate,
 			consoleAppendToText: console_appendText
+		},
+		graph: {
+			dayTargeting: DayTargeting
 		},
 		methods: {
 			getToken: function(){
@@ -1038,10 +1042,13 @@
 		return out;
 	};
 	function DayTargeting(_opt){
-		 var SelfObj = this,
-			 options = $.extend(true, {
+		var defPoints = [];
+		for(var i=0; i<=23; i++) defPoints.push([i, 0]);
+
+		var SelfObj = this,
+			options = $.extend(true, {
 				 holder: document.body,
-				 graphOpt: {
+				 graphOptions: {
 					 xaxis: {
 						 showValue: true,
 						 min: 0,
@@ -1052,6 +1059,8 @@
 						 showValue: true,
 						 min:0,
 						 max: 50,
+						 maxDefault: 50,
+						 maxValue: 100000,
 						 tickSize: 5,
 						 tickFormatter: function (v) { return DataFormat.int(v); }
 					 },
@@ -1067,8 +1076,76 @@
 						 borderWidth:0,
 						 mouseActiveRadius:8
 					 }
-				 }
+				 },
+				 lines: [
+					 {
+						 name: "min",
+						 enable: true,
+						 data: defPoints,
+						 color: "rgba(64,153,255,1)", //цвет линии графика
+						 shadowSize: 3,
+						 lines: {
+							 show: true,
+							 fill: false,
+							 fillColor: "rgba(255,255,255,0)",
+							 lineWidth: 1.5//толщина линий
+						 },
+						 points:{
+							 show: true,
+							 fill: true,
+							 fillColor: 'rgba(255,255,255,1)',
+							 lineWidth: 1.2, //толщина линии точки
+							 radius: 2.5, //радиус точки
+							 color: "rgba(255,255,255,1)",
+							 values: {
+								 show: false,
+								 font: "normal 11px arial",
+								 color: "rgba(1,1,1,1)",
+								 margin: 5
+							 }
+						 }
+					 },
+					 {
+						 name: "max",
+						 enable: true,
+						 data : defPoints,
+						 color: "rgba(255,95,45,1)", //цвет линии графика
+						 shadowSize: 3,
+						 lines: {
+							 show: true,
+							 fill: false,
+							 fillColor: 'rgba(255,255,255,0)', //цвет заливки области графика
+							 lineWidth: 1.5//толщина линий
+						 },
+						 points:{
+							 show: true,
+							 fill: true,
+							 fillColor: 'rgba(255,255,255,1)',
+							 lineWidth: 1.2, //толщина линии точки
+							 radius: 2.5, //радиус точки
+							 color: "rgba(255,255,255,1)",
+							 values: {
+								 show: false,
+								 font: "normal 11px arial",
+								 color: "rgba(1,1,1,1)",
+								 margin: 5
+							 }
+						 }
+					 }
+				 ]
 			 }, _opt);
+
+		function constructor(){
+			SelfObj.graph = $.plot(options.holder, options.lines, options.graphOptions);
+		};
+
+		//PROPERTIES
+		this.graph = false;
+
+		//METHODS
+
+		//INIT
+		constructor();
 	};
 
 	//init

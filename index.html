@@ -6,10 +6,10 @@
     <meta name="robots" content="index, follow"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
+	<script type="text/javascript" src="js/flot/jquery.flot.js"></script>
     <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/manager.js"></script>
@@ -564,9 +564,10 @@
                 <label><input type="checkbox" checked><span class="graph-set min">Минимум</span>(<span class="graph-value">63</span>)</label>
                 <label><input type="checkbox" checked><span class="graph-set max">Максимум</span>(<span class="graph-value">207</span>)</label>
             </div>
-            <div class="graph-box">
-                 graph
-            </div>
+            <div class="graph-box" id="graph_dayTargeting"></div>
+	        <script type="text/javascript">
+		        manager.data.graphs.dayTagreting = new manager.graph.dayTargeting({holder: $("#graph_dayTargeting")});
+	        </script>
         </div>
     </div>
     <div class="set-item">
