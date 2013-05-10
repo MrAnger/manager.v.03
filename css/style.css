@@ -1148,7 +1148,7 @@ embed:hover .copy {
     background: rgba(255, 255, 255, .5);
     box-shadow: 0 0 .2em rgba(0, 0, 0, .6);
     border-radius: 2px;
-    min-width: 80px;
+    min-width: 70px;
     z-index: 20000;
 }
 
