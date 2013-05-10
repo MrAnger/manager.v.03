@@ -1090,6 +1090,7 @@ embed:hover .copy {
 	display: inline-block;
 	padding: 5px 0;
 	margin-right: 10px;
+	font-size:.9em;
 }
 
 .graph-set {
@@ -1116,14 +1117,63 @@ embed:hover .copy {
 
 .graph-box {
 	display: block;
-	margin: 5px 10px;
+	margin: 5px 10px 35px 40px;
 	width: 550px;
-	height: 300px;
-	background: #ebebeb;
+	height: 250px;
+	/*background: #ebebeb;*/
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 }
 
 .geo-box {
 	margin: 5px 10px;
+}
+
+.xAxis {
+	height:30px!important;
+	line-height:30px!important;
+}
+
+.yAxis .tickLabel {
+	width:50px!important;
+	text-align:right!important;
+}
+
+.gr-hint {
+    display: inline-block;
+    position: fixed;
+    padding: 3px;
+    background: rgba(255, 255, 255, .5);
+    box-shadow: 0 0 .2em rgba(0, 0, 0, .6);
+    border-radius: 2px;
+    min-width: 80px;
+    z-index: 20000;
+}
+
+.gr-hint-content {
+    padding: 3px 8px;
+    background: rgba(0, 0, 0, .88);
+    color: #fff;
+    font-size: .85em;
+    cursor: default;
+}
+
+.gr-hint.give .gr-hint-content {
+    background: rgba(0, 90, 0, 1)
+}
+
+.gr-hint.min .gr-hint-content {
+    background: rgba(64, 153, 255, 1)
+}
+
+.gr-hint.max .gr-hint-content {
+    background: rgba(255, 95, 45, 1)
+}
+
+.gr-hint.incomplete .gr-hint-content {
+    background: rgba(95, 0, 33, 1)
+}
+
+.gr-hint.overload .gr-hint-content {
+    background: rgba(167, 118, 0, 1)
 }
