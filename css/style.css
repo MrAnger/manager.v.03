@@ -1135,9 +1135,8 @@ embed:hover .copy {
 }
 
 .yAxis .tickLabel {
-	height:20px;
+	height: 20px;
 	line-height: 20px;
-	margin-top: -10px;
 	width:50px!important;
 	text-align:right!important;
 }
