@@ -404,13 +404,13 @@
         <div class="not-content" style="display: none;" wa_lang="{form.task.not_have_task}"></div>
     </div>
 </div>
-<div class="set-task">
+<div class="set-task" name="holder-task-setting">
 <div class="title">
     <div class="task-info">
         <div class="condition">
             <span class="name" wa_lang="{form.task_setting.status}"></span>
-                <span class="switch-box">
-                    <span class="switcher"></span><input type="hidden" value="true">
+                <span class="switch-box" id="task-status">
+                    <span class="switcher"></span>
                 </span>
         </div>
         <div class="cost">
@@ -430,6 +430,8 @@
 <div class="setting-group">
 <div class="content-scroll" style="top:0;">
 <form name="task-setting" onsubmit="return false;">
+<input type="hidden" name="folderId" value="0">
+<input type="hidden" name="taskId" value="0">
 <div name="general">
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.name.text}"></div>
@@ -532,12 +534,7 @@
                 wa_lang="{form.task_setting.listId.text}"></span></label></div>
         <div name="use_listIp_setting">
             <div class="text-line">
-                <select name="listId">
-                    <option value="0"></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <select name="listId"></select>
             </div>
             <div name="listIp-option">
                 <div class="label-text">

@@ -103,6 +103,9 @@ $(document).on("click", ".item-list li", function(e){
 $(document).on("click", "[wa_folder]", function(e){
 	manager.methods.loadTasks(manager.methods.folder.getParam(this, "id"));
 });
+$(document).on("click", "[wa_task]", function(e){
+	manager.methods.loadTaskSetting(this);
+});
 $(".add-box-wrap .close").click(function(e){
 	$(this).parents(".add-box-wrap").fadeOut("fast");
 });
@@ -166,7 +169,7 @@ $("[name=task-setting] input[name=use_mask]").change(function(e){
 	}else{
 		$(container_mask_setting).hide("fast");
 		$(mask).val("");
-		$(afterClick).val("");
+		$(afterClick).val(api.Constants.Limit.Task.AfterClick.Value.Min);
 		ignoreGU.checked = false;
 	};
 }).click().click();

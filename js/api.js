@@ -332,6 +332,33 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			getDayTargeting: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.DayTargeting);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.DayTargeting]) $.each(_data[OperationItem.DayTargeting], function(key, targ){
+						output.push({
+							id: targ[OperationItem.Hour],
+							min: targ[OperationItem.Min],
+							max: targ[OperationItem.Max]
+						});
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {

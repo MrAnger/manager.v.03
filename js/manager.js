@@ -157,6 +157,51 @@
 
 				data.callback();
 			},
+			taskSettingFormShow: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				manager.methods.taskSettingFormClear();
+
+				$("[name=holder-task-setting]").show();
+				$("[name=holder-task-setting] .tab-box li.general").click();
+
+				data.callback();
+			},
+			taskSettingFormHide: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$("[name=holder-task-setting]").hide();
+
+				data.callback();
+			},
+			taskSettingFormClear: function(){
+				var inputs = [
+					{name: "name", value: ""},
+					{name: "domain", value: ""},
+					{name: "extSource", value: ""},
+					{name: "beforeClick", value: ""},
+					{name: "rangeSize", value: ""},
+					{name: "uniquePeriod", value: ""},
+					{name: "growth", value: ""},
+					{name: "days", value: ""}
+				];
+				for(var i=0; i<=inputs.length-1; i++) $("form[name=task-setting] [name='"+inputs[i].name+"']").val(inputs[i].value);
+
+				var use_mask = $("form[name=task-setting] [name=use_mask]")[0];
+				if(use_mask.checked) $(use_mask).click();
+
+				$("form[name=task-setting] [name=allowProxy]")[0].checked = false;
+
+				var use_profile = $("form[name=task-setting] [name=use_profile]")[0];
+				if(use_profile.checked) $(use_profile).click();
+
+				var use_listIp = $("form[name=task-setting] [name=use_listIp]")[0];
+				if(use_listIp.checked) $(use_listIp).click();
+			},
 			logOut: function(data){
 				data = $.extend(true, {
 					callback: function(){}
@@ -214,11 +259,80 @@
 					}
 				});
 			},
+			loadTaskSetting: function(taskHtml){
+				manager.methods.taskSettingFormShow();
+				var taskMethods = manager.methods.task;
+				var inputs = [
+					{name: "folderId", value: taskMethods.getParam(taskHtml, "folderId")},//
+					{name: "taskId", value: taskMethods.getParam(taskHtml, "taskId")},//
+					{name: "name", value: taskMethods.getParam(taskHtml, "name")},//
+					{name: "listId", value: taskMethods.getParam(taskHtml, "listId")},//
+					{name: "afterClick", value: taskMethods.getParam(taskHtml, "afterClick")},//
+					{name: "beforeClick", value: taskMethods.getParam(taskHtml, "beforeClick")},//
+					{name: "allowProxy", value: eval(taskMethods.getParam(taskHtml, "allowProxy"))},//
+					{name: "ignoreGU", value: eval(taskMethods.getParam(taskHtml, "ignoreGU"))},//
+					{name: "growth", value: taskMethods.getParam(taskHtml, "growth")},//
+					{name: "domain", value: taskMethods.getParam(taskHtml, "domain")},//
+					{name: "profile", value: taskMethods.getParam(taskHtml, "profile")},//
+					{name: "frozen", value: eval(taskMethods.getParam(taskHtml, "frozen"))},
+					{name: "listMode", value: eval(taskMethods.getParam(taskHtml, "listMode"))},//
+					{name: "rangeSize", value: taskMethods.getParam(taskHtml, "rangeSize")},//
+					{name: "uniquePeriod", value: taskMethods.getParam(taskHtml, "uniquePeriod")},//
+					{name: "mask", value: taskMethods.getParam(taskHtml, "mask")},//
+					{name: "days", value: taskMethods.getParam(taskHtml, "days")},//
+					{name: "extSource", value: taskMethods.getParam(taskHtml, "extSource")}//
+				];
+
+				for(var i=0; i<=inputs.length-1; i++){
+					var name = inputs[i].name,
+						val = inputs[i].value;
+					if(name == "listId"){
+						if(val != 0){
+							$("form[name=task-setting] [name='"+name+"']").val(val).change();
+							$("form[name=task-setting] [name=use_listIp]").click();
+
+							var listMode = eval(taskMethods.getParam(taskHtml, "listMode"));
+							if(listMode) $("form[name=task-setting] [name=listIp-type][value=true]").prop("checked", true);
+							else $("form[name=task-setting] [name=listIp-type][value=false]").prop("checked", true);
+						};
+					}else if(name == "listMode"){
+						continue;
+					}else if(name == "mask"){
+						if(val != ""){
+							$("form[name=task-setting] [name=use_mask]").click();
+							$("form[name=task-setting] [name='"+name+"']").val(val);
+							$("form[name=task-setting] [name=afterClick]").val(taskMethods.getParam(taskHtml, "afterClick"));
+
+							$("form[name=task-setting] [name=ignoreGU]").prop("checked", eval(taskMethods.getParam(taskHtml, "ignoreGU")));
+						};
+					}else if(name == "afterClick"){
+						continue;
+					}else if(name == "ignoreGU"){
+						continue;
+					}else if(name == "allowProxy"){
+						$("form[name=task-setting] [name=allowProxy]").prop("checked", !eval(taskMethods.getParam(taskHtml, "allowProxy")));
+					}else if(name == "profile"){
+						if(val != ""){
+							$("form[name=task-setting] [name=use_profile]").click();
+							$("form[name=task-setting] [name=profile]").val(val);
+						};
+					}else if(name == "frozen"){
+						$("#task-status").removeClass("status-off").addClass((val) ? "status-off" : "");
+					}else{
+						$("form[name=task-setting] [name='"+name+"']").val(val);
+					};
+				};
+			},
 			refreshDataIpLists: function(){
 				api.methods.getIpLists({
 					token: manager.methods.getToken(),
 					callback: function(arr){
 						manager.data.ipLists = arr;
+
+						var html = "<option value=0></option>";
+						for(var i=0; i<=arr.length-1; i++) html += '<option value="'+arr[i].id+'">'+arr[i].name+'</option>';
+
+						$("[name=task-setting] [name=listId]").html(html).change();
 					}
 				})
 			},
@@ -1047,8 +1161,8 @@
 
 		var SelfObj = this,
 			options = $.extend(true, {
-				 holder: document.body,
-				 graphOptions: {
+				holder: document.body,
+				graphOptions: {
 					 xaxis: {
 						 showValue: true,
 						 min: 0,
@@ -1077,7 +1191,7 @@
 						 mouseActiveRadius:8
 					 }
 				 },
-				 lines: [
+				lines: [
 					 {
 						 name: "min",
 						 enable: true,
@@ -1132,17 +1246,39 @@
 							 }
 						 }
 					 }
-				 ]
+				 ],
+				events: []
 			 }, _opt);
 
 		function constructor(){
-			SelfObj.graph = $.plot(options.holder, options.lines, options.graphOptions);
+			SelfObj.initGraph();
 		};
 
 		//PROPERTIES
 		this.graph = false;
 
 		//METHODS
+		this.initGraph = function(){
+			SelfObj.graph = $.plot(options.holder, options.lines, options.graphOptions);
+			$.each(options.events, function(key, func){
+				func();
+			});
+		};
+		this.setData = function(arr){
+			var curData = SelfObj.graph.getData();
+
+			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+			SelfObj.graph.draw();
+
+			function searchGraphInData(name, data){
+				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
+			};
+		};
+
+		//functions
+		function searchLineInOption(lineName){
+			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
 
 		//INIT
 		constructor();
