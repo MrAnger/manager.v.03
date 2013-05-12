@@ -357,6 +357,12 @@
 						});
 					});
 
+					var i = 0;
+					while(i<=23){
+						if(!output[i] || output[i].id != i) output.splice(i, 0, {id: i, min: 0, max: 10});
+						else i++;
+					};
+
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			}

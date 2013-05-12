@@ -261,7 +261,9 @@
 			},
 			loadTaskSetting: function(taskHtml){
 				manager.methods.taskSettingFormShow();
-				var taskMethods = manager.methods.task;
+				var taskMethods = manager.methods.task,
+					folderId = taskMethods.getParam(taskHtml, "folderId"),
+					taskId = taskMethods.getParam(taskHtml, "taskId");
 				var inputs = [
 					{name: "folderId", value: taskMethods.getParam(taskHtml, "folderId")},//
 					{name: "taskId", value: taskMethods.getParam(taskHtml, "taskId")},//
@@ -322,6 +324,32 @@
 						$("form[name=task-setting] [name='"+name+"']").val(val);
 					};
 				};
+
+				//get DayTargeting
+				api.methods.getDayTargeting({
+					token: manager.methods.getToken(),
+					folderId: folderId,
+					taskId: taskId,
+					callback: function(data){
+						var lineMin = {
+								name: "min",
+								data: []
+							},
+							lineMax = {
+								name: "max",
+								data: []
+							};
+
+						data.sort(function(a,b){return a.id - b.id;});
+
+						$.each(data, function(key, val){
+							lineMin.data.push([val.id, val.min]);
+							lineMax.data.push([val.id, val.max]);
+						});
+
+						manager.data.graphs.dayTargeting.setData([lineMin, lineMax]);
+					}
+				});
 			},
 			refreshDataIpLists: function(){
 				api.methods.getIpLists({
@@ -1194,7 +1222,6 @@
 				lines: [
 					 {
 						 name: "min",
-						 enable: true,
 						 data: defPoints,
 						 color: "rgba(64,153,255,1)", //цвет линии графика
 						 shadowSize: 3,
@@ -1221,7 +1248,6 @@
 					 },
 					 {
 						 name: "max",
-						 enable: true,
 						 data : defPoints,
 						 color: "rgba(255,95,45,1)", //цвет линии графика
 						 shadowSize: 3,
@@ -1268,11 +1294,26 @@
 			var curData = SelfObj.graph.getData();
 
 			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+			SelfObj.graph.setData(curData)
 			SelfObj.graph.draw();
 
 			function searchGraphInData(name, data){
 				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
 			};
+		};
+		this.setMaxYAxis = function(maxYAxis, YAxisTickSize, XAxisTickSize){
+			var curData = SelfObj.graph.getData();
+
+			$.each(curData, function(key, line){
+				searchLineInOption(line.name).data = line.data;
+			});
+
+			if(maxYAxis) options.graphOptions.yaxis.max = maxYAxis;
+			if(YAxisTickSize) options.graphOptions.yaxis.tickSize = YAxisTickSize;
+			if(XAxisTickSize) options.graphOptions.xaxis.tickSize = XAxisTickSize;
+
+			SelfObj.graph.shutdown();
+			SelfObj.initGraph();
 		};
 
 		//functions
