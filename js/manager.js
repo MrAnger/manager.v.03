@@ -1360,9 +1360,22 @@
 								if(graphMax){
 									data[idGraphMax].data[x] = [x, y];
 									if(idGraphMin!= -1 && data[idGraphMin].data[x][1] > data[idGraphMax].data[x][1])data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+
+									if(idGraphMin == -1){
+										if(y < searchLineInOption("min").data[x][1]) data[idGraphMin].data[x][1] = searchLineInOption("max").data[x][1];
+										else data[idGraphMin].data[x][1] = y;
+									}else{
+										if(y > data[idGraphMax].data[x][1]) data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+										else data[idGraphMin].data[x][1] = y;
+									};
 								}else if(graphMin){
-									data[idGraphMin].data[x] = [x, y];
-									if(idGraphMax != -1 &&data[idGraphMax].data[x][1] < data[idGraphMin].data[x][1])data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+									if(idGraphMax == -1){
+										if(y > searchLineInOption("max").data[x][1]) data[idGraphMin].data[x][1] = searchLineInOption("max").data[x][1];
+										else data[idGraphMin].data[x][1] = y;
+									}else{
+										if(y > data[idGraphMax].data[x][1]) data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+										else data[idGraphMin].data[x][1] = y;
+									};
 								};
 
 								SelfObj.graph.setData(data);

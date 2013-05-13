@@ -40,7 +40,7 @@ $(".show-box").disableSelection().click(function (event) {
 	var elValue = el.parents(".text-line").children("input").val(),
 		name = el.parents(".text-line").children("input").attr("name"),
 		placeholder = el.parents(".text-line").children("input").attr("placeholder"),
-		disabled = el.parents(".text-line").children("input").hasAttribute("disabled");
+		disabled = el.parents(".text-line").children("input")[0].hasAttribute("disabled");
 	if (el.hasClass("true")) {
 		el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value placeholder>");
 		el.parents(".text-line").children("input[type=password]").remove();
