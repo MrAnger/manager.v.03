@@ -410,7 +410,7 @@
     <div class="task-info">
         <div class="condition">
             <span class="name" wa_lang="{form.task_setting.status}"></span>
-                <span class="switch-box" id="task-status">
+                <span class="switch-box" id="task-status" onchange="manager.methods.task.setStatusFromTaskSettingForm">
                     <span class="switcher"></span>
                 </span>
         </div>
@@ -557,149 +557,60 @@
         </div>
         <div class="spoiler-box-content">
             <div class="graph-view-set">
-                <label id="dayTargeting_cb_min"><input type="checkbox" checked><span class="graph-set min" wa_lang="{form.task_setting.dayTargeting.min}"></span>(<span class="graph-value" name="value">0</span>)</label>
-                <label id="dayTargeting_cb_max"><input type="checkbox" checked><span class="graph-set max" wa_lang="{form.task_setting.dayTargeting.max}"></span>(<span class="graph-value" name="value">0</span>)</label>
+                <label id="dayTargeting_cb_min"><input disabled type="checkbox" checked><span class="graph-set min" wa_lang="{form.task_setting.dayTargeting.min}"></span>(<span class="graph-value" name="value">0</span>)</label>
+                <label id="dayTargeting_cb_max"><input disabled type="checkbox" checked><span class="graph-set max" wa_lang="{form.task_setting.dayTargeting.max}"></span>(<span class="graph-value" name="value">0</span>)</label>
             </div>
             <div class="graph-box" id="graph_dayTargeting"></div>
         </div>
     </div>
     <div class="set-item">
         <div class="name">
-            <div class="spoiler">Недельный таргетинг</div>
+            <div class="spoiler" wa_lang="{form.task_setting.weekTargeting.text}"></div>
         </div>
         <div class="spoiler-box-content">
-            <div class="graph-box">
-                graph 2
-            </div>
+            <div class="graph-box" id="graph_weekTargeting"></div>
         </div>
     </div>
+	<div class="set-item">
+		<div class="name">
+			<div class="spoiler" wa_lang="{form.task_setting.timeDistribution.text}"></div>
+		</div>
+		<div class="spoiler-box-content">
+			<div class="graph-box" id="graph_timeDistribution"></div>
+		</div>
+	</div>
     <div class="set-item">
         <div class="name">
-            <div class="spoiler">Геотаргетинг</div>
+            <div class="spoiler" wa_lang="{form.task_setting.geoTargeting.text}"></div>
         </div>
         <div class="spoiler-box-content">
             <div class="geo-box">
-                <div class="label-text">Поиск стран</div>
+                <div class="label-text" wa_lang="{form.task_setting.geoTargeting.searchCountry.text}"></div>
                 <div class="text-line">
-                    <input type="text" value="" placeholder="Введите текст для поиска">
+                    <input name="searchCountry" type="text" value placeholder  wa_lang="{form.task_setting.geoTargeting.searchCountry.placeholder|attr:placeholder}">
                 </div>
-                <div class="label-text">Список стран</div>
+                <div class="label-text" wa_lang="{form.task_setting.geoTargeting.countryList}"></div>
                 <div class="text-line">
-                    <select size="8" multiple="multiple">
-                        <option>Австрия</option>
-                        <option>Азербайджан</option>
-                        <option>Армения</option>
-                        <option>Белоруссия</option>
-                        <option>Бельгия</option>
-                        <option>Болгария</option>
-                        <option>Великобритания</option>
-                        <option>Венгрия</option>
-                        <option>Германия</option>
-                        <option>Греция</option>
-                        <option>Грузия</option>
-                        <option>Дания</option>
-                        <option>Европейский союз</option>
-                        <option>Израиль</option>
-                        <option>Ирландия</option>
-                        <option>Испания</option>
-                        <option>Италия</option>
-                        <option>Казахстан</option>
-                        <option>Канада</option>
-                        <option>Латвия</option>
-                        <option>Литва</option>
-                        <option>Молдавия</option>
-                        <option>Нидерланды</option>
-                        <option>Норвегия</option>
-                        <option>Польша</option>
-                        <option>Португалия</option>
-                        <option>Россия</option>
-                        <option>Румыния</option>
-                        <option>США</option>
-                        <option>Словения</option>
-                        <option>Турция</option>
-                        <option>Украина</option>
-                        <option>Финляндия</option>
-                        <option>Франция</option>
-                        <option>Хорватия</option>
-                        <option>Чехия</option>
-                        <option>Швейцария</option>
-                        <option>Швеция</option>
-                        <option>Эстония</option>
-                    </select>
+                    <select name="selectBox_country" size="8"></select>
                 </div>
-                <div class="label-text">Выбранные страны</div>
+                <div class="label-text" wa_lang="{form.task_setting.geoTargeting.selectedCountries}"></div>
                 <div class="geo-selected">
-                    <div class="country">
-                        <div class="set-name">Россия</div>
+                    <div class="country" wa_geo_country default>
+                        <div class="set-name" name="view_countryName"></div>
                         <div class="mark-box">
                             <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="80"
-                                                                                   class="geo"><span>%</span>
+                                <span class="option-name" wa_lang="{form.task_setting.geoTargeting.set}"></span>
+	                            <input name="view_target" type="text" value="0" class="geo"><span>%</span>
 
-                                <div class="mark-range" style="width: 80%"></div>
+                                <div name="view_target_range" class="mark-range" style="width: 0%"></div>
                             </div>
                             <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="40" class="geo"
-                                                                                readonly><span>%</span>
-
-                                <div class="mark-range" style="width: 40%"></div>
+                                <span class="option-name" wa_lang="{form.task_setting.geoTargeting.give}"></span>
+	                            <input name="view_recd" type="text" value="0" class="geo" readonly><span>%</span>
+                                <div name="view_recd_range" class="mark-range" style="width: 0%"></div>
                             </div>
                         </div>
-                        <span class="delete"></span>
-                    </div>
-                    <div class="country">
-                        <div class="set-name">Украина</div>
-                        <div class="mark-box">
-                            <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="50"
-                                                                                   class="geo"><span>%</span>
-
-                                <div class="mark-range" style="width: 50%"></div>
-                            </div>
-                            <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="10" class="geo"
-                                                                                readonly><span>%</span>
-
-                                <div class="mark-range" style="width: 10%"></div>
-                            </div>
-                        </div>
-                        <span class="delete"></span>
-                    </div>
-                    <div class="country">
-                        <div class="set-name">Польша</div>
-                        <div class="mark-box">
-                            <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="10"
-                                                                                   class="geo"><span>%</span>
-
-                                <div class="mark-range" style="width: 10%"></div>
-                            </div>
-                            <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="1" class="geo"
-                                                                                readonly><span>%</span>
-
-                                <div class="mark-range" style="width: 1%"></div>
-                            </div>
-                        </div>
-                        <span class="delete"></span>
-                    </div>
-                    <div class="country">
-                        <div class="set-name">Казахстан</div>
-                        <div class="mark-box">
-                            <div class="mark set">
-                                <span class="option-name">Установлено</span><input type="text" value="15"
-                                                                                   class="geo"><span>%</span>
-
-                                <div class="mark-range" style="width: 15%"></div>
-                            </div>
-                            <div class="mark value">
-                                <span class="option-name">Получено</span><input type="text" value="5" class="geo"
-                                                                                readonly><span>%</span>
-
-                                <div class="mark-range" style="width: 5%"></div>
-                            </div>
-                        </div>
-                        <span class="delete"></span>
+                        <span class="delete" name="delete"></span>
                     </div>
                 </div>
             </div>
@@ -711,12 +622,17 @@
     <div class="tab-content">
         <div class="set-item">
             <div class="name">
-                <div class="spoiler active">Сегодня</div>
+                <div class="spoiler active" wa_lang="{form.task_setting.dayStat.text}"></div>
             </div>
             <div class="spoiler-box-content">
-                <div class="graph-box">
-                    graph 4
-                </div>
+	            <div class="graph-view-set">
+		            <label id="dayStat_cb_min"><input type="checkbox" checked><span class="graph-set min" wa_lang="{form.task_setting.dayStat.min}"></span>(<span class="graph-value" name="value">0</span>)</label>
+		            <label id="dayStat_cb_max"><input type="checkbox" checked><span class="graph-set max" wa_lang="{form.task_setting.dayStat.max}"></span>(<span class="graph-value" name="value">0</span>)</label>
+		            <label id="dayStat_cb_give"><input type="checkbox" checked><span class="graph-set give" wa_lang="{form.task_setting.dayStat.give}"></span>(<span class="graph-value" name="value">0</span>)</label>
+		            <label id="dayStat_cb_incomplete"><input type="checkbox" checked><span class="graph-set incomplete" wa_lang="{form.task_setting.dayStat.incomplete}"></span>(<span class="graph-value" name="value">0</span>)</label>
+		            <label id="dayStat_cb_overload"><input type="checkbox" checked><span class="graph-set overload" wa_lang="{form.task_setting.dayStat.overload}"></span>(<span class="graph-value" name="value">0</span>)</label>
+	            </div>
+                <div class="graph-box" id="graph_dayStat"></div>
             </div>
         </div>
     </div>
@@ -876,12 +792,6 @@
 </div>
 </div>
 </div>
-<div class="gr-hint" style="bottom:150px;"><div class="gr-hint-content">content</div></div>
-<div class="gr-hint min" style="bottom:120px;"><div class="gr-hint-content">content</div></div>
-<div class="gr-hint max" style="bottom:90px;"><div class="gr-hint-content">content</div></div>
-<div class="gr-hint incomplete" style="bottom:60px;"><div class="gr-hint-content">content</div></div>
-<div class="gr-hint overload" style="bottom:30px;"><div class="gr-hint-content">content</div></div>
-<div class="gr-hint give" style="bottom:0px;"><div class="gr-hint-content">content</div></div>
 <div id="gr-hint" class="gr-hint" style="display: none;" onmouseover="this.style.display = 'none';"><div class="gr-hint-content" name="text"></div></div>
 <script src="js/main.js" type="text/javascript"></script>
 </body>

@@ -5,6 +5,13 @@ $(window).resize(setHeightTaskContent);
 $(document).ready(setHeightTaskContent);
 $(".switch-box").click(function () {
     $(this).toggleClass("status-off");
+
+	if(this.hasAttribute("onchange")){
+		var func = $(this).attr("onchange");
+
+		if($(this).hasClass("status-off")) eval(func + "(false, this)");
+		else eval(func + "(true, this)");
+	};
 });
 //  скроллинг
 function setHeightContentScroll() {
@@ -137,6 +144,7 @@ $(".tab-list li").each(function(key, el){
 	if($(this).hasClass("active")) $(tab_content).show();
 	else $(tab_content).hide();
 }).click(function(e){
+	$(this).parents(".tab-box").find(".content-scroll").css("top", 0);
 	var name = $(this).attr("name");
 	$(this).parents(".tab-list").children("li").removeClass("active").each(function(key, el){
 		$(this).parents(".tab-box").find(".tab-box-content [name='"+$(this).attr("name")+"']").hide();
@@ -198,21 +206,6 @@ $("[name=task-setting] [name=listId]").change(function(e){
 		$("[name=task-setting] [name=listIp-option]").show("fast");
 	};
 }).change();
-manager.data.graphs.dayTargeting = new manager.graph.dayTargeting({
-	holder: $("#graph_dayTargeting"),
-	onChange: function(data){
-		var summ = {};
-		$.each(data, function(name, line){
-			if(!summ[name]) summ[name] = 0;
-			$.each(line, function(key, arr){
-				summ[name] += parseInt(arr[1]);
-			});
-		});
-
-		$("#dayTargeting_cb_min [name=value]").html(summ.min);
-		$("#dayTargeting_cb_max [name=value]").html(summ.max);
-	}
-});
 $("#dayTargeting_cb_min input[type=checkbox]").change(function(e){
 	if($(this)[0].checked){
 		manager.data.graphs.dayTargeting.lineVisibility("min", true);
@@ -226,4 +219,72 @@ $("#dayTargeting_cb_max input[type=checkbox]").change(function(e){
 	}else{
 		manager.data.graphs.dayTargeting.lineVisibility("max", false);
 	};
+});
+$("#dayStat_cb_max input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayStat.lineVisibility("max", true);
+	}else{
+		manager.data.graphs.dayStat.lineVisibility("max", false);
+	};
+});
+$("#dayStat_cb_min input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayStat.lineVisibility("min", true);
+	}else{
+		manager.data.graphs.dayStat.lineVisibility("min", false);
+	};
+});
+$("#dayStat_cb_give input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayStat.lineVisibility("give", true);
+	}else{
+		manager.data.graphs.dayStat.lineVisibility("give", false);
+	};
+});
+$("#dayStat_cb_incomplete input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayStat.lineVisibility("incomplete", true);
+	}else{
+		manager.data.graphs.dayStat.lineVisibility("incomplete", false);
+	};
+});
+$("#dayStat_cb_overload input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayStat.lineVisibility("overload", true);
+	}else{
+		manager.data.graphs.dayStat.lineVisibility("overload", false);
+	};
+});
+$(document).on("click", "[wa_geo_country] [name=delete]", function(e){
+	var layout = $(this).parents("[wa_geo_country]"),
+		inputSearch = $("[name=task-setting] [name=searchCountry]")[0],
+		oldValue = inputSearch.value;
+
+	manager.data.geoStorage.unSelect($(layout).find("[name=id]").val());
+
+	$(inputSearch).val("  ");
+	setTimeout(function(){
+		$(inputSearch).val(oldValue);
+	},350);
+
+	$(layout).remove();
+});
+$(document).on("change", "[wa_geo_country] [name=view_target]", function(e){
+	var layout = $(this).parents("[wa_geo_country]"),
+		value = 100;
+
+	if(parseFloat(this.value) > 0 && parseFloat(this.value) <= 100){
+		value = parseFloat(this.value);
+	};
+
+	manager.methods.geoTargeting.setParam(layout, "target", value);
+	manager.methods.geoTargeting.setTargetHtml(layout, value);
+	manager.data.geoStorage.setTarget($(layout).find("[name=id]").val(), value);
+});
+$(document).on("dblclick", "[name=task-setting] [name=selectBox_country] option[value]", function(e){
+	manager.data.geoStorage.setTarget(this.value, 100);
+	var country = manager.data.geoStorage.getById(this.value);
+
+	manager.methods.geoTargeting.addHtml(manager.data.geoStorage.getById(this.value));
+	$(this).remove();
 });

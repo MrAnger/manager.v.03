@@ -2,8 +2,8 @@
 	var api = window.api =  {
 		options: {
 			server: "",
-			//timeout: 30000,
-			timeout: 1000,//!!!!
+			timeout: 30000,
+			//timeout: 1000,//!!!!
 			log: {
 				enable: false,
 				callback: {
@@ -363,6 +363,154 @@
 						if(!output[i] || output[i].id != i) output.splice(i, 0, {id: i, min: 0, max: 0});
 						else i++;
 					};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getWeekTargeting: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.WeekTargeting);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.WeekTargeting]) $.each(_data[OperationItem.WeekTargeting], function(key, targ){
+						output.push({
+							id: targ[OperationItem.Day],
+							val: targ[OperationItem.Target]
+						});
+					});
+
+					var i = 0;
+					while(i<=6){
+						if(!output[i] || output[i].id != i) output.splice(i, 0, {id: i, val: 100});
+						else i++;
+					};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getDayStat: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.DayStats);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.DayTargeting]) $.each(_data[OperationItem.DayTargeting], function(key, targ){
+						output.push({
+							id: targ[OperationItem.Hour],
+							min: targ[OperationItem.Min],
+							max: targ[OperationItem.Max],
+							give: targ[OperationItem.Recd],
+							incomplete: targ[OperationItem.Incomplete],
+							overload: targ[OperationItem.Overload]
+						});
+					});
+
+					var i = 0;
+					while(i<=23){
+						if(!output[i] || output[i].id != i) output.splice(i, 0, {id: i, min: 0, max: 0, give: 0, incomplete: 0, overload: 0});
+						else i++;
+					};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getTimeDistribution: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.TimeDistribution);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.TimeDistribution]) $.each(_data[OperationItem.TimeDistribution], function(key, targ){
+						output.push({
+							id: targ[OperationItem.Percent],
+							val: targ[OperationItem.Priority]
+						});
+					});
+
+					var i = 1;
+					while(i<=100){
+						if(!output[i-1] || output[i-1].id != i) output.splice(i-1, 0, {id: i, val: 0});
+						else i++;
+					};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getGeoTargeting: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.GeoTargeting);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.GeoTargeting]) $.each(_data[OperationItem.GeoTargeting], function(key, targ){
+						output.push({
+							id: targ[OperationItem.IdZone],
+							target: targ[OperationItem.Target],
+							recd: targ[OperationItem.Recd],
+							shortName: targ[OperationItem.Name]
+						});
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			setTaskStatus: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.TaskFrozen);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+				req.addData(OperationItem.Frozen, data.frozen);
+
+				req.send(function(_data){
+					var output = {};
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);

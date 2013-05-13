@@ -22,7 +22,8 @@
 			},
 			elem: {},
 			ipLists: [],
-			graphs: {}
+			graphs: {},
+			geoStorage: false
 		},
 		utils: {
 			showNotice: NoticeShow,
@@ -31,7 +32,10 @@
 			consoleAppendToText: console_appendText
 		},
 		graph: {
-			dayTargeting: DayTargeting
+			dayTargeting: DayTargeting,
+			weekTargeting: WeekTargeting,
+			dayStat: DayStat,
+			timeDistribution: TimeDistribution
 		},
 		methods: {
 			getToken: function(){
@@ -350,6 +354,113 @@
 						manager.data.graphs.dayTargeting.setData([lineMin, lineMax]);
 					}
 				});
+
+				//get WeekTargeting
+				api.methods.getWeekTargeting({
+					token: manager.methods.getToken(),
+					folderId: folderId,
+					taskId: taskId,
+					callback: function(data){
+						var lineMin = {
+								name: "min",
+								data: []
+							};
+
+						data.sort(function(a,b){return a.id - b.id;});
+
+						$.each(data, function(key, val){
+							lineMin.data.push([val.id, val.val]);
+						});
+
+						manager.data.graphs.weekTargeting.setData([lineMin]);
+					}
+				});
+
+				//get TimeDistribution
+				api.methods.getTimeDistribution({
+					token: manager.methods.getToken(),
+					folderId: folderId,
+					taskId: taskId,
+					callback: function(data){
+						var lineMin = {
+							name: "min",
+							data: []
+						};
+
+						data.sort(function(a,b){return a.id - b.id;});
+
+						$.each(data, function(key, val){
+							if(val.id%5 == 0) lineMin.data.push([val.id, val.val]);
+						});
+
+						manager.data.graphs.timeDistribution.setData([lineMin]);
+					}
+				});
+
+				//get geoTargeting
+				api.methods.getGeoTargeting({
+					token: manager.methods.getToken(),
+					folderId: folderId,
+					taskId: taskId,
+					callback: function(data){
+						manager.data.geoStorage.clear();
+
+						$.each(data, function(key, country){
+							manager.data.geoStorage.add(country.id, country.shortName, country.target, country.recd);
+						});
+
+						manager.methods.geoTargeting.printInSelectBox(manager.data.geoStorage.getNotSelected());
+
+						//delete all printed countries
+						$(manager.methods.geoTargeting.getCountriesHtml()).remove();
+
+						//add selected countries
+						$.each(manager.data.geoStorage.getSelected(), function(key, country){
+							manager.methods.geoTargeting.addHtml(country);
+						});
+					}
+				});
+
+				//get dayStat
+				api.methods.getDayStat({
+					token: manager.methods.getToken(),
+					folderId: folderId,
+					taskId: taskId,
+					callback: function(data){
+						var lineMin = {
+								name: "min",
+								data: []
+							},
+							lineMax = {
+								name: "max",
+								data: []
+							},
+							lineGive = {
+								name: "give",
+								data: []
+							},
+							lineIncomplete = {
+								name: "incomplete",
+								data: []
+							},
+							lineOverload = {
+								name: "overload",
+								data: []
+							};
+
+						data.sort(function(a,b){return a.id - b.id;});
+
+						$.each(data, function(key, val){
+							lineMin.data.push([val.id, val.min]);
+							lineMax.data.push([val.id, val.max]);
+							lineGive.data.push([val.id, val.give]);
+							lineIncomplete.data.push([val.id, val.incomplete]);
+							lineOverload.data.push([val.id, val.overload]);
+						});
+
+						manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
+					}
+				});
 			},
 			refreshDataIpLists: function(){
 				api.methods.getIpLists({
@@ -519,6 +630,22 @@
 				},
 				getActiveHtml: function(){
 					return $(".active[wa_task]:not([default])");
+				},
+				setStatusFromTaskSettingForm: function(state, switcher){
+					api.methods.setTaskStatus({
+						token: manager.methods.getToken(),
+						folderId: manager.methods.task.getParam(manager.methods.task.getActiveHtml(), "folderId"),
+						taskId: manager.methods.task.getParam(manager.methods.task.getActiveHtml(), "taskId"),
+						frozen: !state,
+						callback: function(){
+							manager.methods.task.setParam(manager.methods.task.getActiveHtml(), "frozen", !state);
+							manager.methods.task.setStatusHtml(manager.methods.task.getActiveHtml(), state);
+						},
+						ge_callback: function(){
+							if(state) $(switcher).addClass("status-off");
+							else $(switcher).removeClass("status-off");
+						}
+					});
 				}
 			},
 			graphHint:{
@@ -531,6 +658,56 @@
 				},
 				hide: function(){
 					$("#gr-hint").hide();
+				}
+			},
+			geoTargeting:{
+				printInSelectBox: function(arr){
+					var html = "";
+
+					$.each(arr, function(key, country){
+						html += '<option value="'+country.id+'">'+country.fullName+'</option>';
+					});
+
+					$("[name=task-setting] [name=selectBox_country]").html(html);
+				},
+				addHtml: function(param){
+					var layout = $("[wa_geo_country][default]"),
+						parent = $(layout).parent(),
+						html = $(layout).clone().removeAttr("default").appendTo(parent);
+
+					//add param to html
+					$.each(param, function(key, val){
+						$('<input type="hidden" name="'+key+'" value="'+val+'">').appendTo(html);
+					});
+
+					manager.methods.geoTargeting.setNameHtml(html, manager.methods.geoTargeting.getParam(html, "fullName"));
+					manager.methods.geoTargeting.setTargetHtml(html, manager.methods.geoTargeting.getParam(html, "target"));
+					manager.methods.geoTargeting.setRecdHtml(html, manager.methods.geoTargeting.getParam(html, "recd"));
+				},
+				setNameHtml: function(html, name){
+					$(html).find("[name=view_countryName]").html(name);
+				},
+				setTargetHtml: function(html, target){
+					$(html).find("[name=view_target]").val(target);
+					$(html).find("[name=view_target_range]").css("width", target+"%");
+				},
+				setRecdHtml: function(html, recd){
+					$(html).find("[name=view_recd]").val(recd);
+					$(html).find("[name=view_recd_range]").css("width", recd+"%");
+				},
+				getParam: function(html, param){
+					return $(html).find("input[name='"+param+"']").val();
+				},
+				setParam: function(html, param, val){
+					var el = $(html).find("input[name='"+param+"']");
+					if(el.length == 0){
+						$('<input type="hidden" name="'+param+'" value="'+val+'">').appendTo(html);
+					}else{
+						$(el).val(val);
+					};
+				},
+				getCountriesHtml: function(){
+					return $("[wa_geo_country]:not([default])");
 				}
 			}
 		}
@@ -572,6 +749,7 @@
 			}catch(e){};
 		};
 	});
+	//console
 	manager.options.onReadyDom.push(function(){
 		var consoleBox = $(".console-box .open-box"),
 			clip = manager.data.elem.console_clip = new ZeroClipboard.Client();
@@ -599,6 +777,71 @@
 			$(consoleBox).hide();*/
 		});
 	});
+	//datTargeting graph
+	manager.options.onReadyDom.push(function(){
+		manager.data.graphs.dayTargeting = new DayTargeting({
+			holder: $("#graph_dayTargeting"),
+			onChange: function(data){
+				var summ = {};
+				$.each(data, function(name, line){
+					if(!summ[name]) summ[name] = 0;
+					$.each(line, function(key, arr){
+						summ[name] += parseInt(arr[1]);
+					});
+				});
+
+				$("#dayTargeting_cb_min [name=value]").html(summ.min);
+				$("#dayTargeting_cb_max [name=value]").html(summ.max);
+			}
+		});
+	});
+	//weekTargeting graph
+	manager.options.onReadyDom.push(function(){
+		manager.data.graphs.weekTargeting = new WeekTargeting({
+			holder: $("#graph_weekTargeting")
+		});
+	});
+	//dayStat graph
+	manager.options.onReadyDom.push(function(){
+		manager.data.graphs.dayStat = new DayStat({
+			holder: $("#graph_dayStat"),
+			onChange: function(data){
+				var summ = {};
+				$.each(data, function(name, line){
+					if(!summ[name]) summ[name] = 0;
+					$.each(line, function(key, arr){
+						summ[name] += parseInt(arr[1]);
+					});
+				});
+
+				$("#dayStat_cb_min [name=value]").html(summ.min);
+				$("#dayStat_cb_max [name=value]").html(summ.max);
+				$("#dayStat_cb_give [name=value]").html(summ.give);
+				$("#dayStat_cb_incomplete [name=value]").html(summ.incomplete);
+				$("#dayStat_cb_overload [name=value]").html(summ.overload);
+			}
+		});
+	});
+	//timeDistribution graph
+	manager.options.onReadyDom.push(function(){
+		manager.data.graphs.timeDistribution = new TimeDistribution({
+			holder: $("#graph_timeDistribution")
+		});
+	});
+	//change search country
+	manager.options.onReadyDom.push(function(){
+		var input = $("[name=task-setting] [name=searchCountry]")[0],
+			oldText = null,
+			interval = new api.utils.interval(function(){
+				if(oldText != input.value){
+					manager.methods.geoTargeting.printInSelectBox(manager.data.geoStorage.find(input.value));
+
+					oldText = input.value;
+				};
+			}, 300);
+		interval.start();
+	});
+
 	//SET CONSOLE FORM
 
 	//SET AUTH FORM
@@ -1199,8 +1442,8 @@
 		return out;
 	};
 	function DayTargeting(_opt){
-		var defPoints = [],
-			def_lines = [
+		var defPoints = []; for(var i=0; i<=23; i++) defPoints.push([i, 0]);
+		var def_lines = [
 				{
 					name: "min",
 					show: true,
@@ -1256,7 +1499,6 @@
 					}
 				}
 			];
-		for(var i=0; i<=23; i++) defPoints.push([i, 0]);
 
 		var SelfObj = this,
 			options = $.extend(true, {
@@ -1342,8 +1584,8 @@
 						});
 						$(options.holder).bind("plothover", function(event, pos, item) {
 							if(reDraw && (graphMax || graphMin)){
-								var x = Math.round(pos.x).toFixed(0),
-									y = parseFloat(pos.y).toFixed(0),
+								var x = parseInt(pos.x),
+									y = parseInt(pos.y),
 									data = SelfObj.graph.getData(),
 									idGraphMin = getIdGraph(data, "min"),
 									idGraphMax = getIdGraph(data, "max"),
@@ -1358,15 +1600,12 @@
 								if(y < yMin) y = yMin;
 
 								if(graphMax){
-									data[idGraphMax].data[x] = [x, y];
-									if(idGraphMin!= -1 && data[idGraphMin].data[x][1] > data[idGraphMax].data[x][1])data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+									data[idGraphMax].data[x][1] = y;
 
 									if(idGraphMin == -1){
-										if(y < searchLineInOption("min").data[x][1]) data[idGraphMin].data[x][1] = searchLineInOption("max").data[x][1];
-										else data[idGraphMin].data[x][1] = y;
+										if(y < searchLineInOption("min").data[x][1]) searchLineInOption("min").data[x][1] = y;
 									}else{
-										if(y > data[idGraphMax].data[x][1]) data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
-										else data[idGraphMin].data[x][1] = y;
+										if(y < data[idGraphMin].data[x][1]) data[idGraphMin].data[x][1] = y;
 									};
 								}else if(graphMin){
 									if(idGraphMax == -1){
@@ -1416,14 +1655,14 @@
 			 }, {lines: def_lines}, _opt);
 
 		function constructor(){
-			SelfObj.initGraph();
+			SelfObj.initGraph(true);
 		};
 
 		//PROPERTIES
 		this.graph = false;
 
 		//METHODS
-		this.initGraph = function(){
+		this.initGraph = function(bindEvents){
 			var lines = [];
 			$.each(options.lines, function(key, line){
 				if(line.show) lines.push(line);
@@ -1431,7 +1670,7 @@
 			$(options.holder).hide();
 			SelfObj.graph = $.plot(options.holder, lines, options.graphOptions);
 			$(options.holder).show();
-			$.each(options.events, function(key, func){
+			if(bindEvents) $.each(options.events, function(key, func){
 				func();
 			});
 		};
@@ -1448,6 +1687,7 @@
 			SelfObj.graph.draw(maxY);
 
 			SelfObj.setMaxYAxis(maxY, Math.floor(maxY/10));
+			options.onChange(SelfObj.getData());
 
 			function searchGraphInData(name, data){
 				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
@@ -1510,6 +1750,913 @@
 		//INIT
 		constructor();
 	};
+	function WeekTargeting(_opt){
+		var defPoints = []; for(var i=0; i<=6; i++) defPoints.push([i, 100]);
+		var def_lines = [
+				{
+					name: "min",
+					show: true,
+					data: defPoints,
+					color : "rgba(0,79,163,0.7)",//цвет линии графика
+					shadowSize : 0,//размер тени
+					lines : {
+						show : true,//вкл/выкл линию графика
+						fill : true,//вкл/выкл заливку области графика
+						fillColor : 'rgba(0,79,163,0.07)',//цвет заливки области графика
+						lineWidth : 1//толщина линий
+					},
+					points: {
+						show : true,//вкл/выкл точки на линиях графиков
+						fill : true,//вкл/выкл заливку
+						fillColor : 'rgba(255,255,255,1)',//цвет заливки точки
+						lineWidth : 1,//толщина линии точки
+						radius : 2,//радиус точки
+						color: 'rgba(255,255,255,1)',//цвет точки
+						values: {
+							show: false,//вкл/выкл отображение значений в точках
+							font : "normal 11px arial",//шрифт текста значений
+							color: 'rgba(71,1,2,1)',//цвет текста значений
+							margin: 5//расстояние от точки до значения
+						}
+					}
+				}
+			];
+
+		var SelfObj = this,
+			options = $.extend(true, {
+				holder: document.body,
+				onChange: function(data){},
+				graphOptions: {
+					xaxis : {
+						showValue : true, //показывать или нет значения
+						min : 0,
+						max : 6,
+						tickSize : 1,//шаг
+						tickFormatter: function (v) { return manager.lng.form.task_setting.weekTargeting.days[v].short; }
+					},
+					yaxis : {
+						showValue : true, //показывать или нет значения
+						min : 0,
+						max : 100,
+						maxDefault: 100,
+						tickSize : 25,//шаг
+						tickFormatter: function (v) { return v+"%"; }
+					},
+					grid : {
+						hoverable : true,
+						clickable : true,
+						color : '#000',//цвет меток(числа 1 2 3 4 5 6 и т.д.)
+						backgroundColor : {
+							colors : ["rgba(255,255,255,1)", "rgba(233,233,233,1)"]
+						},//цвет заливки сетки
+						tickColor : 'rgba(0,0,0,.1)',//цвет самой сетки
+						labelMargin : 5,//растояние от метки до сетки
+						borderWidth : 4,//ширина рамки по краю сетки
+						mouseActiveRadius : 8//радиус активной точки
+					}
+				},
+				lines: [],
+				events: [
+					function(){
+						$(options.holder).mousedown(function(e){
+							return false;
+						});
+					},
+					//show tooltip
+					function(){
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(item){
+								var x = item.datapoint[0].toFixed(0),
+									y = item.datapoint[1].toFixed(2),
+									hint_text = manager.lng.form.task_setting.weekTargeting.tooltip.title + "<br>" + manager.lng.form.task_setting.weekTargeting.days[x].full + ": " + y + "%";
+
+								manager.methods.graphHint.show(hint_text, item.series.name, item.pageY - 15, item.pageX + 15);
+							}else{
+								manager.methods.graphHint.hide();
+							};
+						});
+					},
+					//redraw
+					function(){
+						var reDraw = false, graphMax = false, graphMin = false;
+						$(options.holder).mousedown(function(e) {
+							reDraw = true;
+						});
+						$(window).mouseup(function(e) {
+							reDraw = false;
+						});
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(reDraw){
+								var x = Math.round(pos.x),
+									y = parseFloat(pos.y).toFixed(2),
+									data = SelfObj.graph.getData(),
+									idGraphMin = getIdGraph(data, "min"),
+									xMax = data[0].xaxis.max,
+									xMin = data[0].xaxis.min,
+									yMax = data[0].yaxis.max,
+									yMin = data[0].yaxis.min;
+
+								if(x < xMin) x = xMin;
+								else if(x > xMax) x = xMax;
+								if(y > yMax) y = yMax;
+								if(y < yMin) y = yMin;
+
+								data[idGraphMin].data[x][1] = y;
+
+								SelfObj.graph.setData(data);
+								SelfObj.graph.draw();
+								options.onChange(SelfObj.getData());
+							};
+						});
+
+						function getIdGraph(data, graphName){
+							for(var i=0;i<data.length;i++){
+								if(graphName == data[i].name) return i;
+							};
+
+							return -1;
+						};
+					},
+					//change yTickSize
+					function(){
+						$(options.holder).mousewheel(function(e, delta){
+							var curData = SelfObj.graph.getData(),
+								tickSize = curData[0].yaxis.tickSize,
+								yAxisMax = curData[0].yaxis.max,
+								yAxisMin = curData[0].yaxis.min,
+								yAxisDefault = curData[0].yaxis.options.maxDefault,
+								yMax = yAxisMax;
+
+							if(yAxisMax + delta * tickSize > yAxisDefault){
+								yMax = yAxisDefault;
+							}else if(yAxisMax + delta * tickSize < yAxisDefault && yAxisMax + delta * tickSize > yAxisMin){
+								yMax = yAxisMax + delta * tickSize;
+							}else{
+								yMax = 1;
+							};
+
+							SelfObj.setMaxYAxis(yMax, ((Math.floor(yMax/4)) >= 1) ? Math.floor(yMax/4) : 1);
+						});
+					}
+				]
+			}, {lines: def_lines}, _opt);
+
+		function constructor(){
+			SelfObj.initGraph(true);
+		};
+
+		//PROPERTIES
+		this.graph = false;
+
+		//METHODS
+		this.initGraph = function(bindEvents){
+			var lines = [];
+			$.each(options.lines, function(key, line){
+				if(line.show) lines.push(line);
+			});
+			$(options.holder).hide();
+			SelfObj.graph = $.plot(options.holder, lines, options.graphOptions);
+			$(options.holder).show();
+			if(bindEvents) $.each(options.events, function(key, func){
+				func();
+			});
+		};
+		this.setData = function(arr){
+			var curData = SelfObj.graph.getData();
+
+			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+
+			SelfObj.graph.setData(curData);
+			SelfObj.graph.draw();
+
+			options.onChange(SelfObj.getData());
+
+			function searchGraphInData(name, data){
+				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
+			};
+		};
+		this.setMaxYAxis = function(maxYAxis, YAxisTickSize, XAxisTickSize){
+			var curData = SelfObj.graph.getData();
+
+			$.each(curData, function(key, line){
+				searchLineInOption(line.name).data = line.data;
+			});
+
+			if(maxYAxis) options.graphOptions.yaxis.max = maxYAxis;
+			if(YAxisTickSize) options.graphOptions.yaxis.tickSize = YAxisTickSize;
+			if(XAxisTickSize) options.graphOptions.xaxis.tickSize = XAxisTickSize;
+
+			SelfObj.graph.shutdown();
+			SelfObj.initGraph();
+		};
+		this.getData = function(){
+			var data = SelfObj.graph.getData(), output = {};
+
+			$.each(data, function(key, val){
+				output[val.name] = val.data;
+			});
+
+			//проверяем на присутствие всех графиков, если какой то отсутствует, берем значения из стандартных опций
+			$.each(options.lines, function(key, line){
+				if(!output[line.name]) output[line.name] = line.data;
+			});
+
+			return output;
+		};
+		this.lineVisibility = function(lineName, state){
+			searchLineInOption(lineName).show = state;
+			SelfObj.initGraph();
+		};
+		this.setDefaultState = function(){
+			SelfObj.setData(def_lines);
+		};
+
+		//functions
+		function searchLineInOption(lineName){
+			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+
+		//INIT
+		constructor();
+	};
+	function DayStat(_opt){
+		var defPoints = []; for(var i=0; i<=23; i++) defPoints.push([i, 0]);
+		var def_lines = [
+			{
+				name: "give",
+				show: true,
+				data: defPoints,
+				color: "rgba(120,255,0,1)",
+				shadowSize: 3,
+				tooltipOrder: 3,
+				lines: {
+					show: true,
+					fill: true,
+					fillColor: "rgba(120,255,0,0.15)",
+					lineWidth: 2
+				},
+				points: {
+					show: true,
+					fill: true,
+					fillColor: "rgba(0,90,0,1)",
+					lineWidth: 2,
+					radius: 3,
+					color: "rgba(255,255,255,1)",
+					values: {
+						show: false,
+						font: "normal 11px arial",
+						color: "rgba(1,1,1,1)",
+						margin: 5
+					}
+				}
+			},
+			{
+				name: "incomplete",
+				show: true,
+				data : defPoints,
+				color: "rgba(255,0,208,1)", //цвет линии графика
+				shadowSize: 3,
+				tooltipOrder: 4,
+				lines: {
+					show: true,
+					fill: true,
+					fillColor: "rgba(255,0,208,0.3)", //цвет заливки области графика
+					lineWidth: 1.5//толщина линий
+				},
+				points:{
+					show: true,
+					fill: true,
+					fillColor: "rgba(95,0,33,1)",
+					lineWidth: 1.2, //толщина линии точки
+					radius: 2.5, //радиус точки
+					color: "rgba(255,255,255,1)",
+					values: {
+						show: false,
+						font: "normal 11px arial",
+						color: "rgba(1,1,1,1)",
+						margin: 5
+					}
+				}
+			},
+			{
+				name: "overload",
+				show: true,
+				data : defPoints,
+				color: "rgba(255,200,0,1)", //цвет линии графика
+				shadowSize: 3,
+				tooltipOrder: 5,
+				lines:{
+					show: true,
+					fill: true,
+					fillColor: "rgba(255,200,0,0.1)", //цвет заливки области графика
+					lineWidth: 1.5//толщина линий
+				},
+				points:{
+					show: true,
+					fill: true,
+					fillColor: "rgba(167,118,0,1)",
+					lineWidth: 1.2, //толщина линии точки
+					radius: 2.5, //радиус точки
+					color: "rgba(255,255,255,1)",
+					values: {
+						show: false,
+						font: "normal 11px arial",
+						color: "rgba(1,1,1,1)",
+						margin: 5
+					}
+				}
+			},
+			{
+				name: "min",
+				show: true,
+				data: defPoints,
+				color: "rgba(64,153,255,1)", //цвет линии графика
+				shadowSize: 3,
+				tooltipOrder: 1,
+				lines: {
+					show: true,
+					fill: false,
+					fillColor: "rgba(255,255,255,0)",
+					lineWidth: 1.5//толщина линий
+				},
+				points:{
+					show: true,
+					fill: true,
+					fillColor: 'rgba(255,255,255,1)',
+					lineWidth: 1.2, //толщина линии точки
+					radius: 2.5, //радиус точки
+					color: "rgba(255,255,255,1)",
+					values: {
+						show: false,
+						font: "normal 11px arial",
+						color: "rgba(1,1,1,1)",
+						margin: 5
+					}
+				}
+			},
+			{
+				name: "max",
+				show: true,
+				data : defPoints,
+				color: "rgba(255,95,45,1)", //цвет линии графика
+				shadowSize: 3,
+				tooltipOrder: 2,
+				lines: {
+					show: true,
+					fill: false,
+					fillColor: 'rgba(255,255,255,0)', //цвет заливки области графика
+					lineWidth: 1.5//толщина линий
+				},
+				points:{
+					show: true,
+					fill: true,
+					fillColor: 'rgba(255,255,255,1)',
+					lineWidth: 1.2, //толщина линии точки
+					radius: 2.5, //радиус точки
+					color: "rgba(255,255,255,1)",
+					values: {
+						show: false,
+						font: "normal 11px arial",
+						color: "rgba(1,1,1,1)",
+						margin: 5
+					}
+				}
+			}
+		];
+
+		var SelfObj = this,
+			options = $.extend(true, {
+				holder: document.body,
+				onChange: function(data){},
+				graphOptions: {
+					xaxis: {
+						showValue: true,
+						min: 0,
+						max: 23,
+						tickSize: 1
+					},
+					yaxis: {
+						showValue: true,
+						min:0,
+						max: 50,
+						maxDefault: 50,
+						maxValue: 100000,
+						tickSize: 5,
+						tickFormatter: function (v) { return DataFormat.int(v); }
+					},
+					grid: {
+						hoverable:true,
+						clickable:true,
+						color:"#222",
+						backgroundColor: {
+							colors:["rgba(50,50,50,1)", "rgba(35,35,35,1)"]
+						},
+						tickColor:"rgba(70,70,70,1)",
+						labelMargin:5,
+						borderWidth:0,
+						mouseActiveRadius:8
+					}
+				},
+				lines: [],
+				events: [
+					function(){
+						$(options.holder).mousedown(function(e){
+							return false;
+						});
+					},
+					//show tooltip
+					function(){
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(item){
+								var x = item.datapoint[0].toFixed(0),
+									y = item.datapoint[1].toFixed(0),
+									name = item.series.name,
+									itemsCount = 1,
+									texts = [],
+									text = "";
+								texts.push({
+									text: manager.lng.form.task_setting.dayStat[name] + ": " + y,
+									order: item.series.tooltipOrder
+								});
+
+								$.each(SelfObj.graph.getData(), function(key, series){
+									if(series.name == name) return;
+
+									//search matches items
+									$.each(series.data, function(key, arr){
+										if(arr[0] == x && arr[1] == y){
+											itemsCount++;
+
+											texts.push({
+												text: manager.lng.form.task_setting.dayStat[series.name] + ": " + y,
+												order: series.tooltipOrder
+											});
+										};
+									});
+								});
+
+								texts.sort(function(a,b){return a.order- b.order;});
+								$.each(texts, function(key, val){
+									text += val.text + "<br>";
+								});
+
+								manager.methods.graphHint.show(x + ":00 - " + ((x == 23) ? "0" : (parseInt(x)+1)) + ":00" + "<br />" + text, ((itemsCount == 1) ? item.series.name : ""), item.pageY - 15, item.pageX + 15);
+							}else{
+								manager.methods.graphHint.hide();
+							};
+						});
+					},
+					//change yTickSize
+					function(){
+						$(options.holder).mousewheel(function(e, delta){
+							var curData = SelfObj.graph.getData(),
+								tickSize = curData[0].yaxis.tickSize,
+								yAxisMax = curData[0].yaxis.max,
+								yAxisDefault = curData[0].yaxis.options.maxDefault,
+								yAxisMaxValue = (getMaxY(curData) <= options.graphOptions.yaxis.maxDefault) ? options.graphOptions.yaxis.maxDefault : getMaxY(curData),
+								yMax = yAxisMax;
+
+							if(yAxisMax + delta * tickSize > yAxisDefault){
+								yMax = yAxisMax + delta * tickSize;
+								if(yMax > yAxisMaxValue) yMax = yAxisMaxValue;
+							}else{
+								yMax = yAxisDefault;
+							};
+
+							SelfObj.setMaxYAxis(yMax, Math.floor(yMax/10));
+						});
+
+						function getMaxY(data){
+							var arr = [];
+
+							$.each(data, function(key, line){
+								$.each(line.data, function(key, val){
+									arr.push(val[1]);
+								});
+							});
+
+							arr.sort(function(a,b){return a-b;});
+
+							return arr[arr.length-1];
+						};
+					}
+				]
+			}, {lines: def_lines}, _opt);
+
+		function constructor(){
+			SelfObj.initGraph(true);
+		};
+
+		//PROPERTIES
+		this.graph = false;
+
+		//METHODS
+		this.initGraph = function(bindEvents){
+			var lines = [];
+			$.each(options.lines, function(key, line){
+				if(line.show) lines.push(line);
+			});
+			$(options.holder).hide();
+			SelfObj.graph = $.plot(options.holder, lines, options.graphOptions);
+			$(options.holder).show();
+			if(bindEvents) $.each(options.events, function(key, func){
+				func();
+			});
+		};
+		this.setData = function(arr){
+			var curData = SelfObj.graph.getData(),
+				maxY = 0;
+
+			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+
+			var _y = getMaxY(curData);
+			maxY = ((_y < options.graphOptions.yaxis.maxDefault) ? options.graphOptions.yaxis.maxDefault : _y);
+
+			SelfObj.graph.setData(curData);
+			SelfObj.graph.draw(maxY);
+
+			SelfObj.setMaxYAxis(maxY, Math.floor(maxY/10));
+			options.onChange(SelfObj.getData());
+
+			function searchGraphInData(name, data){
+				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
+			};
+			function getMaxY(data){
+				var arr = [];
+
+				$.each(data, function(key, line){
+					$.each(line.data, function(key, val){
+						arr.push(val[1]);
+					});
+				});
+
+				arr.sort(function(a,b){return a-b;});
+
+				return arr[arr.length-1];
+			};
+		};
+		this.setMaxYAxis = function(maxYAxis, YAxisTickSize, XAxisTickSize){
+			var curData = SelfObj.graph.getData();
+
+			$.each(curData, function(key, line){
+				searchLineInOption(line.name).data = line.data;
+			});
+
+			if(maxYAxis) options.graphOptions.yaxis.max = maxYAxis;
+			if(YAxisTickSize) options.graphOptions.yaxis.tickSize = YAxisTickSize;
+			if(XAxisTickSize) options.graphOptions.xaxis.tickSize = XAxisTickSize;
+
+			SelfObj.graph.shutdown();
+			SelfObj.initGraph();
+		};
+		this.getData = function(){
+			var data = SelfObj.graph.getData(), output = {};
+
+			$.each(data, function(key, val){
+				output[val.name] = val.data;
+			});
+
+			//проверяем на присутствие всех графиков, если какой то отсутствует, берем значения из стандартных опций
+			$.each(options.lines, function(key, line){
+				if(!output[line.name]) output[line.name] = line.data;
+			});
+
+			return output;
+		};
+		this.lineVisibility = function(lineName, state){
+			searchLineInOption(lineName).show = state;
+			SelfObj.initGraph();
+		};
+		this.setDefaultState = function(){
+			SelfObj.setData(def_lines);
+		};
+
+		//functions
+		function searchLineInOption(lineName){
+			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+
+		//INIT
+		constructor();
+	};
+	function TimeDistribution(_opt){
+		var defPoints = []; for(var i=5; i<=100; i+=5) defPoints.push([i, 0]);
+		var def_lines = [
+			{
+				name: "min",
+				show: true,
+				data: defPoints,
+				color : "rgba(0,79,163,0.7)",//цвет линии графика
+				shadowSize : 0,//размер тени
+				lines : {
+					show : true,//вкл/выкл линию графика
+					fill : true,//вкл/выкл заливку области графика
+					fillColor : 'rgba(0,79,163,0.07)',//цвет заливки области графика
+					lineWidth : 1//толщина линий
+				},
+				points: {
+					show : true,//вкл/выкл точки на линиях графиков
+					fill : true,//вкл/выкл заливку
+					fillColor : 'rgba(255,255,255,1)',//цвет заливки точки
+					lineWidth : 1,//толщина линии точки
+					radius : 2,//радиус точки
+					color: 'rgba(255,255,255,1)',//цвет точки
+					values: {
+						show: false,//вкл/выкл отображение значений в точках
+						font : "normal 11px arial",//шрифт текста значений
+						color: 'rgba(71,1,2,1)',//цвет текста значений
+						margin: 5//расстояние от точки до значения
+					}
+				}
+			}
+		];
+
+		var SelfObj = this,
+			options = $.extend(true, {
+				holder: document.body,
+				onChange: function(data){},
+				graphOptions: {
+					xaxis : {
+						showValue : true, //показывать или нет значения
+						min : 5,
+						max : 100,
+						tickSize : 5,//шаг
+						tickFormatter: function (v) { return v + "%"; }
+					},
+					yaxis : {
+						showValue : true, //показывать или нет значения
+						min : 0,
+						max : 50,
+						maxDefault: 50,
+						maxValue: 999,
+						tickSize : 5,//шаг
+						tickFormatter: function (v) { return v; }
+					},
+					grid : {
+						hoverable : true,
+						clickable : true,
+						color : '#000',//цвет меток(числа 1 2 3 4 5 6 и т.д.)
+						backgroundColor : {
+							colors : ["rgba(255,255,255,1)", "rgba(233,233,233,1)"]
+						},//цвет заливки сетки
+						tickColor : 'rgba(0,0,0,.1)',//цвет самой сетки
+						labelMargin : 5,//растояние от метки до сетки
+						borderWidth : 4,//ширина рамки по краю сетки
+						mouseActiveRadius : 8//радиус активной точки
+					}
+				},
+				lines: [],
+				events: [
+					function(){
+						$(options.holder).mousedown(function(e){
+							return false;
+						});
+					},
+					//show tooltip
+					function(){
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(item){
+								var x = item.datapoint[0].toFixed(0),
+									y = item.datapoint[1].toFixed(0),
+									hint_text = manager.lng.form.task_setting.timeDistribution.priority + " " + y + "<br>" + manager.lng.form.task_setting.timeDistribution.percent + " " + x + "%";
+
+								manager.methods.graphHint.show(hint_text, item.series.name, item.pageY - 15, item.pageX + 15);
+							}else{
+								manager.methods.graphHint.hide();
+							};
+						});
+					},
+					//redraw
+					function(){
+						var reDraw = false, graphMax = false, graphMin = false;
+						$(options.holder).mousedown(function(e) {
+							reDraw = true;
+						});
+						$(window).mouseup(function(e) {
+							reDraw = false;
+						});
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(reDraw){
+								var x = Math.round(pos.x),
+									y = parseFloat(pos.y).toFixed(0),
+									data = SelfObj.graph.getData(),
+									idGraphMin = getIdGraph(data, "min"),
+									xMax = data[0].xaxis.max,
+									xMin = data[0].xaxis.min,
+									yMax = data[0].yaxis.max,
+									yMin = data[0].yaxis.min;
+
+								if(x < xMin) x = xMin;
+								else if(x > xMax) x = xMax;
+								if(y > yMax) y = yMax;
+								if(y < yMin) y = yMin;
+
+								if(x%5 == 0){
+									data[idGraphMin].data[x/5-1][1] = y;
+
+									SelfObj.graph.setData(data);
+									SelfObj.graph.draw();
+									options.onChange(SelfObj.getData());
+								};
+							};
+						});
+
+						function getIdGraph(data, graphName){
+							for(var i=0;i<data.length;i++){
+								if(graphName == data[i].name) return i;
+							};
+
+							return -1;
+						};
+					},
+					//change yTickSize
+					function(){
+						$(options.holder).mousewheel(function(e, delta){
+							var curData = SelfObj.graph.getData(),
+								tickSize = curData[0].yaxis.tickSize,
+								yAxisMax = curData[0].yaxis.max,
+								yAxisDefault = curData[0].yaxis.options.maxDefault,
+								yAxisMaxValue = curData[0].yaxis.options.maxValue,
+								yMax = yAxisMax;
+
+							if(yAxisMax + delta * tickSize > yAxisDefault){
+								yMax = yAxisMax + delta * tickSize;
+								if(yMax > yAxisMaxValue) yMax = yAxisMaxValue;
+							}else{
+								yMax = yAxisDefault;
+							};
+
+							SelfObj.setMaxYAxis(yMax, Math.floor(yMax/10));
+						});
+					}
+				]
+			}, {lines: def_lines}, _opt);
+
+		function constructor(){
+			SelfObj.initGraph(true);
+		};
+
+		//PROPERTIES
+		this.graph = false;
+
+		//METHODS
+		this.initGraph = function(bindEvents){
+			var lines = [];
+			$.each(options.lines, function(key, line){
+				if(line.show) lines.push(line);
+			});
+			$(options.holder).hide();
+			SelfObj.graph = $.plot(options.holder, lines, options.graphOptions);
+			$(options.holder).show();
+			if(bindEvents) $.each(options.events, function(key, func){
+				func();
+			});
+		};
+		this.setData = function(arr){
+			var curData = SelfObj.graph.getData(),
+				maxY = 0;
+
+			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+
+			var _y = getMaxY(curData);
+			maxY = ((_y < options.graphOptions.yaxis.maxDefault) ? options.graphOptions.yaxis.maxDefault : _y);
+
+			SelfObj.graph.setData(curData);
+			SelfObj.graph.draw();
+
+			SelfObj.setMaxYAxis(maxY, Math.floor(maxY/10));
+			options.onChange(SelfObj.getData());
+
+			function searchGraphInData(name, data){
+				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
+			};
+			function getMaxY(data){
+				var arr = [];
+
+				$.each(data, function(key, line){
+					$.each(line.data, function(key, val){
+						arr.push(val[1]);
+					});
+				});
+
+				arr.sort(function(a,b){return a-b;});
+
+				return arr[arr.length-1];
+			};
+		};
+		this.setMaxYAxis = function(maxYAxis, YAxisTickSize, XAxisTickSize){
+			var curData = SelfObj.graph.getData();
+
+			$.each(curData, function(key, line){
+				searchLineInOption(line.name).data = line.data;
+			});
+
+			if(maxYAxis) options.graphOptions.yaxis.max = maxYAxis;
+			if(YAxisTickSize) options.graphOptions.yaxis.tickSize = YAxisTickSize;
+			if(XAxisTickSize) options.graphOptions.xaxis.tickSize = XAxisTickSize;
+
+			SelfObj.graph.shutdown();
+			SelfObj.initGraph();
+		};
+		this.getData = function(){
+			var data = SelfObj.graph.getData(), output = {};
+
+			$.each(data, function(key, val){
+				output[val.name] = val.data;
+			});
+
+			//проверяем на присутствие всех графиков, если какой то отсутствует, берем значения из стандартных опций
+			$.each(options.lines, function(key, line){
+				if(!output[line.name]) output[line.name] = line.data;
+			});
+
+			return output;
+		};
+		this.lineVisibility = function(lineName, state){
+			searchLineInOption(lineName).show = state;
+			SelfObj.initGraph();
+		};
+		this.setDefaultState = function(){
+			SelfObj.setData(def_lines);
+		};
+
+		//functions
+		function searchLineInOption(lineName){
+			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+
+		//INIT
+		constructor();
+	};
+	function GeoStorage(){
+		var countries = {},
+			SelfObj = this;
+
+		this.add = function(id, shortname, target, recd){
+			countries[id] = {
+				id: id,
+				shortName: shortname,
+				fullName: manager.lng.zoneName[shortname],
+				target: target,
+				recd: recd
+			};
+		};
+		this.clear = function(){
+			countries = {};
+		};
+		this.getSelected = function(){
+			var output = [];
+
+			$.each(countries, function(key, cntry){
+				if(cntry.target != 0) output.push(cntry);
+			});
+
+			output.sort(function(a, b) {
+				return (a.fullName.toUpperCase() < b.fullName.toUpperCase()) ? -1 : (a.fullName.toUpperCase() > b.fullName.toUpperCase()) ? 1 : 0;
+			})
+
+			return output;
+		};
+		this.getNotSelected = function(){
+			var output = [];
+
+			$.each(countries, function(key, cntry){
+				if(cntry.target == 0) output.push(cntry);
+			});
+
+			output.sort(function(a, b) {
+				return (a.fullName.toUpperCase() < b.fullName.toUpperCase()) ? -1 : (a.fullName.toUpperCase() > b.fullName.toUpperCase()) ? 1 : 0;
+			})
+
+			return output;
+		};
+		this.setTarget = function(countryId, target){
+			countries[countryId].target = target;
+		};
+		this.unSelect = function(countryId){
+			countries[countryId].target = 0;
+		};
+		this.find = function(text){
+			var output = [];
+
+			if(text != ""){
+				$.each(countries, function(key, cntry){
+					if((cntry.shortName.indexOf(text) != -1 || cntry.fullName.indexOf(text) != -1) ) output.push(cntry);
+				});
+			}else{
+				return SelfObj.getNotSelected();
+			};
+
+			output.sort(function(a, b) {
+				return (a.fullName.toUpperCase() < b.fullName.toUpperCase()) ? -1 : (a.fullName.toUpperCase() > b.fullName.toUpperCase()) ? 1 : 0;
+			})
+
+			return output;
+		};
+		this.getById = function(id){
+			return countries[id];
+		};
+	};
 
 	//init
 	$(document).ready(function(e){
@@ -1550,6 +2697,8 @@
 				manager.methods.authFormShow();
 			}});
 		};
+
+		manager.data.geoStorage = new GeoStorage();
 
 		//Translate document
 		TranslatePage();
