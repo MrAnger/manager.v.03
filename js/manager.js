@@ -520,6 +520,18 @@
 				getActiveHtml: function(){
 					return $(".active[wa_task]:not([default])");
 				}
+			},
+			graphHint:{
+				show: function(_text, _class, _top, _left){
+					var hint = $("#gr-hint")[0];
+
+					hint.className = "gr-hint";
+
+					$(hint).addClass(_class).css({top: _top, left: _left}).fadeIn("fast").find("[name=text]").html(_text);
+				},
+				hide: function(){
+					$("#gr-hint").hide();
+				}
 			}
 		}
 	};
@@ -579,9 +591,12 @@
 			NoticeShow(manager.lng.form.console.copy.complete, "success");
 		});
 		$(window).resize(function(e){
-			$(consoleBox).show();
+			if($(consoleBox).css("display") != "none"){
+				clip.reposition();
+			};
+			/*$(consoleBox).show();
 			clip.reposition();
-			$(consoleBox).hide();
+			$(consoleBox).hide();*/
 		});
 	});
 	//SET CONSOLE FORM
@@ -1184,97 +1199,208 @@
 		return out;
 	};
 	function DayTargeting(_opt){
-		var defPoints = [];
+		var defPoints = [],
+			def_lines = [
+				{
+					name: "min",
+					show: true,
+					data: defPoints,
+					color: "rgba(64,153,255,1)", //цвет линии графика
+					shadowSize: 3,
+					lines: {
+						show: true,
+						fill: false,
+						fillColor: "rgba(255,255,255,0)",
+						lineWidth: 1.5//толщина линий
+					},
+					points:{
+						show: true,
+						fill: true,
+						fillColor: 'rgba(255,255,255,1)',
+						lineWidth: 1.2, //толщина линии точки
+						radius: 2.5, //радиус точки
+						color: "rgba(255,255,255,1)",
+						values: {
+							show: false,
+							font: "normal 11px arial",
+							color: "rgba(1,1,1,1)",
+							margin: 5
+						}
+					}
+				},
+				{
+					name: "max",
+					show: true,
+					data : defPoints,
+					color: "rgba(255,95,45,1)", //цвет линии графика
+					shadowSize: 3,
+					lines: {
+						show: true,
+						fill: false,
+						fillColor: 'rgba(255,255,255,0)', //цвет заливки области графика
+						lineWidth: 1.5//толщина линий
+					},
+					points:{
+						show: true,
+						fill: true,
+						fillColor: 'rgba(255,255,255,1)',
+						lineWidth: 1.2, //толщина линии точки
+						radius: 2.5, //радиус точки
+						color: "rgba(255,255,255,1)",
+						values: {
+							show: false,
+							font: "normal 11px arial",
+							color: "rgba(1,1,1,1)",
+							margin: 5
+						}
+					}
+				}
+			];
 		for(var i=0; i<=23; i++) defPoints.push([i, 0]);
 
 		var SelfObj = this,
 			options = $.extend(true, {
 				holder: document.body,
+				onChange: function(data){},
 				graphOptions: {
-					 xaxis: {
-						 showValue: true,
-						 min: 0,
-						 max: 23,
-						 tickSize: 1
-					 },
-					 yaxis: {
-						 showValue: true,
-						 min:0,
-						 max: 50,
-						 maxDefault: 50,
-						 maxValue: 100000,
-						 tickSize: 5,
-						 tickFormatter: function (v) { return DataFormat.int(v); }
-					 },
-					 grid: {
-						 hoverable:true,
-						 clickable:true,
-						 color:"#222",
-						 backgroundColor: {
-							 colors:["rgba(50,50,50,1)", "rgba(35,35,35,1)"]
-						 },
-						 tickColor:"rgba(70,70,70,1)",
-						 labelMargin:5,
-						 borderWidth:0,
-						 mouseActiveRadius:8
-					 }
-				 },
-				lines: [
-					 {
-						 name: "min",
-						 data: defPoints,
-						 color: "rgba(64,153,255,1)", //цвет линии графика
-						 shadowSize: 3,
-						 lines: {
-							 show: true,
-							 fill: false,
-							 fillColor: "rgba(255,255,255,0)",
-							 lineWidth: 1.5//толщина линий
-						 },
-						 points:{
-							 show: true,
-							 fill: true,
-							 fillColor: 'rgba(255,255,255,1)',
-							 lineWidth: 1.2, //толщина линии точки
-							 radius: 2.5, //радиус точки
-							 color: "rgba(255,255,255,1)",
-							 values: {
-								 show: false,
-								 font: "normal 11px arial",
-								 color: "rgba(1,1,1,1)",
-								 margin: 5
-							 }
-						 }
-					 },
-					 {
-						 name: "max",
-						 data : defPoints,
-						 color: "rgba(255,95,45,1)", //цвет линии графика
-						 shadowSize: 3,
-						 lines: {
-							 show: true,
-							 fill: false,
-							 fillColor: 'rgba(255,255,255,0)', //цвет заливки области графика
-							 lineWidth: 1.5//толщина линий
-						 },
-						 points:{
-							 show: true,
-							 fill: true,
-							 fillColor: 'rgba(255,255,255,1)',
-							 lineWidth: 1.2, //толщина линии точки
-							 radius: 2.5, //радиус точки
-							 color: "rgba(255,255,255,1)",
-							 values: {
-								 show: false,
-								 font: "normal 11px arial",
-								 color: "rgba(1,1,1,1)",
-								 margin: 5
-							 }
-						 }
-					 }
-				 ],
-				events: []
-			 }, _opt);
+					xaxis: {
+						showValue: true,
+						min: 0,
+						max: 23,
+						tickSize: 1
+					},
+					yaxis: {
+						showValue: true,
+						min:0,
+						max: 50,
+						maxDefault: 50,
+						maxValue: 100000,
+						tickSize: 5,
+						tickFormatter: function (v) { return DataFormat.int(v); }
+					},
+					grid: {
+						hoverable:true,
+						clickable:true,
+						color:"#222",
+						backgroundColor: {
+							colors:["rgba(50,50,50,1)", "rgba(35,35,35,1)"]
+						},
+						tickColor:"rgba(70,70,70,1)",
+						labelMargin:5,
+						borderWidth:0,
+						mouseActiveRadius:8
+					}
+				},
+				lines: [],
+				events: [
+					function(){
+						$(options.holder).mousedown(function(e){
+							return false;
+						});
+					},
+					//show tooltip
+					function(){
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(item){
+								var x = item.datapoint[0].toFixed(0),
+									y = item.datapoint[1].toFixed(0),
+									name = item.series.name,
+									itemsCount = 1,
+									hint_text = manager.lng.form.task_setting.dayTargeting[name] + ": " + y;
+
+								$.each(SelfObj.graph.getData(), function(key, series){
+									if(series.name == name) return;
+
+									//search matches items
+									$.each(series.data, function(key, arr){
+										if(arr[0] == x && arr[1] == y){
+											itemsCount++;
+
+											hint_text += "<br />" + manager.lng.form.task_setting.dayTargeting[series.name] + ": " + y;
+										};
+									});
+								});
+
+								manager.methods.graphHint.show(x + ":00 - " + ((x == 23) ? "0" : (parseInt(x)+1)) + ":00" + "<br />" + hint_text, ((itemsCount == 1) ? item.series.name : ""), item.pageY - 15, item.pageX + 15);
+							}else{
+								manager.methods.graphHint.hide();
+							};
+						});
+					},
+					//redraw
+					function(){
+						var reDraw = false, graphMax = false, graphMin = false;
+						$(options.holder).mousedown(function(e) {
+							reDraw = true;
+							if(e.shiftKey) graphMax = true;
+							else if(e.ctrlKey) graphMin = true;
+						});
+						$(window).mouseup(function(e) {
+							reDraw = false;
+							graphMax = false;
+							graphMin = false;
+						});
+						$(options.holder).bind("plothover", function(event, pos, item) {
+							if(reDraw && (graphMax || graphMin)){
+								var x = Math.round(pos.x).toFixed(0),
+									y = parseFloat(pos.y).toFixed(0),
+									data = SelfObj.graph.getData(),
+									idGraphMin = getIdGraph(data, "min"),
+									idGraphMax = getIdGraph(data, "max"),
+									xMax = data[0].xaxis.max,
+									xMin = data[0].xaxis.min,
+									yMax = data[0].yaxis.max,
+									yMin = data[0].yaxis.min;
+
+								if(x < xMin) x = xMin;
+								else if(x > xMax) x = xMax;
+								if(y > yMax) y = yMax;
+								if(y < yMin) y = yMin;
+
+								if(graphMax){
+									data[idGraphMax].data[x] = [x, y];
+									if(idGraphMin!= -1 && data[idGraphMin].data[x][1] > data[idGraphMax].data[x][1])data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+								}else if(graphMin){
+									data[idGraphMin].data[x] = [x, y];
+									if(idGraphMax != -1 &&data[idGraphMax].data[x][1] < data[idGraphMin].data[x][1])data[idGraphMin].data[x][1] = data[idGraphMax].data[x][1];
+								};
+
+								SelfObj.graph.setData(data);
+								SelfObj.graph.draw();
+								options.onChange(SelfObj.getData());
+							};
+						});
+
+						function getIdGraph(data, graphName){
+							for(var i=0;i<data.length;i++){
+								if(graphName == data[i].name) return i;
+							};
+
+							return -1;
+						};
+					},
+					//change yTickSize
+					function(){
+						$(options.holder).mousewheel(function(e, delta){
+							var curData = SelfObj.graph.getData(),
+								tickSize = curData[0].yaxis.tickSize,
+								yAxisMax = curData[0].yaxis.max,
+								yAxisDefault = curData[0].yaxis.options.maxDefault,
+								yAxisMaxValue = curData[0].yaxis.options.maxValue,
+								yMax = yAxisMax;
+
+							if(yAxisMax + delta * tickSize > yAxisDefault){
+								yMax = yAxisMax + delta * tickSize;
+								if(yMax > yAxisMaxValue) yMax = yAxisMaxValue;
+							}else{
+								yMax = yAxisDefault;
+							};
+
+							SelfObj.setMaxYAxis(yMax, Math.floor(yMax/10));
+						});
+					}
+				]
+			 }, {lines: def_lines}, _opt);
 
 		function constructor(){
 			SelfObj.initGraph();
@@ -1285,20 +1411,46 @@
 
 		//METHODS
 		this.initGraph = function(){
-			SelfObj.graph = $.plot(options.holder, options.lines, options.graphOptions);
+			var lines = [];
+			$.each(options.lines, function(key, line){
+				if(line.show) lines.push(line);
+			});
+			$(options.holder).hide();
+			SelfObj.graph = $.plot(options.holder, lines, options.graphOptions);
+			$(options.holder).show();
 			$.each(options.events, function(key, func){
 				func();
 			});
 		};
 		this.setData = function(arr){
-			var curData = SelfObj.graph.getData();
+			var curData = SelfObj.graph.getData(),
+				maxY = 0;
 
 			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
-			SelfObj.graph.setData(curData)
-			SelfObj.graph.draw();
+
+			var _y = getMaxY(curData);
+			maxY = ((_y < options.graphOptions.yaxis.maxDefault) ? options.graphOptions.yaxis.maxDefault : _y);
+
+			SelfObj.graph.setData(curData);
+			SelfObj.graph.draw(maxY);
+
+			SelfObj.setMaxYAxis(maxY, Math.floor(maxY/10));
 
 			function searchGraphInData(name, data){
 				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
+			};
+			function getMaxY(data){
+				var arr = [];
+
+				$.each(data, function(key, line){
+					$.each(line.data, function(key, val){
+						arr.push(val[1]);
+					});
+				});
+
+				arr.sort(function(a,b){return a-b;});
+
+				return arr[arr.length-1];
 			};
 		};
 		this.setMaxYAxis = function(maxYAxis, YAxisTickSize, XAxisTickSize){
@@ -1314,6 +1466,27 @@
 
 			SelfObj.graph.shutdown();
 			SelfObj.initGraph();
+		};
+		this.getData = function(){
+			var data = SelfObj.graph.getData(), output = {};
+
+			$.each(data, function(key, val){
+				output[val.name] = val.data;
+			});
+
+			//проверяем на присутствие всех графиков, если какой то отсутствует, берем значения из стандартных опций
+			$.each(options.lines, function(key, line){
+				if(!output[line.name]) output[line.name] = line.data;
+			});
+
+			return output;
+		};
+		this.lineVisibility = function(lineName, state){
+			searchLineInOption(lineName).show = state;
+			SelfObj.initGraph();
+		};
+		this.setDefaultState = function(){
+			SelfObj.setData(def_lines);
 		};
 
 		//functions

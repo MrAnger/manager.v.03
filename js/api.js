@@ -2,7 +2,8 @@
 	var api = window.api =  {
 		options: {
 			server: "",
-			timeout: 30000,
+			//timeout: 30000,
+			timeout: 1000,//!!!!
 			log: {
 				enable: false,
 				callback: {
@@ -359,7 +360,7 @@
 
 					var i = 0;
 					while(i<=23){
-						if(!output[i] || output[i].id != i) output.splice(i, 0, {id: i, min: 0, max: 10});
+						if(!output[i] || output[i].id != i) output.splice(i, 0, {id: i, min: 0, max: 0});
 						else i++;
 					};
 

@@ -10,12 +10,18 @@
  */
 jQuery.fn.extend({
 	mousewheel: function(up, down, preventDefault) {
+		$(this).attr("mousewheel","true");
+
 		return this.hover(
 			function() {
+				jQuery("[mousewheel]").each(function(key, el){
+					jQuery.event.mousewheel.removeFocus(el);
+				});
 				jQuery.event.mousewheel.giveFocus(this, up, down, preventDefault);
 			},
 			function() {
 				jQuery.event.mousewheel.removeFocus(this);
+				if(jQuery(this).parents("[mousewheel]").length != 0) jQuery(this).parents("[mousewheel]").eq(0).mouseover();
 			}
 		);
 	},

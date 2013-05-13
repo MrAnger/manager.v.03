@@ -17,7 +17,8 @@ $('.content-scroll').mousewheel(function (e, delta) {
     var scrollSize = 15;
     if (delta > 0) {
         if (parseInt($(this).css("top")) != 0) {
-            $(this).css("top", parseInt($(this).css("top")) + scrollSize * delta);
+			var top = parseInt($(this).css("top")) + scrollSize * delta;
+            $(this).css("top", parseInt(((top > 0) ? 0 : top)));
         }
     } else {
         if ($(this).parent().height() + Math.abs(parseInt($(this).css("top"))) <= $(this).height()) {
@@ -197,3 +198,32 @@ $("[name=task-setting] [name=listId]").change(function(e){
 		$("[name=task-setting] [name=listIp-option]").show("fast");
 	};
 }).change();
+manager.data.graphs.dayTargeting = new manager.graph.dayTargeting({
+	holder: $("#graph_dayTargeting"),
+	onChange: function(data){
+		var summ = {};
+		$.each(data, function(name, line){
+			if(!summ[name]) summ[name] = 0;
+			$.each(line, function(key, arr){
+				summ[name] += parseInt(arr[1]);
+			});
+		});
+
+		$("#dayTargeting_cb_min [name=value]").html(summ.min);
+		$("#dayTargeting_cb_max [name=value]").html(summ.max);
+	}
+});
+$("#dayTargeting_cb_min input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayTargeting.lineVisibility("min", true);
+	}else{
+		manager.data.graphs.dayTargeting.lineVisibility("min", false);
+	};
+});
+$("#dayTargeting_cb_max input[type=checkbox]").change(function(e){
+	if($(this)[0].checked){
+		manager.data.graphs.dayTargeting.lineVisibility("max", true);
+	}else{
+		manager.data.graphs.dayTargeting.lineVisibility("max", false);
+	};
+});
