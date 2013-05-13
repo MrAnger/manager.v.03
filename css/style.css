@@ -179,6 +179,7 @@ body {
 }
 
 .content-height {
+	position:relative;
 	overflow: hidden;
 }
 
@@ -1178,4 +1179,24 @@ embed:hover .copy {
 
 .gr-hint.overload .gr-hint-content {
     background: rgba(167, 118, 0, 1)
+}
+.scrollbar {
+	position:absolute;
+	top:0;
+	right:0;
+	width:16px;
+	height:100%;
+	background:rgba(0, 0, 0, .3);
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	z-index:500;
+}
+.scroller {
+	position:absolute;
+	margin:2px;
+	width:12px;
+	height:10%;
+	background:rgba(0, 0, 0, .6);
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }

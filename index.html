@@ -237,8 +237,7 @@
                     <div class="label-text" wa_lang="{form.auth.password.text}"></div>
                     <div class="text-line">
                         <input name="password" class="password" type="password" value placeholder
-                               wa_lang="{form.auth.password.placeholder|attr:placeholder}"><span
-                            class="show-box"></span>
+                               wa_lang="{form.auth.password.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-text">
@@ -348,6 +347,7 @@
                                                                         onclick="manager.methods.folder.addMsgShow();"></span>
     </div>
     <div class="content-height">
+	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_folder default>
                 <span class="name">
@@ -379,6 +379,7 @@
                                                                       onclick="manager.methods.task.addMsgShow();"></span>
     </div>
     <div class="content-height">
+	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_task default>
                 <span class="name">
@@ -428,6 +429,7 @@
 </ul>
 <div class="tab-box-content">
 <div class="setting-group">
+<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 <div class="content-scroll" style="top:0;">
 <form name="task-setting" onsubmit="return false;">
 <input type="hidden" name="folderId" value="0">
