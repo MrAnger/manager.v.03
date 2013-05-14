@@ -59,7 +59,7 @@ jQuery.event.mousewheel = {
 			var delta = 0;
 			if (event.wheelDelta) {
 				delta = event.wheelDelta/120;
-				if (window.opera) delta = -delta;
+				//if (window.opera) delta = -delta;
 			} else if (event.detail) {
 				delta = -event.detail/3;
 			}

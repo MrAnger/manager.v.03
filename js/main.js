@@ -1,290 +1,292 @@
-function setHeightTaskContent() {
-    $(".tasks-content").css("height", $(window).height() - 30);
-};
-$(window).resize(setHeightTaskContent);
-$(document).ready(setHeightTaskContent);
-$(".switch-box").click(function () {
-    $(this).toggleClass("status-off");
-
-	if(this.hasAttribute("onchange")){
-		var func = $(this).attr("onchange");
-
-		if($(this).hasClass("status-off")) eval(func + "(false, this)");
-		else eval(func + "(true, this)");
+(function($){
+	function setHeightTaskContent() {
+		$(".tasks-content").css("height", $(window).height() - 30);
 	};
-});
-//  скроллинг
-function setHeightContentScroll() {
-    $('.setting-group').css("height", $(window).height() - 90);
-    $('.content-height').css("height", $(window).height() - 60);
-};
-setHeightContentScroll();
-$(window).resize(setHeightContentScroll);
-$('.content-scroll').mousewheel(function (e, delta) {
-    var scrollSize = 15;
-    if (delta > 0) {
-        if (parseInt($(this).css("top")) != 0) {
-			var top = parseInt($(this).css("top")) + scrollSize * delta;
-            $(this).css("top", parseInt(((top > 0) ? 0 : top)));
-        }
-    } else {
-        if ($(this).parent().height() + Math.abs(parseInt($(this).css("top"))) <= $(this).height()) {
-            $(this).css("top", parseInt($(this).css("top")) + scrollSize * delta);
-        }
-    }
-});
+	$(window).resize(setHeightTaskContent);
+	$(document).ready(setHeightTaskContent);
+	$(".switch-box").click(function () {
+		$(this).toggleClass("status-off");
 
-//MrAnger edit script
-$(".lng-item").click(function(){
-	if(!$(this).hasAttribute("disable")){
-		$(".lng-item").removeClass("active");
-		$(this).addClass("active");
-	};
-});
-$(".show-box").disableSelection().click(function (event) {
-	var el = $(this)
-	el.toggleClass("true")
-	var elValue = el.parents(".text-line").children("input").val(),
-		name = el.parents(".text-line").children("input").attr("name"),
-		placeholder = el.parents(".text-line").children("input").attr("placeholder"),
-		disabled = el.parents(".text-line").children("input")[0].hasAttribute("disabled");
-	if (el.hasClass("true")) {
-		el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value placeholder>");
-		el.parents(".text-line").children("input[type=password]").remove();
-		el.parents(".text-line").children("input[type=text]").val(elValue);
-		if(name) el.parents(".text-line").children("input[type=text]").attr("name", name);
-		if(placeholder) el.parents(".text-line").children("input[type=text]").attr("placeholder", placeholder);
-		if(disabled) el.parents(".text-line").children("input[type=text]").attr("disabled", "disabled");
-	}
-	else {
-		el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value placeholder>");
-		el.parents(".text-line").children("input[type=text]").remove();
-		el.parents(".text-line").children("input[type=password]").val(elValue);
-		if(name) el.parents(".text-line").children("input[type=password]").attr("name", name);
-		if(placeholder) el.parents(".text-line").children("input[type=password]").attr("placeholder", placeholder);
-		if(disabled) el.parents(".text-line").children("input[type=password]").attr("disabled", "disabled");
-	}
-	event.stopImmediatePropagation();
-});
-$(document).on("click", ".msg-box .msg-content .close", function(e){
-	$(this).parent().fadeOut("fast", function(){
-		$(this).remove();
+		if(this.hasAttribute("onchange")){
+			var func = $(this).attr("onchange");
+
+			if($(this).hasClass("status-off")) eval(func + "(false, this)");
+			else eval(func + "(true, this)");
+		};
 	});
-});
-$(".console-box .console-title").click(function(e){
-	var box = $(this).parents(".console-box").find(".open-box"),
-		input = $(this).parents(".console-box").find(".console-send input[type=text]");
-
-	if($(box).css("display") == "none"){
-		$(box).show("fast", function(){
-			manager.data.elem.console_clip.show();
-			manager.data.elem.console_clip.reposition();
-			$(input).focus();
-		});
-	}else{
-		$(box).hide("fast", function(){
-			manager.data.elem.console_clip.hide();
-		});
+	//  скроллинг
+	function setHeightContentScroll() {
+		$('.setting-group').css("height", $(window).height() - 90);
+		$('.content-height').css("height", $(window).height() - 60);
 	};
-});
-$(".top-menu .item").click(function(e){
-	$(this).parents(".top-menu").find(".item").removeClass("active");
-	$(this).addClass("active");
-});
-$(".account [name=login]").click(function(e){
-	$(".top-menu .item").removeClass("active");
-});
-$(document).on("click", ".edit", function(e){
-	var hasClass = $(this).hasClass("active");
-	$(".edit").removeClass("active");
-	if(hasClass) $(this).removeClass("active");
-	else $(this).addClass("active");
-	e.stopImmediatePropagation();
-});
-$(document).click(function(e){
-	$(".edit").removeClass("active");
-});
-$(document).on("click", ".item-list li", function(e){
-	$(this).parent().children("li").removeClass('active');
-	$(this).addClass('active');
-});
-$(document).on("click", "[wa_folder]", function(e){
-	manager.methods.loadTasks(manager.methods.folder.getParam(this, "id"));
-});
-$(document).on("click", "[wa_task]", function(e){
-	manager.methods.loadTaskSetting(this);
-});
-$(".add-box-wrap .close").click(function(e){
-	$(this).parents(".add-box-wrap").fadeOut("fast");
-});
-$(".confirm-box .close").click(function(e){
-	$(this).parents(".confirm-box").fadeOut("fast");
-});
-$(".confirm-box [name=yes]").click(function(e){
-	$(this).parents(".confirm-box").find(".close").click();
-});
-$(".confirm-box [name=no]").click(function(e){
-	$(this).parents(".confirm-box").find(".close").click();
-});
-$(document).keydown(function(e){
-	if(e.keyCode == 27){
-		$(".add-box-wrap, .confirm-box").each(function(key, el){
-			if($(el).css("display") != "none") $(el).find(".close").click();
+	setHeightContentScroll();
+	$(window).resize(setHeightContentScroll);
+	$('.content-scroll').mousewheel(function (e, delta) {
+		var scrollSize = 15;
+		if (delta > 0) {
+			if (parseInt($(this).css("top")) != 0) {
+				var top = parseInt($(this).css("top")) + scrollSize * delta;
+				$(this).css("top", parseInt(((top > 0) ? 0 : top)));
+			}
+		} else {
+			if ($(this).parent().height() + Math.abs(parseInt($(this).css("top"))) <= $(this).height()) {
+				$(this).css("top", parseInt($(this).css("top")) + scrollSize * delta);
+			}
+		}
+	});
+
+	//MrAnger edit script
+	$(".lng-item").click(function(){
+		if(!$(this).hasAttribute("disable")){
+			$(".lng-item").removeClass("active");
+			$(this).addClass("active");
+		};
+	});
+	$(".show-box").click(function (event) {
+		var el = $(this)
+		el.toggleClass("true")
+		var elValue = el.parents(".text-line").children("input").val(),
+			name = el.parents(".text-line").children("input").attr("name"),
+			placeholder = el.parents(".text-line").children("input").attr("placeholder"),
+			disabled = el.parents(".text-line").children("input")[0].hasAttribute("disabled");
+		if (el.hasClass("true")) {
+			el.parents(".text-line").children("input[type=password]").after("<input class='password' type='text' value placeholder>");
+			el.parents(".text-line").children("input[type=password]").remove();
+			el.parents(".text-line").children("input[type=text]").val(elValue);
+			if(name) el.parents(".text-line").children("input[type=text]").attr("name", name);
+			if(placeholder) el.parents(".text-line").children("input[type=text]").attr("placeholder", placeholder);
+			if(disabled) el.parents(".text-line").children("input[type=text]").attr("disabled", "disabled");
+		}
+		else {
+			el.parents(".text-line").children("input[type=text]").after("<input class='password' type='password' value placeholder>");
+			el.parents(".text-line").children("input[type=text]").remove();
+			el.parents(".text-line").children("input[type=password]").val(elValue);
+			if(name) el.parents(".text-line").children("input[type=password]").attr("name", name);
+			if(placeholder) el.parents(".text-line").children("input[type=password]").attr("placeholder", placeholder);
+			if(disabled) el.parents(".text-line").children("input[type=password]").attr("disabled", "disabled");
+		}
+		event.stopImmediatePropagation();
+	});
+	$(document).on("click", ".msg-box .msg-content .close", function(e){
+		$(this).parent().fadeOut("fast", function(){
+			$(this).remove();
 		});
-	}else if(e.keyCode == 13){
-		$(".confirm-box").each(function(key, el){
-			if($(el).css("display") != "none"){
-				$(el).find("[name=yes]").click();
+	});
+	$(".console-box .console-title").click(function(e){
+		var box = $(this).parents(".console-box").find(".open-box"),
+			input = $(this).parents(".console-box").find(".console-send input[type=text]");
+
+		if($(box).css("display") == "none"){
+			$(box).show("fast", function(){
+				manager.data.elem.console_clip.show();
+				manager.data.elem.console_clip.reposition();
+				$(input).focus();
+			});
+		}else{
+			$(box).hide("fast", function(){
+				manager.data.elem.console_clip.hide();
+			});
+		};
+	});
+	$(".top-menu .item").click(function(e){
+		$(this).parents(".top-menu").find(".item").removeClass("active");
+		$(this).addClass("active");
+	});
+	$(".account [name=login]").click(function(e){
+		$(".top-menu .item").removeClass("active");
+	});
+	$(document).on("click", ".edit", function(e){
+		var hasClass = $(this).hasClass("active");
+		$(".edit").removeClass("active");
+		if(hasClass) $(this).removeClass("active");
+		else $(this).addClass("active");
+		e.stopImmediatePropagation();
+	});
+	$(document).click(function(e){
+		$(".edit").removeClass("active");
+	});
+	$(document).on("click", ".item-list li", function(e){
+		$(this).parent().children("li").removeClass('active');
+		$(this).addClass('active');
+	});
+	$(document).on("click", "[wa_folder]", function(e){
+		manager.methods.loadTasks(manager.methods.folder.getParam(this, "id"));
+	});
+	$(document).on("click", "[wa_task]", function(e){
+		manager.methods.loadTaskSetting(this);
+	});
+	$(".add-box-wrap .close").click(function(e){
+		$(this).parents(".add-box-wrap").fadeOut("fast");
+	});
+	$(".confirm-box .close").click(function(e){
+		$(this).parents(".confirm-box").fadeOut("fast");
+	});
+	$(".confirm-box [name=yes]").click(function(e){
+		$(this).parents(".confirm-box").find(".close").click();
+	});
+	$(".confirm-box [name=no]").click(function(e){
+		$(this).parents(".confirm-box").find(".close").click();
+	});
+	$(document).keydown(function(e){
+		if(e.keyCode == 27){
+			$(".add-box-wrap, .confirm-box").each(function(key, el){
+				if($(el).css("display") != "none") $(el).find(".close").click();
+			});
+		}else if(e.keyCode == 13){
+			$(".confirm-box").each(function(key, el){
+				if($(el).css("display") != "none"){
+					$(el).find("[name=yes]").click();
+				};
+			});
+		};
+	});
+	$(".tab-list li").each(function(key, el){
+		var tab_content = $(this).parents(".tab-box").find(".tab-box-content [name='"+$(this).attr("name")+"']");
+		if($(this).hasClass("active")) $(tab_content).show();
+		else $(tab_content).hide();
+	}).click(function(e){
+			$(this).parents(".tab-box").find(".content-scroll").css("top", 0);
+			var name = $(this).attr("name");
+			$(this).parents(".tab-list").children("li").removeClass("active").each(function(key, el){
+				$(this).parents(".tab-box").find(".tab-box-content [name='"+$(this).attr("name")+"']").hide();
+			});
+			$(this).addClass('active');
+
+			$(this).parents(".tab-box").find(".tab-box-content [name='"+name+"']").show();
+		});
+	$(".spoiler").each(function(key, el){
+		var content = $(el).parents(".set-item").find(".spoiler-box-content");
+		if($(el).hasClass("active")) $(content).show();
+		else $(content).hide();
+	}).click(function(){
+			var content = $(this).parents(".set-item").find(".spoiler-box-content");
+			if($(this).hasClass("active")){
+				$(this).removeClass("active");
+				$(content).hide("fast");
+			}else{
+				$(this).addClass("active");
+				$(content).show("fast");
 			};
 		});
-	};
-});
-$(".tab-list li").each(function(key, el){
-	var tab_content = $(this).parents(".tab-box").find(".tab-box-content [name='"+$(this).attr("name")+"']");
-	if($(this).hasClass("active")) $(tab_content).show();
-	else $(tab_content).hide();
-}).click(function(e){
-	$(this).parents(".tab-box").find(".content-scroll").css("top", 0);
-	var name = $(this).attr("name");
-	$(this).parents(".tab-list").children("li").removeClass("active").each(function(key, el){
-		$(this).parents(".tab-box").find(".tab-box-content [name='"+$(this).attr("name")+"']").hide();
-	});
-	$(this).addClass('active');
+	$("[name=task-setting] input[name=use_mask]").change(function(e){
+		var mask = $("[name=task-setting] [name=mask]"),
+			afterClick = $("[name=task-setting] [name=afterClick]"),
+			ignoreGU = $("[name=task-setting] [name=ignoreGU]")[0],
+			container_mask_setting = $("[name=task-setting] [name=use-mask-setting]");
 
-	$(this).parents(".tab-box").find(".tab-box-content [name='"+name+"']").show();
-});
-$(".spoiler").each(function(key, el){
-	var content = $(el).parents(".set-item").find(".spoiler-box-content");
-	if($(el).hasClass("active")) $(content).show();
-	else $(content).hide();
-}).click(function(){
-		var content = $(this).parents(".set-item").find(".spoiler-box-content");
-		if($(this).hasClass("active")){
-			$(this).removeClass("active");
-			$(content).hide("fast");
+		if(this.checked){
+			$(container_mask_setting).show("fast");
 		}else{
-			$(this).addClass("active");
-			$(content).show("fast");
+			$(container_mask_setting).hide("fast");
+			$(mask).val("");
+			$(afterClick).val(api.Constants.Limit.Task.AfterClick.Value.Min);
+			ignoreGU.checked = false;
 		};
-});
-$("[name=task-setting] input[name=use_mask]").change(function(e){
-	var mask = $("[name=task-setting] [name=mask]"),
-		afterClick = $("[name=task-setting] [name=afterClick]"),
-		ignoreGU = $("[name=task-setting] [name=ignoreGU]")[0],
-		container_mask_setting = $("[name=task-setting] [name=use-mask-setting]");
+	}).click().click();
+	$("[name=task-setting] input[name=use_profile]").change(function(e){
+		if(this.checked){
+			$("[name=task-setting] [name=use_profile_setting]").show("fast");
+		}else{
+			$("[name=task-setting] [name=use_profile_setting]").hide("fast");
+			$("[name=task-setting] [name=profile]").val("");
+		};
+	}).click().click();
+	$("[name=task-setting] input[name=use_listIp]").change(function(e){
+		if(this.checked){
+			$("[name=task-setting] [name=use_listIp_setting]").show("fast");
+		}else{
+			$("[name=task-setting] [name=use_listIp_setting]").hide("fast");
+			$("[name=task-setting] [name=listId]").val(0).change();
+		};
+	}).click().click();
+	$("[name=task-setting] [name=listId]").change(function(e){
+		if($(this).val() == 0 || $(this).val() == ""){
+			$("[name=task-setting] [name=listIp-option]").hide("fast");
+			$("[name=task-setting] [name=listIp-type][value=true]")[0].checked = true;
+		}else{
+			$("[name=task-setting] [name=listIp-option]").show("fast");
+		};
+	}).change();
+	$("#dayTargeting_cb_min input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayTargeting.lineVisibility("min", true);
+		}else{
+			manager.data.graphs.dayTargeting.lineVisibility("min", false);
+		};
+	});
+	$("#dayTargeting_cb_max input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayTargeting.lineVisibility("max", true);
+		}else{
+			manager.data.graphs.dayTargeting.lineVisibility("max", false);
+		};
+	});
+	$("#dayStat_cb_max input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayStat.lineVisibility("max", true);
+		}else{
+			manager.data.graphs.dayStat.lineVisibility("max", false);
+		};
+	});
+	$("#dayStat_cb_min input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayStat.lineVisibility("min", true);
+		}else{
+			manager.data.graphs.dayStat.lineVisibility("min", false);
+		};
+	});
+	$("#dayStat_cb_give input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayStat.lineVisibility("give", true);
+		}else{
+			manager.data.graphs.dayStat.lineVisibility("give", false);
+		};
+	});
+	$("#dayStat_cb_incomplete input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayStat.lineVisibility("incomplete", true);
+		}else{
+			manager.data.graphs.dayStat.lineVisibility("incomplete", false);
+		};
+	});
+	$("#dayStat_cb_overload input[type=checkbox]").change(function(e){
+		if($(this)[0].checked){
+			manager.data.graphs.dayStat.lineVisibility("overload", true);
+		}else{
+			manager.data.graphs.dayStat.lineVisibility("overload", false);
+		};
+	});
+	$(document).on("click", "[wa_geo_country] [name=delete]", function(e){
+		var layout = $(this).parents("[wa_geo_country]"),
+			inputSearch = $("[name=task-setting] [name=searchCountry]")[0],
+			oldValue = inputSearch.value;
 
-	if(this.checked){
-		$(container_mask_setting).show("fast");
-	}else{
-		$(container_mask_setting).hide("fast");
-		$(mask).val("");
-		$(afterClick).val(api.Constants.Limit.Task.AfterClick.Value.Min);
-		ignoreGU.checked = false;
-	};
-}).click().click();
-$("[name=task-setting] input[name=use_profile]").change(function(e){
-	if(this.checked){
-		$("[name=task-setting] [name=use_profile_setting]").show("fast");
-	}else{
-		$("[name=task-setting] [name=use_profile_setting]").hide("fast");
-		$("[name=task-setting] [name=profile]").val("");
-	};
-}).click().click();
-$("[name=task-setting] input[name=use_listIp]").change(function(e){
-	if(this.checked){
-		$("[name=task-setting] [name=use_listIp_setting]").show("fast");
-	}else{
-		$("[name=task-setting] [name=use_listIp_setting]").hide("fast");
-		$("[name=task-setting] [name=listId]").val(0).change();
-	};
-}).click().click();
-$("[name=task-setting] [name=listId]").change(function(e){
-	if($(this).val() == 0 || $(this).val() == ""){
-		$("[name=task-setting] [name=listIp-option]").hide("fast");
-		$("[name=task-setting] [name=listIp-type][value=true]")[0].checked = true;
-	}else{
-		$("[name=task-setting] [name=listIp-option]").show("fast");
-	};
-}).change();
-$("#dayTargeting_cb_min input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayTargeting.lineVisibility("min", true);
-	}else{
-		manager.data.graphs.dayTargeting.lineVisibility("min", false);
-	};
-});
-$("#dayTargeting_cb_max input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayTargeting.lineVisibility("max", true);
-	}else{
-		manager.data.graphs.dayTargeting.lineVisibility("max", false);
-	};
-});
-$("#dayStat_cb_max input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayStat.lineVisibility("max", true);
-	}else{
-		manager.data.graphs.dayStat.lineVisibility("max", false);
-	};
-});
-$("#dayStat_cb_min input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayStat.lineVisibility("min", true);
-	}else{
-		manager.data.graphs.dayStat.lineVisibility("min", false);
-	};
-});
-$("#dayStat_cb_give input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayStat.lineVisibility("give", true);
-	}else{
-		manager.data.graphs.dayStat.lineVisibility("give", false);
-	};
-});
-$("#dayStat_cb_incomplete input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayStat.lineVisibility("incomplete", true);
-	}else{
-		manager.data.graphs.dayStat.lineVisibility("incomplete", false);
-	};
-});
-$("#dayStat_cb_overload input[type=checkbox]").change(function(e){
-	if($(this)[0].checked){
-		manager.data.graphs.dayStat.lineVisibility("overload", true);
-	}else{
-		manager.data.graphs.dayStat.lineVisibility("overload", false);
-	};
-});
-$(document).on("click", "[wa_geo_country] [name=delete]", function(e){
-	var layout = $(this).parents("[wa_geo_country]"),
-		inputSearch = $("[name=task-setting] [name=searchCountry]")[0],
-		oldValue = inputSearch.value;
+		manager.data.geoStorage.unSelect($(layout).find("[name=id]").val());
 
-	manager.data.geoStorage.unSelect($(layout).find("[name=id]").val());
+		$(inputSearch).val("  ");
+		setTimeout(function(){
+			$(inputSearch).val(oldValue);
+		},350);
 
-	$(inputSearch).val("  ");
-	setTimeout(function(){
-		$(inputSearch).val(oldValue);
-	},350);
+		$(layout).remove();
+	});
+	$(document).on("change", "[wa_geo_country] [name=view_target]", function(e){
+		var layout = $(this).parents("[wa_geo_country]"),
+			value = 100;
 
-	$(layout).remove();
-});
-$(document).on("change", "[wa_geo_country] [name=view_target]", function(e){
-	var layout = $(this).parents("[wa_geo_country]"),
-		value = 100;
+		if(parseFloat(this.value) > 0 && parseFloat(this.value) <= 100){
+			value = parseFloat(this.value);
+		};
 
-	if(parseFloat(this.value) > 0 && parseFloat(this.value) <= 100){
-		value = parseFloat(this.value);
-	};
+		manager.methods.geoTargeting.setParam(layout, "target", value);
+		manager.methods.geoTargeting.setTargetHtml(layout, value);
+		manager.data.geoStorage.setTarget($(layout).find("[name=id]").val(), value);
+	});
+	$(document).on("dblclick", "[name=task-setting] [name=selectBox_country] option[value]", function(e){
+		manager.data.geoStorage.setTarget(this.value, 100);
+		var country = manager.data.geoStorage.getById(this.value);
 
-	manager.methods.geoTargeting.setParam(layout, "target", value);
-	manager.methods.geoTargeting.setTargetHtml(layout, value);
-	manager.data.geoStorage.setTarget($(layout).find("[name=id]").val(), value);
-});
-$(document).on("dblclick", "[name=task-setting] [name=selectBox_country] option[value]", function(e){
-	manager.data.geoStorage.setTarget(this.value, 100);
-	var country = manager.data.geoStorage.getById(this.value);
-
-	manager.methods.geoTargeting.addHtml(manager.data.geoStorage.getById(this.value));
-	$(this).remove();
-});
+		manager.methods.geoTargeting.addHtml(manager.data.geoStorage.getById(this.value));
+		$(this).remove();
+	});
+})(jQuery);
