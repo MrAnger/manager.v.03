@@ -551,6 +551,9 @@
 							case OperationItem.UniqueTimeFactor:
 								output.uniqueTimeFactor = val;
 								break;
+							case OperationItem.IPRangeFactor:
+								output.ipRangeFactor = val;
+								break;
 						};
 					});
 

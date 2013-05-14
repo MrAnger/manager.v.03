@@ -44,7 +44,8 @@
 			taskSecondCost: 0,
 			exchangeRate: 0,
 			systemWMR: "",
-			uniqueTimeFactor: 0
+			uniqueTimeFactor: 0,
+			ipRangeFactor: 0
 		}
 	};
 
@@ -133,6 +134,9 @@
 	mStorage.getConstUniqueTimeFactor = function(){
 		return mStorage.const.system.uniqueTimeFactor;
 	};
+	mStorage.getConstIpRangeFactor = function(){
+		return mStorage.const.system.ipRangeFactor;
+	};
 	mStorage.setConstTaskMinCost = function(_const){
 		return (mStorage.const.system.taskMinCost = _const);
 	};
@@ -153,6 +157,9 @@
 	};
 	mStorage.setConstUniqueTimeFactor = function(_const){
 		return (mStorage.const.system.uniqueTimeFactor = _const);
+	};
+	mStorage.setConstIpRangeFactor = function(_const){
+		return (mStorage.const.system.ipRangeFactor = _const);
 	};
 
 	//METHODS
@@ -182,6 +189,9 @@
 							break;
 						case "uniqueTimeFactor":
 							mStorage.setConstUniqueTimeFactor(val);
+							break;
+						case "ipRangeFactor":
+							mStorage.setConstIpRangeFactor(val);
 							break;
 					};
 				});

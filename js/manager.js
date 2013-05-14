@@ -761,7 +761,7 @@
 				},
 				getTaskCost: function(beforeClick, afterClick, rangeSize, uniquePeriod){
 					var _const = manager.const.system;
-					return ((_const.TaskSecondCost * (beforeClick + afterClick)) + (_const.IPRangeFactor * rangeSize) + (_const.UniqueTimeFactor * uniquePeriod) + _const.TaskMinCost).toFixed(2);
+					return ((_const.taskSecondCost * (beforeClick + afterClick)) + (_const.ipRangeFactor * rangeSize) + (_const.uniqueTimeFactor * uniquePeriod) + _const.taskMinCost).toFixed(2);
 				}
 			},
 			graphHint:{
