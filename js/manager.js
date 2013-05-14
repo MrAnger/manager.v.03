@@ -205,6 +205,23 @@
 
 				var use_listIp = $("form[name=task-setting] [name=use_listIp]")[0];
 				if(use_listIp.checked) $(use_listIp).click();
+
+				manager.data.graphs.dayTargeting.setDefaultState();
+				manager.data.graphs.weekTargeting.setDefaultState();
+				manager.data.graphs.timeDistribution.setDefaultState();
+				manager.data.graphs.dayStat.setDefaultState();
+
+				manager.data.geoStorage.clear();
+				//delete all printed countries
+				$(manager.methods.geoTargeting.getCountriesHtml()).remove();
+				$("[name=task-setting] [name=selectBox_country]").html("");
+
+				$("#task-status").removeClass("status-off");
+
+				//check checkbox on graph day stat
+				$("#dayStat_cb_max input[type=checkbox], #dayStat_cb_min input[type=checkbox], #dayStat_cb_give input[type=checkbox], #dayStat_cb_incomplete input[type=checkbox], #dayStat_cb_overload input[type=checkbox]").each(function(key, el){
+					el.checked = true;
+				});
 			},
 			logOut: function(data){
 				data = $.extend(true, {
@@ -403,16 +420,11 @@
 					folderId: folderId,
 					taskId: taskId,
 					callback: function(data){
-						manager.data.geoStorage.clear();
-
 						$.each(data, function(key, country){
 							manager.data.geoStorage.add(country.id, country.shortName, country.target, country.recd);
 						});
 
 						manager.methods.geoTargeting.printInSelectBox(manager.data.geoStorage.getNotSelected());
-
-						//delete all printed countries
-						$(manager.methods.geoTargeting.getCountriesHtml()).remove();
 
 						//add selected countries
 						$.each(manager.data.geoStorage.getSelected(), function(key, country){
