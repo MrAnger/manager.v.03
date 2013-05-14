@@ -14,7 +14,9 @@
 				authStepNumber: "authStepNumber",
 				authStepToken: "authStepToken"
 			},
-			onReadyDom: []
+			onReadyDom: [],
+			onLogin: [],
+			mobileUrl: "http://mobile.mv3.waspace.net"
 		},
 		data: {
 			user: {
@@ -25,11 +27,15 @@
 			graphs: {},
 			geoStorage: false
 		},
+		const: {
+			system:{}
+		},
 		utils: {
 			showNotice: NoticeShow,
 			checkType: CheckType,
 			formatDate: formatDate,
-			consoleAppendToText: console_appendText
+			consoleAppendToText: console_appendText,
+			isInt: isInt
 		},
 		graph: {
 			dayTargeting: DayTargeting,
@@ -127,9 +133,17 @@
 				$(".main .auth-success").show();
 				$(".header .auth-success").show();
 				$(".main .auth-success .manager").children().hide();
+				$(".main .auth-success .tasks-content .not-content").hide();
 				switch(data.form){
 					case "task":
 						$(".main .auth-success .tasks-content").show();
+
+						$(manager.methods.folder.getFoldersHtml()).remove();
+						$(manager.methods.task.getTasksHtml()).remove();
+						manager.methods.taskSettingFormHide();
+						$("[name=not-setting] [name=add-category]").hide();
+						$("[name=not-setting] [name=add-task]").hide();
+
 						manager.methods.loadFolders();
 						manager.methods.refreshDataIpLists();
 						break;
@@ -168,7 +182,7 @@
 
 				manager.methods.taskSettingFormClear();
 
-				$("[name=holder-task-setting]").show();
+				$("[name=not-setting]").hide();
 				$("[name=holder-task-setting] .tab-box li.general").click();
 
 				data.callback();
@@ -178,7 +192,7 @@
 					callback: function(){}
 				}, data);
 
-				$("[name=holder-task-setting]").hide();
+				$("[name=not-setting]").show().children().hide();
 
 				data.callback();
 			},
@@ -244,6 +258,7 @@
 			loadFolders: function(){
 				//delete all printed folders
 				$(manager.methods.folder.getFoldersHtml()).remove();
+				$(".folders .not-content").hide();
 				//get folders and print
 				api.methods.getFolders({
 					token: manager.methods.getToken(),
@@ -262,6 +277,7 @@
 			loadTasks: function(folderId){
 				//delete all printed folders
 				$(manager.methods.task.getTasksHtml()).remove();
+				$(".tasks .not-content").hide();
 				//get tasks and print
 				api.methods.getTasks({
 					token: manager.methods.getToken(),
@@ -369,6 +385,9 @@
 						});
 
 						manager.data.graphs.dayTargeting.setData([lineMin, lineMax]);
+					},
+					ge_callback: function(){
+						manager.methods.taskSettingFormHide()
 					}
 				});
 
@@ -390,6 +409,9 @@
 						});
 
 						manager.data.graphs.weekTargeting.setData([lineMin]);
+					},
+					ge_callback: function(){
+						manager.methods.taskSettingFormHide()
 					}
 				});
 
@@ -411,6 +433,9 @@
 						});
 
 						manager.data.graphs.timeDistribution.setData([lineMin]);
+					},
+					ge_callback: function(){
+						manager.methods.taskSettingFormHide()
 					}
 				});
 
@@ -430,6 +455,9 @@
 						$.each(manager.data.geoStorage.getSelected(), function(key, country){
 							manager.methods.geoTargeting.addHtml(country);
 						});
+					},
+					ge_callback: function(){
+						manager.methods.taskSettingFormHide()
 					}
 				});
 
@@ -471,6 +499,9 @@
 						});
 
 						manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
+					},
+					ge_callback: function(){
+						manager.methods.taskSettingFormHide()
 					}
 				});
 			},
@@ -547,15 +578,26 @@
 					return manager.methods.folder.getParam(folder, "id");
 				},
 				getFoldersHtml: function(){
-					return $("[wa_folder]:not([default])");
+					var out = [];
+
+					$("[wa_folder]:not([default])").each(function(key, folder){out.push(folder)});
+
+					return out;
 				},
 				toggleNotContent: function(){
-					var not_content = $(".folders .not-content");
-					if(manager.methods.folder.getFoldersHtml().length == 0) $(not_content).show();
-					else $(not_content).hide();
+					var not_content = $(".folders .not-content"),
+						add_category = $("[name=not-setting] [name=add-category]");
+
+					if(manager.methods.folder.getFoldersHtml().length == 0){
+						$(not_content).show();
+						$(add_category).show();
+					}else{
+						$(not_content).hide();
+						$(add_category).hide();
+					};
 				},
 				getActiveHtml: function(){
-					return $(".active[wa_folder]:not([default])");
+					return $(".active[wa_folder]:not([default])")[0];
 				},
 				getParam: function(folderHtml, param){
 					return $(folderHtml).find("input[name='"+param+"']").val();
@@ -608,7 +650,20 @@
 					$(taskHtml).find("[name=view_taskId]").html(id);
 				},
 				getTasksHtml: function(){
-					return $("[wa_task]:not([default])");
+					var out = [];
+
+					$("[wa_task]:not([default])").each(function(key, task){out.push(task)});
+
+					return out;
+				},
+				getHtml: function(folderId, taskId){
+					var output = false;
+
+					$("[wa_task]:not([default])").each(function(key, task){
+						if($(task).find("[name=folderId]").val() == folderId && $(task).find("[name=taskId]").val() == taskId) output = task;
+					});
+
+					return output;
 				},
 				getParam: function(taskHtml, param){
 					return $(taskHtml).find("input[name='"+param+"']").val();
@@ -635,13 +690,30 @@
 				addMsgHide: function(){
 					$("#msg_addTask .add-box .close").click();
 				},
+				deleteMsgShow: function(el){
+					var msg = $("#confirm_deleteTask").fadeIn("fast"),
+						task = $(el).parents("[wa_task]");
+
+					$(msg).find("[name=folderId]").val(manager.methods.task.getParam(task, "folderId"));
+					$(msg).find("[name=taskId]").val(manager.methods.task.getParam(task, "taskId"));
+				},
+				deleteMsgHide: function(){
+					$("#confirm_deleteTask .close").click();
+				},
 				toggleNotContent: function(){
-					var not_content = $(".tasks .not-content");
-					if(manager.methods.task.getTasksHtml().length == 0) $(not_content).show();
-					else $(not_content).hide();
+					var not_content = $(".tasks .not-content"),
+						add_task = $("[name=not-setting] [name=add-task]");
+
+					if(manager.methods.task.getTasksHtml().length == 0){
+						$(not_content).show();
+						$(add_task).show();
+					}else{
+						$(not_content).hide();
+						$(add_task).hide();
+					};
 				},
 				getActiveHtml: function(){
-					return $(".active[wa_task]:not([default])");
+					return $(".active[wa_task]:not([default])")[0];
 				},
 				setStatusFromTaskSettingForm: function(state, switcher){
 					api.methods.setTaskStatus({
@@ -658,6 +730,10 @@
 							else $(switcher).removeClass("status-off");
 						}
 					});
+				},
+				getTaskCost: function(beforeClick, afterClick, rangeSize, uniquePeriod){
+					var _const = manager.const.system;
+					return ((_const.TaskSecondCost * (beforeClick + afterClick)) + (_const.IPRangeFactor * rangeSize) + (_const.UniqueTimeFactor * uniquePeriod) + _const.TaskMinCost).toFixed(2);
 				}
 			},
 			graphHint:{
@@ -852,6 +928,33 @@
 				};
 			}, 300);
 		interval.start();
+	});
+	//calculate task cost
+	manager.options.onReadyDom.push(function(){
+		var interval = new api.utils.interval(function(){
+			var beforeClick = $("form[name=task-setting] [name=beforeClick]").val(),
+				afterClick = $("form[name=task-setting] [name=afterClick]").val(),
+				rangeSize = $("form[name=task-setting] [name=rangeSize]").val(),
+				uniquePeriod = $("form[name=task-setting] [name=uniquePeriod]").val();
+
+			$("[name=holder-task-setting] [name=view_taskCost]").html(manager.methods.task.getTaskCost(
+				(isInt(beforeClick)) ? parseInt(beforeClick) : 0,
+				(isInt(afterClick)) ? parseInt(afterClick) : 0,
+				(isInt(rangeSize)) ? parseInt(rangeSize) : 0,
+				(isInt(uniquePeriod)) ? parseInt(uniquePeriod) : 0));
+		}, 500);
+		interval.start();
+	});
+	//get system const
+	manager.options.onLogin.push(function(){
+		api.methods.getSystemConstants({
+			token: manager.methods.getToken(),
+			callback: function(data){
+				$.each(data, function(key, val){
+					manager.const.system[key] = val;
+				});
+			}
+		});
 	});
 
 	//SET CONSOLE FORM
@@ -1065,6 +1168,8 @@
 						id: data.id,
 						task_count: 0
 					});
+
+					if(manager.methods.folder.getFoldersHtml().length == 1) $(manager.methods.folder.getFoldersHtml()).eq(0).click();
 					manager.methods.folder.toggleNotContent();
 				}
 			});
@@ -1111,8 +1216,19 @@
 			token: manager.methods.getToken(),
 			ids: [id],
 			callback: function(){
-				$(manager.methods.folder.getHtml(id)).remove();
+				var folders = manager.methods.folder.getFoldersHtml(),
+					folder = manager.methods.folder.getHtml(id),
+					isActive = (manager.methods.folder.getActiveHtml() == folder) ? true : false;
+
+				$(folder).remove();
+
+				if(folders.length > 1){
+					if(isActive) $(manager.methods.folder.getFoldersHtml()).eq(0).click();
+				}
+				else manager.methods.taskSettingFormHide();
+
 				manager.methods.folder.toggleNotContent();
+				manager.methods.task.toggleNotContent();
 			}
 		});
 	});
@@ -1175,6 +1291,10 @@
 						taskId: receive_data.taskId
 					}));
 					manager.methods.task.addMsgHide();
+
+					if(manager.methods.task.getTasksHtml().length == 1) $(manager.methods.task.getTasksHtml()).eq(0).click();
+
+					manager.methods.task.toggleNotContent();
 				}
 			}));
 		};
@@ -1182,6 +1302,38 @@
 		return false;
 	});
 	//SET ADD NEW FOLDER FORM
+
+	//SET CONFIRM DELETE TASK
+	$(document).on("click","#confirm_deleteTask [name=yes]", function(e){
+		var Self = this,
+			folderId = $(Self).parents("#confirm_deleteTask").find("[name=folderId]").val(),
+			taskId = $(Self).parents("#confirm_deleteTask").find("[name=taskId]").val();
+
+		api.methods.deleteTasks({
+			token: manager.methods.getToken(),
+			folderId: folderId,
+			ids: [taskId],
+			callback: function(){
+				var tasks = manager.methods.task.getTasksHtml(),
+					task = manager.methods.task.getHtml(folderId, taskId),
+					folder = manager.methods.folder.getHtml(folderId),
+					isActive = (manager.methods.task.getActiveHtml() == task) ? true : false;
+
+				$(task).remove();
+
+				manager.methods.folder.setParam(folder, "task_count", parseInt(manager.methods.folder.getParam(folder, "task_count")) - 1);
+				manager.methods.folder.setCountTask(folder, manager.methods.folder.getParam(folder, "task_count"));
+
+				if(tasks.length > 1){
+					if(isActive) $(manager.methods.task.getTasksHtml()).eq(0).click();
+				}
+				else manager.methods.taskSettingFormHide();
+
+				manager.methods.task.toggleNotContent();
+			}
+		});
+	});
+	//SET CONFIRM DELETE TASK
 
 	//utils
 	function NoticeShow(text, type){
@@ -1751,12 +1903,24 @@
 			SelfObj.initGraph();
 		};
 		this.setDefaultState = function(){
+			$.each(getListLineNames(), function(key, name){
+				SelfObj.lineVisibility(name, true);
+			});
 			SelfObj.setData(def_lines);
 		};
 
 		//functions
 		function searchLineInOption(lineName){
 			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+		function getListLineNames(){
+			var out = [];
+
+			$.each(options.lines, function(key, line){
+				out.push(line.name);
+			});
+
+			return out;
 		};
 
 		//INIT
@@ -1980,12 +2144,24 @@
 			SelfObj.initGraph();
 		};
 		this.setDefaultState = function(){
+			$.each(getListLineNames(), function(key, name){
+				SelfObj.lineVisibility(name, true);
+			});
 			SelfObj.setData(def_lines);
 		};
 
 		//functions
 		function searchLineInOption(lineName){
 			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+		function getListLineNames(){
+			var out = [];
+
+			$.each(options.lines, function(key, line){
+				out.push(line.name);
+			});
+
+			return out;
 		};
 
 		//INIT
@@ -2340,12 +2516,24 @@
 			SelfObj.initGraph();
 		};
 		this.setDefaultState = function(){
+			$.each(getListLineNames(), function(key, name){
+				SelfObj.lineVisibility(name, true);
+			});
 			SelfObj.setData(def_lines);
 		};
 
 		//functions
 		function searchLineInOption(lineName){
 			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+		function getListLineNames(){
+			var out = [];
+
+			$.each(options.lines, function(key, line){
+				out.push(line.name);
+			});
+
+			return out;
 		};
 
 		//INIT
@@ -2589,12 +2777,24 @@
 			SelfObj.initGraph();
 		};
 		this.setDefaultState = function(){
+			$.each(getListLineNames(), function(key, name){
+				SelfObj.lineVisibility(name, true);
+			});
 			SelfObj.setData(def_lines);
 		};
 
 		//functions
 		function searchLineInOption(lineName){
 			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+		function getListLineNames(){
+			var out = [];
+
+			$.each(options.lines, function(key, line){
+				out.push(line.name);
+			});
+
+			return out;
 		};
 
 		//INIT
@@ -2669,6 +2869,9 @@
 			return countries[id];
 		};
 	};
+	function isInt(string){
+		return (string == parseInt(string).toString());
+	}
 
 	//init
 	$(document).ready(function(e){
@@ -2731,12 +2934,20 @@
 				DataStorage.del(manager.options.params.authStepToken);
 				DataStorage.del(manager.options.params.authStepNumber);
 
+				$.each(manager.options.onLogin, function(key, f){
+					f();
+				});
+
 				manager.methods.managerFormShow();
 			};
 		}else{
 			if(DataStorage.get(manager.options.params.tokenKey)){
 				manager.methods.setToken(DataStorage.get(manager.options.params.tokenKey));
 				manager.methods.managerFormShow();
+
+				$.each(manager.options.onLogin, function(key, f){
+					f();
+				});
 			}else{
 				manager.methods.authFormShow();
 			};

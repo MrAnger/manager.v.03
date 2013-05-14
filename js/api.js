@@ -514,6 +514,46 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			getSystemConstants: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.SystemConstants);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
+
+					$.each(_data, function(key, val){
+						var keyName = inObject(OperationItem, key);
+						if(keyName != null) output[keyName] = val;
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			deleteTasks: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Delete.Tasks);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdsTasks, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {
@@ -523,7 +563,8 @@
 			cookie : Cookie,
 			interval: Interval,
 			request: Request,
-			wa_request: WaRequest
+			wa_request: WaRequest,
+			inObject: inObject
 		}
 	};
 
@@ -716,6 +757,7 @@
 			SystemWMR: 'System WMR',
 			UniqueTimeFactor: 'Unique time factor',
 			IPRangeFactor: 'IP range factor',
+			TaskMinCost: 'Task min cost',
 			Recipient: 'Recipient',
 			TransferAmount: 'Transfer amount',
 			Overload: 'Overload',
@@ -1260,4 +1302,19 @@
 			return req;
 		};
 	};
+	function inObject(obj, value){
+		var exit = false,
+			output = null;
+
+		$.each(obj, function(key, val){
+			if(!exit){
+				if(val == value){
+					output = key;
+					exit = true;
+				};
+			};
+		});
+
+		return output;
+	}
 })(jQuery);

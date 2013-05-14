@@ -110,6 +110,7 @@
 		$(this).addClass('active');
 	});
 	$(document).on("click", "[wa_folder]", function(e){
+		manager.methods.taskSettingFormHide();
 		manager.methods.loadTasks(manager.methods.folder.getParam(this, "id"));
 	});
 	$(document).on("click", "[wa_task]", function(e){

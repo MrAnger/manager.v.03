@@ -9,11 +9,38 @@
     <script type="text/javascript" src="http:///ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
+	<script type="text/javascript" src="js/lib/mdetect.js"></script>
 	<script type="text/javascript" src="js/flot/jquery.flot.js"></script>
     <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/manager.js"></script>
     <script type="text/javascript">
+	    //check mobile device
+	    var checkes = [
+		    DetectAndroid(),
+			DetectArchos(),
+			DetectBlackBerry(),
+			DetectIos(),
+			DetectIpad(),
+			DetectIphone(),
+			DetectIpod(),
+			DetectOperaAndroidPhone(),
+			DetectOperaAndroidTablet(),
+			DetectOperaMobile(),
+			DetectS60OssBrowser(),
+			DetectSmartphone(),
+			DetectSymbianOS(),
+			DetectTierIphone(),
+			DetectTierOtherPhones(),
+			DetectTierTablet(),
+			DetectWindowsMobile(),
+			DetectWindowsPhone7(),
+			DetectTablet()
+	    ];
+	    $.each(checkes, function(key, val){
+		    if(val) window.location.href = manager.options.mobileUrl;
+	    });
+
         //set zeroClipboard
         ZeroClipboard.setMoviePath('js/zeroclipboard/ZeroClipboard.swf');
     </script>
@@ -186,6 +213,22 @@
             </div>
         </div>
     </div>
+</div>
+<div id="confirm_deleteTask" class="confirm-box" style="display: none">
+	<input name="folderId" type="hidden">
+	<input name="taskId" type="hidden">
+
+	<div class="confirm-content">
+		<div class="content">
+			<div class="close"></div>
+			<div class="title" name="title" wa_lang="{form.task_delete.title}"></div>
+			<div class="text" name="text" wa_lang="{form.task_delete.text}"></div>
+			<div class="buttons">
+				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
@@ -393,11 +436,11 @@
                 </span>
                 <span class="edit">
                     <span class="edit-list">
-                        <span class="item move" wa_lang="{menu.edit-menu.move}" style="display: none;"></span>
+                        <span class="item move" wa_lang="{menu.edit-menu.move}"></span>
                         <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" style="display: none;"></span>
                         <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}" style="display: none;"></span>
                         <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}" style="display: none;"></span>
-                        <span class="item delete" wa_lang="{menu.edit-menu.delete}"></span>
+                        <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="manager.methods.task.deleteMsgShow(this);"></span>
                     </span>
                 </span>
             </li>
@@ -406,15 +449,15 @@
     </div>
 </div>
 <div class="set-task" name="holder-task-setting">
-<div class="not-settings-content">
+<div class="not-settings-content" name="not-setting">
 <div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
-	<div class="subcontent">
-		<div class="text">Для настройки задания сначала требуется добавить категорию. Это позволит Вам не запутаться при большом количестве заданий(есть возможность указать произвольное имя категории), а также группировать задания по желанию.</div>
-		<button type="button" class="btn big">+ Добавить категорию</button>
+	<div class="subcontent" name="add-category" style="display: none;">
+		<div class="text" wa_lang="{form.not_content.category.text}"></div>
+		<button type="button" class="btn big" onclick="manager.methods.folder.addMsgShow();" wa_lang="{form.not_content.category.button}"></button>
 	</div>
-	<div class="subcontent">
-	<div class="text">У вас нет заданий в категории, требуется создать задание. После его добавления можете приступить к настройкам задания: таргетинг, время маски и т.п. позволят вам гибко настраивать под нужные параметры.</div>
-	<button type="button" class="btn big">+ Добавить задание</button></div>
+	<div class="subcontent" name="add-task" style="display: none;">
+	<div class="text" wa_lang="{form.not_content.task.text}"></div>
+	<button type="button" class="btn big" onclick="manager.methods.task.addMsgShow();" wa_lang="{form.not_content.task.button}"></button></div>
 </div>
 <div class="title">
     <div class="task-info">
