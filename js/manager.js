@@ -196,6 +196,34 @@
 
 				data.callback();
 			},
+			taskMoveFormShow: function(data){
+				data = $.extend(true, {
+					callback: function(){},
+					task: false
+				}, data);
+				var html = "",
+					msg = $("#msg_moveTask")[0];
+
+				$.each(manager.methods.folder.getFoldersHtml(), function(key, folder){
+					if(manager.methods.folder.getId(folder) != manager.methods.task.getParam(data.task, "folderId")) html += '<option value="'+manager.methods.folder.getId(folder)+'">'+manager.methods.folder.getParam(folder, "name")+'</option>';
+				});
+
+				$(msg).find("[name=folderId]").val(manager.methods.task.getParam(data.task, "folderId"));
+				$(msg).find("[name=taskId]").val(manager.methods.task.getParam(data.task, "taskId"));
+
+				$(msg).fadeIn("fast").find("[name=selectBox_folder]").html(html);
+
+				data.callback();
+			},
+			taskMoveFormHide: function(data){
+				data = $.extend(true, {
+					callback: function(){}
+				}, data);
+
+				$("#msg_moveTask").hide();
+
+				data.callback();
+			},
 			taskSettingFormClear: function(){
 				var inputs = [
 					{name: "name", value: ""},
@@ -246,7 +274,7 @@
 					token: manager.methods.getToken(),
 					callback: function(){
 						manager.methods.managerFormHide({callback: function(){
-							DataStorage.del(manager.options.params.tokenKey);
+							DataStorage.remove(manager.options.params.tokenKey);
 							manager.methods.setToken("");
 							manager.methods.authFormShow();
 						}});
@@ -994,7 +1022,7 @@
 				callback: function(data){
 					manager.methods.setToken(data.token);
 					if(!inputs.remember.checked) DataStorage.set(manager.options.params.tokenKey, manager.methods.getToken());
-					else DataStorage.del(manager.options.params.tokenKey);
+					else DataStorage.remove(manager.options.params.tokenKey);
 
 					//submit auth form
 					$(form).attr("wa_auth", 1);
@@ -1335,6 +1363,127 @@
 	});
 	//SET CONFIRM DELETE TASK
 
+	//SET MOVE TASK FORM
+	$(document).on("submit","form[name=task_move]", function(e){
+		var folderId = $(this).find("[name=folderId]").val(),
+			taskId = $(this).find("[name=taskId]").val(),
+			targetId = $(this).find("[name=selectBox_folder]").val();
+
+		if(targetId != null){
+			api.methods.moveTasks({
+				token: manager.methods.getToken(),
+				folderId: folderId,
+				targetId: targetId,
+				ids: [taskId],
+				callback: function(data){
+					var folder = manager.methods.folder.getHtml(folderId),
+						targetFolder = manager.methods.folder.getHtml(targetId),
+						task = manager.methods.task.getHtml(folderId, taskId),
+						tasks = manager.methods.task.getTasksHtml(),
+						isActive = (manager.methods.task.getActiveHtml() == task) ? true : false;
+
+					$(task).remove();
+
+					manager.methods.folder.setParam(folder, "task_count", eval(manager.methods.folder.getParam(folder, "task_count")) - 1);
+					manager.methods.folder.setCountTask(folder, manager.methods.folder.getParam(folder, "task_count"));
+
+					manager.methods.folder.setParam(targetFolder, "task_count", eval(manager.methods.folder.getParam(targetFolder, "task_count")) + 1);
+					manager.methods.folder.setCountTask(targetFolder, manager.methods.folder.getParam(targetFolder, "task_count"));
+
+					if(tasks.length > 1){
+						if(isActive) $(manager.methods.task.getTasksHtml()).eq(0).click();
+					}
+					else manager.methods.taskSettingFormHide();
+
+					manager.methods.task.toggleNotContent();
+					manager.methods.taskMoveFormHide();
+				},
+				exception: {
+					FolderNotFound: function(){
+						manager.utils.showNotice(manager.lng.exception.query.moveTask.FolderNotFound, "error");
+					},
+					TargetFolderNotFound: function(){
+						manager.utils.showNotice(manager.lng.exception.query.moveTask.TargetFolderNotFound, "error");
+					},
+					NotEnoughSlots: function(){
+						manager.utils.showNotice(manager.lng.exception.query.moveTask.NotEnoughSlots, "error");
+					}
+				}
+			});
+		};
+	});
+	//SET MOVE TASK FORM
+
+	//SET TASK SETTING FORM
+	$(document).on("submit","form[name=task-setting]", function(e){
+		var folderId = $(this).find("[name=folderId]").val(),
+			taskId = $(this).find("[name=taskId]").val();
+
+		if(!CheckType($(this).find("[name=name]").val(), TYPE.TASK_NAME)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.name.error, {
+				min: api.Constants.Limit.Task.Name.Length.Min,
+				max: api.Constants.Limit.Task.Name.Length.Max
+			}), "error");
+		}else if(!CheckType($(this).find("[name=domain]").val(), TYPE.TASK_DOMAIN)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.domain.error, {
+				min: api.Constants.Limit.Task.Domain.Length.Min,
+				max: api.Constants.Limit.Task.Domain.Length.Max
+			}), "error");
+		}else if(!CheckType($(this).find("[name=extSource]").val(), TYPE.TASK_EXTSOURCE)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.extSource.error, {
+				min: api.Constants.Limit.Task.ExtSource.Length.Min,
+				max: api.Constants.Limit.Task.ExtSource.Length.Max
+			}), "error");
+		}else if(!CheckType($(this).find("[name=beforeClick]").val(), TYPE.TASK_BEFORECLICK)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.beforeClick.error, {
+				min: api.Constants.Limit.Task.BeforeClick.Value.Min,
+				max: api.Constants.Limit.Task.BeforeClick.Value.Max
+			}), "error");
+		}else if(!CheckType($(this).find("[name=afterClick]").val(), TYPE.TASK_AFTERCLICK)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.afterClick.error, {
+				min: api.Constants.Limit.Task.AfterClick.Value.Min,
+				max: api.Constants.Limit.Task.AfterClick.Value.Max
+			}), "error");
+		}else if(!CheckType($(this).find("[name=mask]").val(), TYPE.TASK_MASK, true)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.mask.error, {
+				min: api.Constants.Limit.Task.Mask.Length.Min,
+				max: api.Constants.Limit.Task.Mask.Length.Max
+			}), "error");
+		}else if(!CheckType($(this).find("[name=rangeSize]").val(), TYPE.TASK_RANGESIZE)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.rangeSize.error, {
+				min: api.Constants.Limit.Task.RangeSize.Value.Min,
+				max: api.Constants.Limit.Task.RangeSize.Value.Max,
+				"default" : api.Constants.Limit.Task.RangeSize.Value.Default
+			}), "error");
+		}else if(!CheckType($(this).find("[name=uniquePeriod]").val(), TYPE.TASK_UNIQUEPERIOD)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.uniquePeriod.error, {
+				min: api.Constants.Limit.Task.UniquePeriod.Value.Min,
+				max: api.Constants.Limit.Task.UniquePeriod.Value.Max,
+				"default" : api.Constants.Limit.Task.UniquePeriod.Value.Default
+			}), "error");
+		}else if(!CheckType($(this).find("[name=growth]").val(), TYPE.TASK_GROWTH)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.growth.error, {
+				min: api.Constants.Limit.Task.Growth.Value.Min,
+				max: api.Constants.Limit.Task.Growth.Value.Max,
+				"default" : api.Constants.Limit.Task.Growth.Value.Default
+			}), "error");
+		}else if(!CheckType($(this).find("[name=days]").val(), TYPE.TASK_DAYS)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.days.error, {
+				min: api.Constants.Limit.Task.Days.Value.Min,
+				max: api.Constants.Limit.Task.Days.Value.Max,
+				"default" : api.Constants.Limit.Task.Days.Value.Default
+			}), "error");
+		}else if(!CheckType($(this).find("[name=profile]").val(), TYPE.TASK_PROFILE, true)){
+			manager.utils.showNotice(insertLoc(manager.lng.form.task_setting.profile.error, {
+				min: api.Constants.Limit.Task.Profile.Length.Min,
+				max: api.Constants.Limit.Task.Profile.Length.Max
+			}), "error");
+		}else{
+			alert("GO GO GO блеать....");
+		};
+	});
+	//SET TASK SETTING FORM
+
 	//utils
 	function NoticeShow(text, type){
 		var types = {
@@ -1481,7 +1630,7 @@
 				((domain) ? "; domain=" + domain : "") +
 				((secure) ? "; secure" : "");
 		},
-		del : function(name){
+		remove : function(name){
 			var cookie_date = new Date ( );
 			cookie_date.setTime ( cookie_date.getTime() - 1 );
 			document.cookie = name += "=; expires=" + cookie_date.toGMTString();
@@ -1507,11 +1656,11 @@
 				Cookie.set(name, value, Cookie.getExpiresDataByDay(365));
 			};
 		},
-		del: function(name){
+		remove: function(name){
 			if(window.localStorage){
 				delete window.localStorage[name];
 			}else{
-				Cookie.del(name);
+				Cookie.remove(name);
 			};
 		}
 	};
@@ -1583,6 +1732,54 @@
 			regexp: api.Constants.Limit.Task.ExtSource.Regexp,
 			min:  api.Constants.Limit.Task.ExtSource.Length.Min,
 			max:  api.Constants.Limit.Task.ExtSource.Length.Max
+		},
+		TASK_BEFORECLICK: {
+			dataType: "int",
+			regexp: api.Constants.Limit.Task.BeforeClick.Regexp,
+			min:  api.Constants.Limit.Task.BeforeClick.Value.Min,
+			max:  api.Constants.Limit.Task.BeforeClick.Value.Max
+		},
+		TASK_AFTERCLICK: {
+			dataType: "int",
+			regexp: api.Constants.Limit.Task.AfterClick.Regexp,
+			min:  api.Constants.Limit.Task.AfterClick.Value.Min,
+			max:  api.Constants.Limit.Task.AfterClick.Value.Max
+		},
+		TASK_MASK: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Task.Mask.Regexp,
+			min:  api.Constants.Limit.Task.Mask.Length.Min,
+			max:  api.Constants.Limit.Task.Mask.Length.Max
+		},
+		TASK_RANGESIZE: {
+			dataType: "int",
+			regexp: api.Constants.Limit.Task.RangeSize.Regexp,
+			min:  api.Constants.Limit.Task.RangeSize.Value.Min,
+			max:  api.Constants.Limit.Task.RangeSize.Value.Max
+		},
+		TASK_UNIQUEPERIOD: {
+			dataType: "int",
+			regexp: api.Constants.Limit.Task.UniquePeriod.Regexp,
+			min:  api.Constants.Limit.Task.UniquePeriod.Value.Min,
+			max:  api.Constants.Limit.Task.UniquePeriod.Value.Max
+		},
+		TASK_GROWTH: {
+			dataType: "int",
+			regexp: api.Constants.Limit.Task.Growth.Regexp,
+			min:  api.Constants.Limit.Task.Growth.Value.Min,
+			max:  api.Constants.Limit.Task.Growth.Value.Max
+		},
+		TASK_DAYS: {
+			dataType: "int",
+			regexp: api.Constants.Limit.Task.Days.Regexp,
+			min:  api.Constants.Limit.Task.Days.Value.Min,
+			max:  api.Constants.Limit.Task.Days.Value.Max
+		},
+		TASK_PROFILE: {
+			dataType: "text",
+			regexp: api.Constants.Limit.Task.Profile.Regexp,
+			min:  api.Constants.Limit.Task.Profile.Length.Min,
+			max:  api.Constants.Limit.Task.Profile.Length.Max
 		}
 	};
 	function CheckType(_data, _type, _allowEmpty){
@@ -1596,6 +1793,7 @@
 				break;
 			case "int":
 				if(_allowEmpty && _data.toString().length == 0) out = true;
+				else if(!_allowEmpty && _data.toString().length == 0) out = false;
 				else if(_data.toString().search(_type.regexp) == 0 && _data >= _type.min && _data <= _type.max) out = true;
 				else out = false;
 				break;
@@ -2853,7 +3051,7 @@
 
 			if(text != ""){
 				$.each(countries, function(key, cntry){
-					if((cntry.shortName.indexOf(text) != -1 || cntry.fullName.indexOf(text) != -1) ) output.push(cntry);
+					if((cntry.shortName.toUpperCase().indexOf(text.toUpperCase()) != -1 || cntry.fullName.toUpperCase().indexOf(text.toUpperCase()) != -1) ) output.push(cntry);
 				});
 			}else{
 				return SelfObj.getNotSelected();
@@ -2871,7 +3069,13 @@
 	};
 	function isInt(string){
 		return (string == parseInt(string).toString());
-	}
+	};
+	function insertLoc(string, data){
+		$.each(data, function(key, text){
+			string = string.replace(new RegExp("%"+key+"%",'ig'), text);
+		});
+		return string;
+	};
 
 	//init
 	$(document).ready(function(e){
@@ -2907,7 +3111,7 @@
 		//exception wrong session id
 		api.options.exception.WrongSessionId = function(){
 			manager.methods.managerFormHide({callback: function(){
-				DataStorage.del(manager.options.params.tokenKey);
+				DataStorage.remove(manager.options.params.tokenKey);
 				manager.methods.setToken("");
 				manager.methods.authFormShow();
 			}});
@@ -2930,9 +3134,9 @@
 			}else if(DataStorage.get(manager.options.params.authStepNumber) == 2){
 				manager.methods.setToken(DataStorage.get(manager.options.params.authStepToken));
 
-				DataStorage.del(manager.options.params.authStep);
-				DataStorage.del(manager.options.params.authStepToken);
-				DataStorage.del(manager.options.params.authStepNumber);
+				DataStorage.remove(manager.options.params.authStep);
+				DataStorage.remove(manager.options.params.authStepToken);
+				DataStorage.remove(manager.options.params.authStepNumber);
 
 				$.each(manager.options.onLogin, function(key, f){
 					f();

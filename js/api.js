@@ -1,5 +1,5 @@
 (function($){
-	var api = window.api =  {
+	var api = window.api = window.WA_ManagerApi =  {
 		options: {
 			server: "",
 			timeout: 30000,
@@ -529,8 +529,29 @@
 					var output = {};
 
 					$.each(_data, function(key, val){
-						var keyName = inObject(OperationItem, key);
-						if(keyName != null) output[keyName] = val;
+						switch(key){
+							case OperationItem.TaskMinCost:
+								output.taskMinCost = val;
+								break;
+							case OperationItem.TransferPercent:
+								output.transferPercent = val;
+								break;
+							case OperationItem.ProxyFactor:
+								output.proxyFactor = val;
+								break;
+							case OperationItem.TaskSecondCost:
+								output.taskSecondCost = val;
+								break;
+							case OperationItem.ExchangeRate:
+								output.exchangeRate = val;
+								break;
+							case OperationItem.SystemWMR:
+								output.systemWMR = val;
+								break;
+							case OperationItem.UniqueTimeFactor:
+								output.uniqueTimeFactor = val;
+								break;
+						};
 					});
 
 					data.callback(output);
@@ -551,6 +572,69 @@
 
 				req.send(function(_data){
 					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			moveTasks: function(data){
+				data = $.extend(true, {
+					exception: {
+						FolderNotFound: function(){},
+						TargetFolderNotFound: function(){},
+						NotEnoughSlots: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Move.Tasks);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTarget, data.targetId);
+				req.addData(OperationItem.IdsTasks, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getGeneralInfo: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.GeneralInfo);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
+
+					$.each(_data, function(key, val){
+						switch(key){
+							case OperationItem.ReadonlyKey:
+								output.readonlyKey = val;
+								break;
+							case OperationItem.Login:
+								output.login = val;
+								break;
+							case OperationItem.Deleted:
+								output.deleted = val;
+								break;
+							case OperationItem.Balance:
+								output.balance = val;
+								break;
+							case OperationItem.Id:
+								output.id = val;
+								break;
+							case OperationItem.Mail:
+								output.email = val;
+								break;
+						};
+					});
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -665,6 +749,10 @@
 
 			Send: {
 				Credits: "Send credits"
+			},
+
+			Move: {
+				Tasks: "Move tasks"
 			}
 		},
 
@@ -740,6 +828,7 @@
 			IdTask: 'Task ID',
 			IdList: 'List ID',
 			IdRange: 'Range ID',
+			IdTarget: 'Target ID',
 			Day: 'Day',
 			IdOperation: 'Operation ID',
 			Recd: 'Recd',
@@ -820,7 +909,10 @@
 			WrongConfirmCode: 'Wrong confirm code',
 			InvalidCode: 'Invalid code',
 			LowBalance: 'Low balance',
-			InvalidRecipient: 'Invalid recipient'
+			InvalidRecipient: 'Invalid recipient',
+			FolderNotFound: 'Folder not found',
+			TargetFolderNotFound: 'Target folder not found',
+			NotEnoughSlots: 'Not enough slots'
 		},
 
 		AccountStatus : {
@@ -1011,7 +1103,7 @@
 				((domain) ? "; domain=" + domain : "") +
 				((secure) ? "; secure" : "");
 		},
-		del : function(name){
+		remove : function(name){
 			var cookie_date = new Date ( );
 			cookie_date.setTime ( cookie_date.getTime() - 1 );
 			document.cookie = name += "=; expires=" + cookie_date.toGMTString();

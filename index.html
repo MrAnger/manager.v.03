@@ -14,6 +14,7 @@
     <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/manager.js"></script>
+	<script type="text/javascript" src="js/manager.storage.js"></script>
     <script type="text/javascript">
 	    //check mobile device
 	    var checkes = [
@@ -230,6 +231,28 @@
 		</div>
 	</div>
 </div>
+<div id="msg_moveTask" class="add-box-wrap" style="display: none;">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="task_move" onsubmit="return false;">
+					<input name="folderId" type="hidden">
+					<input name="taskId" type="hidden">
+
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.task_move.category}"></div>
+						<div class="text-line">
+							<select name="selectBox_folder" size="8"></select>
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.move}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text" wa_lang="{loader.text}"></span>
@@ -436,7 +459,7 @@
                 </span>
                 <span class="edit">
                     <span class="edit-list">
-                        <span class="item move" wa_lang="{menu.edit-menu.move}"></span>
+                        <span class="item move" wa_lang="{menu.edit-menu.move}" onclick="manager.methods.taskMoveFormShow({task: $(this).parents('[wa_task]')[0]});"></span>
                         <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" style="display: none;"></span>
                         <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}" style="display: none;"></span>
                         <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}" style="display: none;"></span>
