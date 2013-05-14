@@ -398,6 +398,14 @@ input[type=checkbox] {
 	box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
 }
 
+.btn.big {
+	padding:0 35px;
+	margin:15px 0;
+	font-size:1.5em;
+	height:50px;
+	line-height:50px;
+}
+
 .btn.cancel, .btn.gray {
 	background: #dbdbdb;
 	background-image: linear-gradient(#dbdbdb, #ababab);
@@ -564,7 +572,7 @@ input[type=checkbox] {
 .item-list li {
 	position: relative;
 	margin: 0;
-	padding: 5px 15px;
+	padding: 5px 25px 5px 15px;
 	cursor: default;
 }
 
@@ -682,12 +690,13 @@ input[type=checkbox] {
 .edit {
 	display: none;
 	position: absolute;
-	right: 5px;
+	right: 15px;
 	top: 50%;
 	margin-top: -3px;
 	border-left: 8px solid transparent;
 	border-top: 8px solid #565656;
 	border-right: 8px solid transparent;
+	z-index: 100;
 }
 
 .item-list li:hover .edit {
@@ -704,7 +713,7 @@ input[type=checkbox] {
 	background: #4e4e4e;
 	list-style-type: none;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, .45);
-	z-index: 10;
+	z-index: 101;
 }
 
 .edit.active {
@@ -730,6 +739,7 @@ input[type=checkbox] {
 	background-image: url(../img/context.png);
 	background-repeat: no-repeat;
 	white-space: nowrap;
+	cursor: default!important;
 	opacity: 1;
 }
 
@@ -1184,19 +1194,44 @@ embed:hover .copy {
 	position:absolute;
 	top:0;
 	right:0;
-	width:16px;
+	width:12px;
 	height:100%;
-	background:rgba(0, 0, 0, .3);
+	background:rgba(0, 0, 0, .07);
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	z-index:500;
+	z-index:150;
 }
 .scroller {
 	position:absolute;
 	margin:2px;
-	width:12px;
+	width:8px;
 	height:10%;
-	background:rgba(0, 0, 0, .6);
+	background:rgba(0, 0, 0, .1);
+	cursor:pointer;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
+}
+.scrollbar:hover {
+	background:rgba(0, 0, 0, .1);
+}
+.scrollbar:hover .scroller {
+	background:rgba(0, 0, 0, .2);
+}
+.scrollbar:hover .scroller:hover {
+	background:rgba(0, 0, 0, .3);
+}
+.not-settings-content {
+	position:absolute;
+	width:60%;
+	height:100%;
+	background:#fff;
+	z-index:600;
+	text-align:center;
+}
+.not-settings-content .subcontent {
+	padding:50px;
+}
+.not-settings-content .subcontent .text {
+	font-size:1.2em;
+	text-align:left;
 }
