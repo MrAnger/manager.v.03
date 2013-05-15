@@ -641,6 +641,231 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			getAll: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.All);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {
+						systemConstants: {},
+						generalInfo: {},
+						folders: [],
+						ipLists: [],
+						geoZones: []
+					};
+
+					//get server date
+					if(_data[OperationItem.Timestamp]){
+						output.serverDate = new Date(_data[OperationItem.Timestamp] * 1000);
+						output.serverDate.setHours(-4);
+					};
+
+					//parse system constants
+					if(_data[OperationItem.SystemConstants]) paramTransfer(output.systemConstants, _data[OperationItem.SystemConstants], [
+						[OperationItem.TaskMinCost, "taskMinCost"],
+						[OperationItem.TransferPercent, "transferPercent"],
+						[OperationItem.ProxyFactor, "proxyFactor"],
+						[OperationItem.TaskSecondCost, "taskSecondCost"],
+						[OperationItem.ExchangeRate, "exchangeRate"],
+						[OperationItem.SystemWMR, "systemWMR"],
+						[OperationItem.UniqueTimeFactor, "uniqueTimeFactor"],
+						[OperationItem.IPRangeFactor, "ipRangeFactor"]
+					]);
+
+					//parse general info
+					if(_data[OperationItem.GeneralInfo]) paramTransfer(output.generalInfo, _data[OperationItem.GeneralInfo], [
+						[OperationItem.ReadonlyKey, "readonlyKey"],
+						[OperationItem.Login, "login"],
+						[OperationItem.Deleted, "deleted"],
+						[OperationItem.Balance, "balance"],
+						[OperationItem.Id, "id"],
+						[OperationItem.Mail, "mail"]
+					]);
+
+					//parse folders, tasks and tasks setting
+					if(_data[OperationItem.Folders])$.each(_data[OperationItem.Folders], function(key, folder){
+						//parse folder
+						var folderObj = paramTransfer({tasks: []}, folder, [
+							[OperationItem.IdFolder, "id"],
+							[OperationItem.Name, "name"]
+						]);
+
+						if(folder[OperationItem.Tasks]) $.each(folder[OperationItem.Tasks], function(key, task){
+							//parse task
+							var taskObj = paramTransfer({
+								dayTargeting: [],
+								weekTargeting: [],
+								geoTargeting: [],
+								timeDistribution: [],
+								dayStat: []
+							}, task, [
+								[OperationItem.IdTask, "id"],
+								[OperationItem.Name, "name"],
+								[OperationItem.IdList, "listId"],
+								[OperationItem.AfterClick, "afterClick"],
+								[OperationItem.BeforeClick, "beforeClick"],
+								[OperationItem.AllowProxy, "allowProxy"],
+								[OperationItem.IgnoreGU, "ignoreGU"],
+								[OperationItem.Growth, "growth"],
+								[OperationItem.Domain, "domain"],
+								[OperationItem.Profile, "profile"],
+								[OperationItem.Frozen, "frozen"],
+								[OperationItem.ListMode, "listMode"],
+								[OperationItem.RangeSize, "rangeSize"],
+								[OperationItem.UniquePeriod, "uniquePeriod"],
+								[OperationItem.Mask, "mask"],
+								[OperationItem.Days, "days"],
+								[OperationItem.ExtSource, "extSource"]
+							]);
+
+							//parse geo Targeting
+							if(task[OperationItem.GeoTargeting]) $.each(task[OperationItem.GeoTargeting], function(key, targ){
+								taskObj.geoTargeting.push(paramTransfer({},targ, [
+									[OperationItem.IdZone, "id"],
+									[OperationItem.Target, "target"],
+									[OperationItem.Recd, "recd"],
+									[OperationItem.Name, "shortName"]
+								]));
+							});
+							taskObj.geoTargeting.sort(function(a,b){return a.id- b.id;});
+
+							//parse day Targeting
+							if(task[OperationItem.DayTargeting]){
+								$.each(task[OperationItem.DayTargeting], function(key, targ){
+									taskObj.dayTargeting.push(paramTransfer({},targ, [
+										[OperationItem.Hour, "id"],
+										[OperationItem.Min, "min"],
+										[OperationItem.Max, "max"]
+									]));
+								});
+
+								var i = 0;
+								while(i<=23){
+									if(!taskObj.dayTargeting[i] || taskObj.dayTargeting[i].id != i) taskObj.dayTargeting.splice(i, 0, {id: i, min: 0, max: 0});
+									else i++;
+								};
+
+								taskObj.dayTargeting.sort(function(a,b){return a.id- b.id;});
+							};
+
+							//parse week Targeting
+							if(task[OperationItem.WeekTargeting]){
+								$.each(task[OperationItem.WeekTargeting], function(key, targ){
+									taskObj.weekTargeting.push(paramTransfer({},targ, [
+										[OperationItem.Day, "id"],
+										[OperationItem.Target, "val"]
+									]));
+								});
+
+								var i = 0;
+								while(i<=6){
+									if(!taskObj.weekTargeting[i] || taskObj.weekTargeting[i].id != i) taskObj.weekTargeting.splice(i, 0, {id: i, val: 100});
+									else i++;
+								};
+
+								taskObj.weekTargeting.sort(function(a,b){return a.id- b.id;});
+							};
+
+							//parse time Distribution
+							if(task[OperationItem.TimeDistribution]){
+								$.each(task[OperationItem.TimeDistribution], function(key, targ){
+									taskObj.timeDistribution.push(paramTransfer({},targ, [
+										[OperationItem.Percent, "id"],
+										[OperationItem.Priority, "val"]
+									]));
+								});
+
+								var i = 1;
+								while(i<=100){
+									if(!taskObj.timeDistribution[i-1] || taskObj.timeDistribution[i-1].id != i) taskObj.timeDistribution.splice(i-1, 0, {id: i, val: 0});
+									else i++;
+								};
+
+								taskObj.timeDistribution.sort(function(a,b){return a.id- b.id;});
+							};
+
+							//parse day stat
+							if(task[OperationItem.DayStatistic]){
+								$.each(task[OperationItem.DayStatistic], function(key, targ){
+									taskObj.dayStat.push(paramTransfer({},targ, [
+										[OperationItem.Hour, "id"],
+										[OperationItem.Recd, "give"],
+										[OperationItem.Incomplete, "incomplete"],
+										[OperationItem.Overload, "overload"]
+									]));
+								});
+
+								var i = 0;
+								while(i<=23){
+									if(!taskObj.dayStat[i] || taskObj.dayStat[i].id != i) taskObj.dayStat.splice(i, 0, {id: i, give: 0, incomplete: 0, overload: 0});
+									else i++;
+								};
+
+								taskObj.dayStat.sort(function(a,b){return a.id- b.id;});
+							};
+
+							//add taskObj to folderObj
+							folderObj.tasks.push(taskObj);
+						});
+						folderObj.tasks.sort(function(a,b){return a.id- b.id;});
+
+						//add folderObj to output
+						output.folders.push(folderObj);
+					});
+					output.folders.sort(function(a,b){return a.id- b.id;});
+
+					//parse ipLists
+					if(_data[OperationItem.IPLists]) $.each(_data[OperationItem.IPLists], function(key, ipList){
+						//parse ipList
+						var ipListObj = paramTransfer({ranges: []}, ipList, [
+							[OperationItem.IdList, "id"],
+							[OperationItem.Name, "name"]
+						]);
+
+						if(ipList[OperationItem.Ranges]) $.each(ipList[OperationItem.Ranges], function(key, range){
+							//parse task
+							var rangeObj = paramTransfer({}, range, [
+								[OperationItem.IdRange, "id"],
+								[OperationItem.Start, "start"],
+								[OperationItem.End, "end"]
+							]);
+
+							//prepare ip address
+							rangeObj.start = num2dot(rangeObj.start);
+							rangeObj.end = num2dot(rangeObj.end);
+
+							//add rangeObj to folderObj
+							ipListObj.ranges.push(rangeObj);
+						});
+						ipListObj.ranges.sort(function(a,b){return a.id- b.id;});
+
+						//add ipListObj to output
+						output.ipLists.push(ipListObj)
+					});
+					output.ipLists.sort(function(a,b){return a.id- b.id;});
+
+					//parse geo zones
+					if(_data[OperationItem.GeoZones]) $.each(_data[OperationItem.GeoZones], function(key, geoZone){
+						//parse geo zone
+						var geoZoneObj = paramTransfer({}, geoZone, [
+							[OperationItem.IdZone, "id"],
+							[OperationItem.Name, "name"]
+						]);
+
+						//add geoZoneObj to output
+						output.geoZones.push(geoZoneObj);
+					});
+					output.geoZones.sort(function(a,b){return a.id- b.id;});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {
@@ -651,7 +876,9 @@
 			interval: Interval,
 			request: Request,
 			wa_request: WaRequest,
-			inObject: inObject
+			inObject: inObject,
+			dot2num: dot2num,
+			num2dot: num2dot
 		}
 	};
 
@@ -684,7 +911,8 @@
 				IPLists: 'Get IP lists',
 				IPRanges: "Get IP ranges",
 				DayStats: "Get day stats",
-				TimeDistribution: "Get time distribution"
+				TimeDistribution: "Get time distribution",
+				All: "Get all"
 			},
 
 			Set : {
@@ -867,7 +1095,12 @@
 			ListMode: 'List mode',
 			TimeDistribution: 'Time distribution',
 			Percent: 'Percent',
-			Priority: 'Priority'
+			Priority: 'Priority',
+			GeneralInfo: 'General info',
+			Timestamp: 'Timestamp',
+			DayStatistic: 'Day statistic',
+			SystemConstants: 'System constants',
+			GeoZones: 'Geo zones'
 		},
 
 		ResponseStatus : {
@@ -1412,4 +1645,32 @@
 
 		return output;
 	}
+	function paramTransfer(objIn, objOut, params){
+		$.each(objOut, function(key, val){
+			var id = paramFind(key, params);
+			if(params[id]) objIn[params[id][1]] = val;
+		});
+
+		function paramFind(name, params_arr){
+			var out = null;
+
+			for(var i=0;i<=params_arr.length-1;i++) if(params_arr[i][0] == name) return i;
+
+			return out;
+		};
+
+		return objIn;
+	};
+	function dot2num(dot){
+		var d = dot.split('.');
+		return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
+	};
+	function num2dot(num) {
+		var d = num%256;
+		for(var i=3;i>0;i--){
+			num = Math.floor(num/256);
+			d = num%256 + '.' + d;
+		}
+		return d;
+	};
 })(jQuery);

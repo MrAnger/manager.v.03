@@ -200,6 +200,46 @@
 			ge_callback: onError
 		});
 	};
+	mStorage.auth = function(_options){
+		var options = $.extend(true, {
+			email: "",
+			pass: "",
+			remember: true,
+			callback: function(){},
+			exception: {
+				NotMatch: function(){},
+				SessionLimit: function(){}
+			},
+			autoReadData: true,
+			onError: function(){}
+		}, _options);
+
+		API_METHOD.auth({
+			mail: options.email,
+			password: options.pass,
+			remember: options.remember,
+			callback: function(data){
+				mStorage.setToken(data.token);
+				mStorage.authorized = true;
+
+				options.callback();
+
+				if(options.autoReadData) mStorage.readData();
+			},
+			exception: {
+				NotMatch: function(){
+					options.exception.NotMatch();
+				},
+				SessionLimit: function(){
+					options.exception.SessionLimit();
+				}
+			},
+			ge_callback: options.onError
+		});
+	};
+	mStorage.readData = function(){
+		mStorage.clearData();
+	};
 	mStorage.executeEvents = function(events){
 		$.each(events, function(key, handler){handler()});
 	};
