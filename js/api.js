@@ -1,5 +1,5 @@
 (function($){
-	var api = window.api = window.WA_ManagerApi =  {
+	var api = window.WA_ManagerApi =  {
 		options: {
 			server: "",
 			timeout: 30000,
@@ -686,7 +686,7 @@
 						[OperationItem.Deleted, "deleted"],
 						[OperationItem.Balance, "balance"],
 						[OperationItem.Id, "id"],
-						[OperationItem.Mail, "mail"]
+						[OperationItem.Mail, "email"]
 					]);
 
 					//parse folders, tasks and tasks setting
@@ -1584,12 +1584,14 @@
 						};
 						break;
 					case api.Constants.ResponseStatus.GeneralError:
+						var errorName = "";
 						$.each(api.Constants.GeneralError, function(key, val){
 							if(val == receive_data[api.Constants.OperationItem.Error]){
+								errorName = key;
 								api.options.exception[key](data);
 							};
 						});
-						if(ge_callback) ge_callback(data);
+						if(ge_callback) ge_callback(data, errorName);
 						break;
 				};
 			});

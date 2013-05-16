@@ -13,8 +13,8 @@
 	<script type="text/javascript" src="js/flot/jquery.flot.js"></script>
     <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
-    <script type="text/javascript" src="js/manager.js"></script>
-	<script type="text/javascript" src="js/manager.storage.js"></script>
+	<script type="text/javascript" src="js/manager.js"></script>
+	<script type="text/javascript" src="js/manager_ui.js"></script>
     <script type="text/javascript">
 	    //check mobile device
 	    var checkes = [
@@ -39,7 +39,7 @@
 			DetectTablet()
 	    ];
 	    $.each(checkes, function(key, val){
-		    if(val) window.location.href = manager.options.mobileUrl;
+		    if(val) window.location.href = "http://mobile.mv3.waspace.net";
 	    });
 
         //set zeroClipboard
@@ -59,9 +59,9 @@
                 <span id="console_button_copy" class="copy"></span>
                 <span class="save"></span>
             </div>
-            <form onsubmit="return false;">
+            <form name="console_query" onsubmit="return false;">
                 <div class="text-line">
-                    <input type="text" value="" autofocus="autofocus">
+                    <input name="query" type="text" value>
                 </div>
                 <div class="text-line">
                     <input type="submit" class="btn" value wa_lang="{form.console.send.text|attr:value}">
@@ -194,9 +194,9 @@
 </div>
 <div class="msg-box">
     <div class="msg-content" default>
-        <div class="close"></div>
+        <div class="close" name="close"></div>
         <div class="content">
-            <div class="text"></div>
+            <div class="text" name="text"></div>
         </div>
     </div>
 </div>
@@ -262,20 +262,20 @@
     <div class="auth-success" style="display: none">
         <div class="top-menu">
             <span class="item active" wa_lang="{menu.top-menu.task}"
-                  onclick="manager.methods.managerFormShow({form: 'task'})"></span> <span class="item"
+                  onclick="WA_ManagerUi.forms.manager.show({form: 'task'});"></span> <span class="item"
                                                                                           wa_lang="{menu.top-menu.iplist}"
-                                                                                          onclick="manager.methods.managerFormShow({form: 'iplist'})"></span>
+                                                                                          onclick="WA_ManagerUi.forms.manager.show({form: 'iplist'});"></span>
         </div>
         <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login"
-                                                                                  onclick="manager.methods.managerFormShow({form: 'account'})">User Login</span>
+                                                                                  onclick="WA_ManagerUi.forms.manager.show({form: 'account'});">User Login</span>
             |
-            <span class="link exit" onclick="manager.methods.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
+            <span class="link exit" onclick="WA_ManagerUi.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
     </div>
     <div class="lang">
         <ul class="lng-check">
             <li>
                 <span class="lng-item rus" wa_lang="{language.ru}" lng="ru-ru"
-                      onclick="manager.utils.language.set(manager.options.lng.ru);"></span>
+                      onclick="WA_ManagerUi.utils.language.set('ru-ru');"></span>
             </li>
             <li>
                 <span class="lng-item eng" wa_lang="{language.en}" lng="en-en" disable></span>
@@ -316,12 +316,12 @@
                 <div class="other-text"
                      wa_lang="{form.auth.notHaveAccount|place:not_have_account}{form.auth.createAccount|place:go_registration}{form.auth.registration|place:register}">
                     <b>{NOT_HAVE_ACCOUNT}</b> {GO_REGISTRATION}
-                    <span class="link" onclick="manager.methods.authFormHide(); manager.methods.regFormShow();">{REGISTER}</span>.
+                    <span class="link" onclick="WA_ManagerUi.forms.auth.hide(); WA_ManagerUi.forms.reg.show();">{REGISTER}</span>.
                 </div>
                 <div class="other-text"
                      wa_lang="{form.auth.forgotPassword|place:forgot_password}{form.auth.usePasswordRecovery|place:password_recovery}{form.auth.rememberPassword|place:remember_password}">
                     <b>{FORGOT_PASSWORD}</b> {PASSWORD_RECOVERY}
-                    <span class="link" onclick="manager.methods.authFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
+                    <span class="link" onclick="WA_ManagerUi.forms.auth.hide(); WA_ManagerUi.forms.forgot.show();">{REMEMBER_PASSWORD}</span>.
                 </div>
             </div>
         </form>
@@ -362,12 +362,12 @@
                      wa_lang="{form.reg.other.haveAccount|place:have_account}{form.reg.other.goToManagerPanel|place:go_to_manager_panel}{form.reg.other.auth|place:auth}">
                     <b>{HAVE_ACCOUNT}</b> {GO_TO_MANAGER_PANEL}
                     <span class="link"
-                          onclick="manager.methods.regFormHide(); manager.methods.authFormShow();">{AUTH}</span>
+                          onclick="WA_ManagerUi.forms.reg.hide(); WA_ManagerUi.forms.auth.show();">{AUTH}</span>
                 </div>
                 <div class="other-text"
                      wa_lang="{form.reg.other.forgotPassword|place:forgot_password}{form.reg.other.restoreAccess|place:restore_access}{form.reg.other.rememberPassword|place:remember_password}">
                     <b>{FORGOT_PASSWORD}</b> {RESTORE_ACCESS}
-                    <span class="link" onclick="manager.methods.regFormHide(); manager.methods.forgotFormShow();">{REMEMBER_PASSWORD}</span>.
+                    <span class="link" onclick="WA_ManagerUi.forms.reg.hide(); WA_ManagerUi.forms.forgot.show();">{REMEMBER_PASSWORD}</span>.
                 </div>
             </div>
         </form>
@@ -486,7 +486,7 @@
     <div class="task-info">
         <div class="condition">
             <span class="name" wa_lang="{form.task_setting.status}"></span>
-                <span class="switch-box" id="task-status" onchange="manager.methods.task.setStatusFromTaskSettingForm">
+                <span class="switch-box" id="task-status" onchange="WA_ManagerUi.forms.task.setStatusFromSettingForm">
                     <span class="switcher"></span>
                 </span>
         </div>

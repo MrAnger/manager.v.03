@@ -1,4 +1,4 @@
-manager.lng = {
+WA_ManagerUi.lng = {
 	"menu":{
 		"top-menu":{
 			"task": "Задания",
