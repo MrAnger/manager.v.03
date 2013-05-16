@@ -388,6 +388,9 @@
 
 		mStorage.executeEvents(mStorage.events.onClearData);
 	};
+	mStorage.addTaskByFolderId = function(folderId, task){
+		return (mStorage.getFolderById(folderId).addTask(task));
+	};
 	mStorage.getFolderById = function(id){
 		return mStorage.folders.getFolderById(id);
 	};
@@ -473,6 +476,105 @@
 				$.each(options.ids, function(key, id){mStorage.removeFolderById(id);});
 
 				options.callback(arrFolders);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.addTask = function(_options){
+		var options = $.extend(true, {
+			taskData: {},
+			exception: {
+				LimitExceeded: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.addTask($.extend(true,{
+			token: mStorage.getToken(),
+			callback: function(data){
+				var taskObj = new Task(),
+					taskData = $.extend(true, {}, options.taskData, data);
+
+				taskObj.setAfterClick(taskData.afterClick);
+				taskObj.setAllowProxy(taskData.allowProxy);
+				taskObj.setBeforeClick(taskData.beforeClick);
+				taskObj.setDays(taskData.days);
+				taskObj.setDomain(taskData.domain);
+				taskObj.setExtSource(taskData.extSource);
+				taskObj.setFrozen(taskData.frozen);
+				taskObj.setGrowth(taskData.growth);
+				taskObj.setId(taskData.taskId);
+				taskObj.setIgnoreGU(taskData.ignoreGU);
+				taskObj.setListId(taskData.listId);
+				taskObj.setListMode(taskData.listMode);
+				taskObj.setMask(taskData.mask);
+				taskObj.setName(taskData.name);
+				taskObj.setProfile(taskData.profile);
+				taskObj.setRangeSize(taskData.rangeSize);
+				taskObj.setUniquePeriod(taskData.uniquePeriod);;
+
+				mStorage.addTaskByFolderId(options.taskData.folderId, taskObj);
+
+				options.callback(taskObj);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		}, options.taskData));
+	};
+	mStorage.moveTask = function(_options){
+		var options = $.extend(true, {
+			folderId: 0,
+			targetId: 0,
+			ids: [],
+			exception: {
+				FolderNotFound: function(){},
+				TargetFolderNotFound: function(){},
+				NotEnoughSlots: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrTasks = [];
+		$.each(options.ids, function(key, id){ arrTasks.push(mStorage.getTaskById(options.folderId, id));});
+
+		API_METHOD.moveTasks({
+			token: mStorage.getToken(),
+			folderId: options.folderId,
+			targetId: options.targetId,
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeTaskById(options.folderId, id);});
+				//to do...add to other folder, wait update api server
+
+				options.callback(arrTasks);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.removeTask = function(_options){
+		var options = $.extend(true, {
+			folderId: 0,
+			ids: [],
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrTasks = [];
+		$.each(options.ids, function(key, id){ arrTasks.push(mStorage.getTaskById(options.folderId, id));});
+
+		API_METHOD.deleteTasks({
+			token: mStorage.getToken(),
+			folderId: options.folderId,
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeTaskById(options.folderId, id);});
+
+				options.callback(arrTasks);
 			},
 			exception: options.exception,
 			ge_callback: options.onError
