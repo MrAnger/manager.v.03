@@ -206,6 +206,26 @@
 			ge_callback: options.onError
 		});
 	};
+	mStorage.logOut = function(_options){
+		var options = $.extend(true, {
+			callback: function(){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.logOut({
+			token: mStorage.getToken(),
+			callback: function(data){
+				mStorage.clearData();
+				mStorage.clearToken();
+				DataStorage.remove(CONST_STORAGE.token);
+
+				mStorage.executeEvents(mStorage.events.onLogOut);
+
+				options.callback();
+			},
+			ge_callback: options.onError
+		});
+	};
 	mStorage.readData = function(_options){
 		var options = $.extend(true, {
 			callback: function(){},
@@ -368,23 +388,93 @@
 
 		mStorage.executeEvents(mStorage.events.onClearData);
 	};
-	mStorage.logOut = function(_options){
+	mStorage.getFolderById = function(id){
+		return mStorage.folders.getFolderById(id);
+	};
+	mStorage.getTaskById = function(folderId, taskId){
+		return mStorage.folders.getFolderById(folderId).getTaskById(taskId);
+	};
+	mStorage.getFolderList = function(id){
+		return mStorage.folders.getFolderList();
+	};
+	mStorage.getTaskList = function(folderId){
+		return mStorage.folders.getFolderById(folderId).getTaskList();
+	};
+	mStorage.removeFolderById = function(id){
+		return (mStorage.folders.removeFolderById(id));
+	};
+	mStorage.removeTaskById = function(folderId, taskId){
+		return (mStorage.getFolderById(folderId).removeTaskById(taskId));
+	};
+
+	//METHODS FOR API SERVER
+	mStorage.addFolder = function(_options){
 		var options = $.extend(true, {
-			callback: function(){},
+			name: "",
+			exception: {
+				LimitExceeded: function(){}
+			},
+			callback: function(data){},
 			onError: function(data, gErrorName){}
 		}, _options);
 
-		API_METHOD.logOut({
+		API_METHOD.addFolder({
 			token: mStorage.getToken(),
+			name: options.name,
 			callback: function(data){
-				mStorage.clearData();
-				mStorage.clearToken();
-				DataStorage.remove(CONST_STORAGE.token);
+				var folderObj = new Folder();
+				folderObj.setId(data.id);
+				folderObj.setName(options.name);
+				mStorage.folders.addFolder(folderObj);
 
-				mStorage.executeEvents(mStorage.events.onLogOut);
-
-				options.callback();
+				options.callback(folderObj);
 			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.renameFolder = function(_options){
+		var options = $.extend(true, {
+			name: "",
+			id: 0,
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.renameFolder({
+			token: mStorage.getToken(),
+			id: options.id,
+			name: options.name,
+			callback: function(data){
+				mStorage.getFolderById(options.id).setName(options.name);
+
+				options.callback(mStorage.getFolderById(options.id));
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.removeFolder = function(_options){
+		var options = $.extend(true, {
+			ids: [],
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrFolders = [];
+		$.each(options.ids, function(key, id){ arrFolders.push(mStorage.getFolderById(id));});
+
+		API_METHOD.deleteFolders({
+			token: mStorage.getToken(),
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeFolderById(id);});
+
+				options.callback(arrFolders);
+			},
+			exception: options.exception,
 			ge_callback: options.onError
 		});
 	};

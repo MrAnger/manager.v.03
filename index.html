@@ -410,7 +410,7 @@
 <div class="tasks-content" style="display: none">
 <div class="folders">
     <div class="title"><span wa_lang="{form.folder.title}"></span><span class="add"
-                                                                        onclick="manager.methods.folder.addMsgShow();"></span>
+                                                                        onclick="WA_ManagerUi.forms.folder_add.show();"></span>
     </div>
     <div class="content-height">
 	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
@@ -429,10 +429,10 @@
             <span class="edit">
                 <span class="edit-list">
                     <span class="item rename" wa_lang="{menu.edit-menu.rename}"
-                          onclick="manager.methods.folder.renameMsgShow(this);"></span>
-                    <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" style="display: none;"></span>
+                          onclick="WA_ManagerUi.forms.folder_rename.show(this);"></span>
+                    <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
                     <span class="item delete" wa_lang="{menu.edit-menu.delete}"
-                          onclick="manager.methods.folder.deleteMsgShow(this);"></span>
+                          onclick="WA_ManagerUi.forms.folder_remove.show(this);"></span>
                 </span>
             </span>
             </li>
@@ -460,9 +460,9 @@
                 <span class="edit">
                     <span class="edit-list">
                         <span class="item move" wa_lang="{menu.edit-menu.move}" onclick="manager.methods.taskMoveFormShow({task: $(this).parents('[wa_task]')[0]});"></span>
-                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" style="display: none;"></span>
-                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}" style="display: none;"></span>
-                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}" style="display: none;"></span>
+                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
+                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}"></span>
+                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}"></span>
                         <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="manager.methods.task.deleteMsgShow(this);"></span>
                     </span>
                 </span>
@@ -476,7 +476,7 @@
 <div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 	<div class="subcontent" name="add-category" style="display: none;">
 		<div class="text" wa_lang="{form.not_content.category.text}"></div>
-		<button type="button" class="btn big" onclick="manager.methods.folder.addMsgShow();" wa_lang="{form.not_content.category.button}"></button>
+		<button type="button" class="btn big" onclick="WA_ManagerUi.forms.folder_add.show();" wa_lang="{form.not_content.category.button}"></button>
 	</div>
 	<div class="subcontent" name="add-task" style="display: none;">
 	<div class="text" wa_lang="{form.not_content.task.text}"></div>

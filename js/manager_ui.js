@@ -186,6 +186,15 @@
 				getActiveHtml: function(){
 					return $(".active[wa_folder]:not([default])")[0];
 				},
+				getHtmlById: function(id){
+					var out = null;
+
+					$.each(this.getFoldersHtml(), function(key, html){
+						if(getParam(html, "id") == id) out = html;
+					});
+
+					return out;
+				},
 				toggleNotContent: function(){
 					var not_content = $(".folders .not-content"),
 						add_category = $(".main .auth-success .manager [name=not-setting] [name=add-category]"),
@@ -199,7 +208,6 @@
 						$(add_category).show();
 					}else{
 						$(not_content).hide();
-						$(not_content_tasks).hide();
 						$(add_category).hide();
 					};
 				},
@@ -276,7 +284,7 @@
 					//delete all tasks
 					$(this.getTasksHtml()).remove();
 					//add to html
-					$.each(WA_ManagerStorage.folders.getFolderById(folderId).getTaskList(), function(key, task){
+					$.each(WA_ManagerStorage.getFolderById(folderId).getTaskList(), function(key, task){
 						manager.forms.task.addHtml(folderId, task.getId());
 					});
 					$(this.getTasksHtml()).eq(0).click();
@@ -566,6 +574,44 @@
 				},
 				hide: function(){
 					$("#gr-hint").hide();
+				}
+			},
+			folder_add: {
+				show: function(){
+					var msg = $("#msg_addFolder").fadeIn("fast"),
+						input = $(msg).find("[name=folder_name]");
+
+					$(input).val("");
+					$(input).focus();
+				},
+				hide: function(){
+					$("#msg_addFolder .add-box .close").click();
+				}
+			},
+			folder_rename: {
+				show: function(el){
+					var msg = $("#msg_renameFolder").fadeIn("fast"),
+						input_name = $(msg).find("[name=folder_name]"),
+						input_id = $(msg).find("[name=folder_id]"),
+						folderId = getParam($(el).parents("[wa_folder]"), "id");
+
+					$(input_name).val(WA_ManagerStorage.getFolderById(folderId).getName());
+					$(input_name).focus();
+					$(input_id).val(folderId);
+				},
+				hide: function(){
+					$("#msg_renameFolder .add-box .close").click();
+				}
+			},
+			folder_remove: {
+				show: function(el){
+					var msg = $("#confirm_deleteFolder").fadeIn("fast"),
+						folderObj = WA_ManagerStorage.getFolderById(getParam($(el).parents("[wa_folder]"), "id"));
+
+					$(msg).find("[name=id]").val(folderObj.getId());
+				},
+				hide: function(){
+					$("#confirm_deleteFolder .close").click();
 				}
 			}
 		},
@@ -872,6 +918,91 @@
 		return false;
 	});
 	//SET FORGOT FORM
+
+	//SET ADD NEW FOLDER FORM
+	$(document).on("submit","form[name=folder_add]", function(e){
+		var form = this, inputs = {
+			folder_name: this["folder_name"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.folder_name.value, TYPE.FOLDER_NAME)){
+			NoticeShow(manager.lng.form.folder_add.folder_name.error, "error");
+			$(inputs.folder_name).focus();
+		}else{
+			WA_ManagerStorage.addFolder({
+				name: inputs.folder_name.value,
+				exception: {
+					LimitExceeded: function(){
+						NoticeShow(manager.lng.exception.query.addFolder.LimitExceeded, "error");
+					}
+				},
+				callback: function(folderObj){
+					manager.forms.folder_add.hide()
+
+					manager.forms.folder.addHtml(folderObj.getId());
+
+					if(manager.forms.folder.getFoldersHtml().length == 1) $(manager.forms.folder.getFoldersHtml()).eq(0).click();
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET ADD NEW FOLDER FORM
+
+	//SET RENAME FOLDER FORM
+	$(document).on("submit","form[name=folder_rename]", function(e){
+		var form = this, inputs = {
+			folder_name: this["folder_name"],
+			id: this["folder_id"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.folder_name.value, TYPE.FOLDER_NAME)){
+			NoticeShow(manager.lng.form.folder_rename.folder_name.error, "error");
+			$(inputs.folder_name).focus();
+		}else{
+			WA_ManagerStorage.renameFolder({
+				id: inputs.id.value,
+				name: inputs.folder_name.value,
+				callback: function(folderObj){
+					manager.forms.folder_rename.hide();
+
+					manager.forms.folder.setName(manager.forms.folder.getHtmlById(inputs.id.value), folderObj.getName());
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET RENAME FOLDER FORM
+
+	//SET CONFIRM DELETE FOLDER
+	$(document).on("click","#confirm_deleteFolder [name=yes]", function(e){
+		var Self = this,
+			folderId = $(Self).parents("#confirm_deleteFolder").find("[name=id]").val();
+
+		WA_ManagerStorage.removeFolder({
+			ids: [folderId],
+			callback: function(arrFolders){
+				manager.forms.folder_remove.hide();
+
+				var folderObj = arrFolders[0],
+					folders = manager.forms.folder.getFoldersHtml(),
+					folder = manager.forms.folder.getHtmlById(folderObj.getId()),
+					isActive = (manager.forms.folder.getActiveHtml() == folder);
+
+				$(folder).remove();
+
+				if(folders.length > 1 && isActive) $(manager.forms.folder.getFoldersHtml()).eq(0).click();
+
+				manager.forms.folder.toggleNotContent();
+				manager.forms.task.toggleNotContent();
+			}
+		});
+	});
+	//SET CONFIRM DELETE FOLDER
 
 	//SET TASK SETTING FORM
 	$(document).on("submit","form[name=task-setting]", function(e){
