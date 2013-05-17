@@ -93,7 +93,7 @@ var deviceIpod = "ipod";
 var deviceIpad = "ipad";
 var deviceMacPpc = "macintosh"; //Used for disambiguation
 
-var browserMSIE = "MSIE";
+var browserMSIE = "msie";
 
 var deviceAndroid = "android";
 var deviceGoogleTV = "googletv";
