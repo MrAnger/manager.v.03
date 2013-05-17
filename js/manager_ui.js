@@ -686,6 +686,24 @@
 
 					data.callback();
 				}
+			},
+			account: {
+				load: function(){
+					$("[name=form_account] [name=balance] [name=value]").html(DataFormat.int(WA_ManagerStorage.getUserBalance()));
+					$("[name=form_account] [name=login] [name=value]").html(WA_ManagerStorage.getUserLogin());
+					$("[name=form_account] [name=email] [name=value]").html(WA_ManagerStorage.getUserEmail());
+					$("[name=form_account] [name=readonlyKey] [name=value]").html(WA_ManagerStorage.getUserReadonlyKey());
+					$("[name=form_account] [name=account_status] [name=value]").html((WA_ManagerStorage.isUserEnabled()) ? manager.lng.form.account.account_status.enabled : manager.lng.form.account.account_status.disabled);
+					$("#account_status_switcher").removeClass("status-off").addClass((WA_ManagerStorage.isUserEnabled()) ? "" : "status-off");
+				}
+			},
+			pay: {
+				show: function(){
+					$("#msg_pay").fadeIn("fast");
+				},
+				hide: function(){
+					$("#msg_pay .close").click();
+				}
 			}
 		},
 		logOut: function(){
@@ -991,6 +1009,15 @@
 		return false;
 	});
 	//SET FORGOT FORM
+
+	//SET CONFIRM DELETE FOLDER
+	$(document).on("click","#msg_pay [name=yes]", function(e){
+		var w = window.open('wmk:payto?Purse='+WA_ManagerStorage.getConstSystemWMR()+'&Amount=5000&Desc='+WA_ManagerStorage.getUserEmail()+'&BringToFront=Y');
+		$(w).ready(function(e){
+			if(!w.closed) w.close();
+		});
+	});
+	//SET CONFIRM DELETE FOLDER
 
 	//SET ADD NEW FOLDER FORM
 	$(document).on("submit","form[name=folder_add]", function(e){
@@ -2937,6 +2964,8 @@
 		});
 		//load folders
 		manager.forms.folder.load();
+		//load account info
+		manager.forms.account.load();
 	});
 	WA_ManagerStorage.events.onLogOut.push(function(){
 		manager.forms.manager.hide();

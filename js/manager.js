@@ -99,6 +99,9 @@
 	mStorage.isUserDeleted = function(){
 		return mStorage.userData.deleted;
 	};
+	mStorage.isUserEnabled = function(){
+		return !mStorage.userData.deleted;
+	};
 	mStorage.setDateServer = function(date){
 		return (mStorage.systemData.date.server = date);
 	};
@@ -119,6 +122,9 @@
 	};
 	mStorage.setUserDeleted = function(deleted){
 		return (mStorage.userData.deleted = deleted);
+	};
+	mStorage.setUserEnabled = function(state){
+		return (mStorage.userData.deleted = !state);
 	};
 
 	//METHODS SYSTEM CONST

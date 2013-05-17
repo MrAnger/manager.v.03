@@ -253,6 +253,18 @@
 		</div>
 	</div>
 </div>
+<div id="msg_pay" class="confirm-box" style="display: none">
+	<div class="confirm-content">
+		<div class="content">
+			<div class="close"></div>
+			<div class="title" name="title" wa_lang="{form.pay.title}"></div>
+			<div class="text" name="text" wa_lang="{form.pay.text}"></div>
+			<div class="buttons">
+				<button name="yes" type="submit" class="btn" wa_lang="{button.okay}"></button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text" wa_lang="{loader.text}"></span>
@@ -824,43 +836,43 @@
 </div>
 <div class="account-content" style="display: none">
     <div class="content-scroll" style="top:0;">
-        <table class="account-set">
-            <tr>
-                <td class="name">Баланс</td>
-                <td class="option"><span class="add"></span><span class="cost-move"></span></td>
-                <td class="value">1 000 000</td>
+        <table class="account-set" name="form_account">
+            <tr name="balance">
+                <td class="name" name="text">Баланс</td>
+                <td class="option"><span class="add" onclick="WA_ManagerUi.forms.pay.show();"></span><span class="cost-move"></span></td>
+                <td class="value" name="value"></td>
             </tr>
             <tr>
                 <td colspan="3"></td>
             </tr>
-            <tr>
-                <td class="name">Логин</td>
+            <tr name="login">
+                <td class="name" name="text" wa_lang="{form.account.login.text}"></td>
                 <td class="option"></td>
-                <td class="value">Creator</td>
+                <td class="value" name="value"></td>
             </tr>
-            <tr>
-                <td class="name">Email</td>
+            <tr name="email">
+                <td class="name" name="text" wa_lang="{form.account.email.text}"></td>
                 <td class="option"></td>
-                <td class="value">ololo@olo.ru</td>
+                <td class="value" name="value"></td>
             </tr>
-            <tr>
-                <td class="name">Пароль</td>
+            <tr name="password">
+                <td class="name" wa_lang="{form.account.password.text}"></td>
                 <td class="option"><span class="editing"></span></td>
-                <td class="value closed">Информация скрыта</td>
+                <td class="value closed" wa_lang="{form.account.password.value_hidden}"></td>
             </tr>
-            <tr>
-                <td class="name">Гостевой ключ</td>
+            <tr name="readonlyKey">
+                <td class="name" name="text" wa_lang="{form.account.readonlyKey.text}"></td>
                 <td class="option"><span class="generate"></span><span class="copy"></span></td>
-                <td class="value">WUd|PxDcHaV9M7ex</td>
+                <td class="value" name="value"></td>
             </tr>
-            <tr>
-                <td class="name">Статус аккаунта</td>
+            <tr name="account_status">
+                <td class="name" name="text" wa_lang="{form.account.account_status.text}"></td>
                 <td class="option">
-                    <span class="switch-box status-off">
+                    <span class="switch-box" id="account_status_switcher">
                         <span class="switcher"></span><input type="hidden" value="true">
                     </span>
                 </td>
-                <td class="value">Выключен</td>
+                <td class="value" name="value"></td>
             </tr>
         </table>
     </div>
