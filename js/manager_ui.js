@@ -3051,7 +3051,8 @@
 			switch(key){
 				case "WrongSessionId":
 					WA_ManagerStorage.apiUserException[key] = function(){
-						NoticeShow(manager.lng.exception.general[key], "error");
+						manager.forms.manager.hide();
+						manager.forms.auth.show();
 					};
 					break;
 				default:

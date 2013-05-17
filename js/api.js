@@ -659,11 +659,10 @@
 						ipLists: [],
 						geoZones: []
 					};
-
 					//get server date
 					if(_data[OperationItem.Timestamp]){
 						output.serverDate = new Date(_data[OperationItem.Timestamp] * 1000);
-						output.serverDate.setHours(-4);
+						output.serverDate.setHours(output.serverDate.getTimezoneOffset()/60)
 					};
 
 					//parse system constants
@@ -882,6 +881,9 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			setStatusAccount: function(data){
+
 			}
 		},
 		utils: {

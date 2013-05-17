@@ -341,6 +341,7 @@
 						taskObj.setBeforeClick(task.beforeClick);
 						taskObj.setDayTargeting(task.dayTargeting);
 						taskObj.setDomain(task.domain);
+						taskObj.setDays(task.days);
 						taskObj.setExtSource(task.extSource);
 						taskObj.setFrozen(task.frozen);
 						taskObj.setGeoTargeting(task.geoTargeting);
@@ -359,10 +360,12 @@
 						//prepare day stat
 						$.each(task.dayStat, function(id, data){
 							var minDef = task.dayTargeting[id].min,
-								maxDef = task.dayTargeting[id].max;
+								maxDef = task.dayTargeting[id].max,
+								growth = taskObj.getGrowth()/100,
+								weekTarg = taskObj.getWeekTargeting()[getNumberDayForApi(mStorage.getDateServer())].val/100;
 
-							data.min = minDef;
-							data.max = maxDef;
+							data.min = (minDef+growth*taskObj.getDays())*weekTarg;
+							data.max = (maxDef+growth*taskObj.getDays())*weekTarg;
 						});
 						taskObj.setDayStat(task.dayStat);
 
@@ -804,6 +807,31 @@
 		$.each(obj, function(){count++;});
 
 		return count;
+	};
+	function getNumberDayForApi(date){
+		switch(date.getDay()){
+			case 0:
+				return 6;
+				break;
+			case 1:
+				return 0;
+				break;
+			case 2:
+				return 1;
+				break;
+			case 3:
+				return 2;
+				break;
+			case 4:
+				return 3;
+				break;
+			case 5:
+				return 4;
+				break;
+			case 6:
+				return 5;
+				break;
+		};
 	};
 
 	//SHORT LINKS
