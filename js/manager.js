@@ -419,6 +419,9 @@
 	mStorage.getTaskList = function(folderId){
 		return mStorage.folders.getFolderById(folderId).getTaskList();
 	};
+	mStorage.getIPListList = function(){
+		return mStorage.ipLists.getIPListList();
+	};
 	mStorage.removeFolderById = function(id){
 		return (mStorage.folders.removeFolderById(id));
 	};

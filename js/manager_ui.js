@@ -506,6 +506,10 @@
 					var use_profile = $("form[name=task-setting] [name=use_profile]")[0];
 					if(use_profile.checked) $(use_profile).click();
 
+					var html = "<option value='0'></option>";
+					$.each(WA_ManagerStorage.getIPListList(), function(key, ipList){html += '<option value="'+ipList.getId()+'">'+ipList.getName()+'</option>'});
+					$("form[name=task-setting] [name=listId]").html(html);
+
 					var use_listIp = $("form[name=task-setting] [name=use_listIp]")[0];
 					if(use_listIp.checked) $(use_listIp).click();
 
