@@ -1228,3 +1228,21 @@ embed:hover .copy {
 	text-align:left;
 	box-sizing: border-box;
 }
+
+.cost-move {
+	display: inline-block;
+	width:30px;
+	height:30px;
+	line-height:30px;
+	background: url(../img/cost-move.png) no-repeat 50% 50%;
+	opacity: .3;
+	cursor: pointer;
+}
+
+.cost-move:hover {
+	opacity:1;
+}
+
+.cost-move:active {
+	opacity: .6;
+}
