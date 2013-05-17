@@ -333,9 +333,7 @@
 						taskObj.setAfterClick(task.afterClick);
 						taskObj.setAllowProxy(task.allowProxy);
 						taskObj.setBeforeClick(task.beforeClick);
-						taskObj.setDayStat(task.dayStat);
 						taskObj.setDayTargeting(task.dayTargeting);
-						taskObj.setDays(task.days);
 						taskObj.setDomain(task.domain);
 						taskObj.setExtSource(task.extSource);
 						taskObj.setFrozen(task.frozen);
@@ -352,6 +350,15 @@
 						taskObj.setTimeDistribution(task.timeDistribution);
 						taskObj.setUniquePeriod(task.uniquePeriod);
 						taskObj.setWeekTargeting(task.weekTargeting);
+						//prepare day stat
+						$.each(task.dayStat, function(id, data){
+							var minDef = task.dayTargeting[id].min,
+								maxDef = task.dayTargeting[id].max;
+
+							data.min = minDef;
+							data.max = maxDef;
+						});
+						taskObj.setDayStat(task.dayStat);
 
 						folderObj.addTask(taskObj);
 					});

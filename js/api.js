@@ -3,7 +3,6 @@
 		options: {
 			server: "",
 			timeout: 30000,
-			//timeout: 1000,//!!!!
 			log: {
 				enable: false,
 				callback: {
@@ -730,8 +729,7 @@
 								taskObj.geoTargeting.push(paramTransfer({},targ, [
 									[OperationItem.IdZone, "id"],
 									[OperationItem.Target, "target"],
-									[OperationItem.Recd, "recd"],
-									[OperationItem.Name, "shortName"]
+									[OperationItem.Recd, "recd"]
 								]));
 							});
 							taskObj.geoTargeting.sort(function(a,b){return a.id- b.id;});
@@ -1098,7 +1096,7 @@
 			Priority: 'Priority',
 			GeneralInfo: 'General info',
 			Timestamp: 'Timestamp',
-			DayStatistic: 'Day statistic',
+			DayStatistic: 'Day stats',
 			SystemConstants: 'System constants',
 			GeoZones: 'Geo zones'
 		},
