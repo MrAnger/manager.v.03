@@ -882,8 +882,21 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			setStatusAccount: function(data){
+			restoreStatusAccount: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
 
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Restore.Account);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {

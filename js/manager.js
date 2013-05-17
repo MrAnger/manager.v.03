@@ -364,8 +364,8 @@
 								growth = taskObj.getGrowth()/100,
 								weekTarg = taskObj.getWeekTargeting()[getNumberDayForApi(mStorage.getDateServer())].val/100;
 
-							data.min = (minDef+growth*taskObj.getDays())*weekTarg;
-							data.max = (maxDef+growth*taskObj.getDays())*weekTarg;
+							data.min = Math.round((minDef+growth*taskObj.getDays())*weekTarg);
+							data.max = Math.round((maxDef+growth*taskObj.getDays())*weekTarg);
 						});
 						taskObj.setDayStat(task.dayStat);
 
@@ -608,6 +608,22 @@
 				mStorage.setUserReadonlyKey(data.readonlyKey);
 
 				options.callback(mStorage.getUserReadonlyKey());
+			},
+			ge_callback: options.onError
+		});
+	};
+	mStorage.restoreStatusAccount = function(_options){
+		var options = $.extend(true, {
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.restoreStatusAccount({
+			token: mStorage.getToken(),
+			callback: function(data){
+				mStorage.setUserEnabled(true);
+
+				options.callback();
 			},
 			ge_callback: options.onError
 		});

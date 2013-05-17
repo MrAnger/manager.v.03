@@ -707,12 +707,23 @@
 					$("[name=form_account] [name=email] [name=value]").html(WA_ManagerStorage.getUserEmail());
 					$("[name=form_account] [name=readonlyKey] [name=value]").html(WA_ManagerStorage.getUserReadonlyKey());
 					$("[name=form_account] [name=account_status] [name=value]").html((WA_ManagerStorage.isUserEnabled()) ? manager.lng.form.account.account_status.enabled : manager.lng.form.account.account_status.disabled);
-					$("#account_status_switcher").removeClass("status-off").addClass((WA_ManagerStorage.isUserEnabled()) ? "" : "status-off");
+					var account_status_switcher = $("#account_status_switcher");
+					$(account_status_switcher).removeClass("status-off").addClass((WA_ManagerStorage.isUserEnabled()) ? "" : "status-off");
+					if(WA_ManagerStorage.isUserEnabled()) $(account_status_switcher).hide();
+					else $(account_status_switcher).show();
 				},
 				resetReadonlyKey: function(){
 					WA_ManagerStorage.resetReadonlyKey({
 						callback: function(key){
 							$("[name=form_account] [name=readonlyKey] [name=value]").html(key);
+						}
+					});
+				},
+				restoreStatusAccount: function(state, switcher){
+					WA_ManagerStorage.restoreStatusAccount({
+						callback: function(){
+							$("[name=form_account] [name=account_status] [name=value]").html(manager.lng.form.account.account_status.enabled);
+							$(switcher).hide();
 						}
 					});
 				}
@@ -2990,7 +3001,7 @@
 	WA_ManagerStorage.events.onLogin.push(function(){
 		manager.forms.auth.hide();
 		manager.forms.manager.show();
-		$(".header [name=login]").html(WA_ManagerStorage.getUserLogin());
+		$(".header [name=login]").html((WA_ManagerStorage.getUserLogin()) ? WA_ManagerStorage.getUserLogin() : "USER");
 		//load geo zones
 		$.each(WA_ManagerStorage.geoZones.getGeoZoneList(), function(key, geoZone){
 			manager.data.geoStorage.add(geoZone.getId(), geoZone.getName(), 0, 0);
