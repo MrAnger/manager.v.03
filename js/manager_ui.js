@@ -26,6 +26,8 @@
 						callback: function(){}
 					}, data);
 
+					setTitle([manager.lng.pageTitle, manager.lng.form.auth.pageTitle]);
+
 					$("form[name=auth] input[type=text], form[name=auth] input[type=password]").val("");
 					$("form[name=auth] input[type=checkbox]").each(function(key, checkbox){checkbox.checked = false;});
 
@@ -56,6 +58,8 @@
 						callback: function(){}
 					}, data);
 
+					setTitle([manager.lng.pageTitle, manager.lng.form.reg.pageTitle]);
+
 					$("[name=reg] input[type=text], [name=reg] input[type=password]").val("");
 
 					$(".main .auth-no-success").show();
@@ -80,6 +84,8 @@
 					data = $.extend(true, {
 						callback: function(){}
 					}, data);
+
+					setTitle([manager.lng.pageTitle, manager.lng.form.forgot.pageTitle]);
 
 					$("form[name=auth] input[type=text]").val("");
 					$("form[name=auth] input[type=password]").val("");
@@ -123,14 +129,17 @@
 
 							//$(".main .auth-success .manager [name=not-setting] [name=add-category]").hide();
 							//$(".main .auth-success .manager [name=not-setting] [name=add-task]").hide();
+							setTitle([manager.lng.pageTitle, manager.lng.form.task.pageTitle]);
 							break;
 						case "iplist":
 							$(".main .auth-success .iplists-content").show();
+							setTitle([manager.lng.pageTitle, manager.lng.form.ipList.pageTitle]);
 							break;
 						case "account":
 							$(".main .auth-success .account-content").show();
 							manager.data.clip_btn_readoblyKey.show();
 							manager.data.clip_btn_readoblyKey.reposition();
+							setTitle([manager.lng.pageTitle, manager.lng.form.account.pageTitle]);
 							break;
 						default:
 							manager.forms.manager.show($.extend(true, data, {form: "task"}));
@@ -2962,6 +2971,19 @@
 		int: function(int){
 			return int.toString().replace(/(?=(\d\d\d)+$)/g, ' ');
 		}
+	};
+	function setTitle(elements){
+		if(!elements) return;
+
+		elements.reverse();
+
+		var title = "";
+
+		$.each(elements, function(key, value){
+			if(value) title += value + " | ";
+		});
+
+		document.title = title.substr(0, title.length - 3);
 	}
 
 	//set events on WA_ManagerStorage
