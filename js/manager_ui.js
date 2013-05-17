@@ -115,6 +115,7 @@
 
 					$(".main .auth-success .manager").children().hide();
 					//$(".main .auth-success .manager .not-content").hide();
+					manager.data.clip_btn_readoblyKey.hide();
 
 					switch(data.form){
 						case "task":
@@ -128,6 +129,8 @@
 							break;
 						case "account":
 							$(".main .auth-success .account-content").show();
+							manager.data.clip_btn_readoblyKey.show();
+							manager.data.clip_btn_readoblyKey.reposition();
 							break;
 						default:
 							manager.forms.manager.show($.extend(true, data, {form: "task"}));
@@ -143,6 +146,7 @@
 
 					$(".main .auth-success").hide();
 					$(".header .auth-success").hide();
+					manager.data.clip_btn_readoblyKey.hide();
 					switch(data.form){
 						case "default":
 							$(".main .auth-success .manager").children().hide();
@@ -695,6 +699,13 @@
 					$("[name=form_account] [name=readonlyKey] [name=value]").html(WA_ManagerStorage.getUserReadonlyKey());
 					$("[name=form_account] [name=account_status] [name=value]").html((WA_ManagerStorage.isUserEnabled()) ? manager.lng.form.account.account_status.enabled : manager.lng.form.account.account_status.disabled);
 					$("#account_status_switcher").removeClass("status-off").addClass((WA_ManagerStorage.isUserEnabled()) ? "" : "status-off");
+				},
+				resetReadonlyKey: function(){
+					WA_ManagerStorage.resetReadonlyKey({
+						callback: function(key){
+							$("[name=form_account] [name=readonlyKey] [name=value]").html(key);
+						}
+					});
 				}
 			},
 			pay: {

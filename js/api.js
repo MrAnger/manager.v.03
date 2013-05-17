@@ -864,6 +864,24 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			resetReadonlyKey: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Reset.ReadonlyKey);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.readonlyKey = _data[OperationItem.ReadonlyKey];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {

@@ -1,5 +1,6 @@
 (function($){
-	var console_clip = null;
+	var clip_console = null,
+		clip_btn_readonlyKey = null;
 
 	function setHeightTaskContent() {
 		$(".tasks-content").css("height", $(window).height() - 30);
@@ -82,7 +83,7 @@
 	//console
 	$(document).ready(function(){
 		var consoleBox = $(".console-box .open-box"),
-			clip = console_clip = new ZeroClipboard.Client();
+			clip = clip_console = new ZeroClipboard.Client();
 
 		$(consoleBox).show();
 		clip.glue("console_button_copy");
@@ -110,15 +111,37 @@
 
 		if($(box).css("display") == "none"){
 			$(box).show("fast", function(){
-				console_clip.show();
-				console_clip.reposition();
+				clip_console.show();
+				clip_console.reposition();
 				$(input).focus();
 			});
 		}else{
 			$(box).hide("fast", function(){
-				console_clip.hide();
+				clip_console.hide();
 			});
 		};
+	});
+	//button copy readonlyKey
+	$(document).ready(function(e){
+		var clip = WA_ManagerUi.data.clip_btn_readoblyKey = clip_btn_readonlyKey = new ZeroClipboard.Client(),
+			clipHtml = null,
+			cy4ki = $(".main .auth-success, .main .manager .account-content");
+		$(cy4ki).show();
+		clip.glue("btn_copy_readonlyKey");
+		$(cy4ki).hide();
+		clipHtml = $("#"+$(clip.getHTML()).attr('id')).parent()[0];
+		clip.addEventListener('onMouseUp', function(client){
+			clip.setText($("[name=form_account] [name=readonlyKey] [name=value]").html());
+		});
+		clip.addEventListener('onComplete', function(client){
+			WA_ManagerUi.utils.noticeShow(WA_ManagerUi.lng.form.account.readonlyKey.copy_success, "success");
+		});
+		clip.hide();
+		$(window).resize(function(e){
+			if($(".main .manager .account-content").css("display") != "none"){
+				clip.reposition();
+			};
+		});
 	});
 	//top  menu
 	$(".top-menu .item").click(function(e){

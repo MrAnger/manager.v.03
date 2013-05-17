@@ -593,6 +593,22 @@
 			ge_callback: options.onError
 		});
 	};
+	mStorage.resetReadonlyKey = function(_options){
+		var options = $.extend(true, {
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.resetReadonlyKey({
+			token: mStorage.getToken(),
+			callback: function(data){
+				mStorage.setUserReadonlyKey(data.readonlyKey);
+
+				options.callback(mStorage.getUserReadonlyKey());
+			},
+			ge_callback: options.onError
+		});
+	};
 
 	mStorage.run = function(_options){
 		var options = $.extend(true, {

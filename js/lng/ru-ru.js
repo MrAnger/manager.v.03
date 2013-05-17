@@ -347,7 +347,8 @@ WA_ManagerUi.lng = {
 				"value_hidden": "Информация скрыта"
 			},
 			"readonlyKey": {
-				"text": "Гостевой ключ"
+				"text": "Гостевой ключ",
+				"copy_success": "Гостевой ключ успешно скопирован в буфер обмена."
 			},
 			"account_status": {
 				"text": "Статус аккаунта",
