@@ -93,6 +93,8 @@ var deviceIpod = "ipod";
 var deviceIpad = "ipad";
 var deviceMacPpc = "macintosh"; //Used for disambiguation
 
+var browserMSIE = "MSIE";
+
 var deviceAndroid = "android";
 var deviceGoogleTV = "googletv";
 var deviceXoom = "xoom"; //Motorola Xoom
@@ -964,7 +966,7 @@ InitDeviceScan()
 //**************************
 function DetectTablet()
 {
-	if (uagent.search(deviceTablet) > -1)
+	if (uagent.search(deviceTablet) > -1 && uagent.search(browserMSIE) == -1)
 		return true;
 	else
 		return false;
