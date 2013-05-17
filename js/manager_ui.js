@@ -199,16 +199,19 @@
 					var not_content = $(".folders .not-content"),
 						add_category = $(".main .auth-success .manager [name=not-setting] [name=add-category]"),
 						not_content_tasks = $(".tasks .not-content"),
-						not_setting = $(".main .auth-success .manager [name=not-setting]");
+						not_setting = $(".main .auth-success .manager [name=not-setting]"),
+						btn_add_task = $("#btn_add_task");
 
 					if(manager.forms.folder.getFoldersHtml().length == 0){
 						$(not_content).show();
 						$(not_content_tasks).show();
 						$(not_setting).show();
 						$(add_category).show();
+						$(btn_add_task).hide();
 					}else{
 						$(not_content).hide();
 						$(add_category).hide();
+						$(btn_add_task).show();
 					};
 				},
 				load: function(){
