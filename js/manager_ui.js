@@ -733,11 +733,36 @@
 				}
 			},
 			pay: {
-				show: function(){
+				show: function(data){
 					$("#msg_pay").fadeIn("fast");
 				},
-				hide: function(){
+				hide: function(data){
 					$("#msg_pay .close").click();
+				}
+			},
+			setAccountPassword: {
+				show: function(data){
+					data = $.extend(true, {
+						callback: function(){}
+					}, data);
+					var html = "",
+						msg = $("#msg_setAccountPassword")[0];
+
+					$(msg).fadeIn("fast").find("form").attr("wa_step", 0);
+
+					$(msg).find("[name=password]").removeAttr("disabled").focus().val("");
+					$(msg).find("[name=code]").attr("disabled", "disabled").val("");
+
+					data.callback();
+				},
+				hide: function(data){
+					data = $.extend(true, {
+						callback: function(){}
+					}, data);
+
+					$("#msg_setAccountPassword").find(".close").click();
+
+					data.callback();
 				}
 			}
 		},
@@ -1045,14 +1070,68 @@
 	});
 	//SET FORGOT FORM
 
-	//SET CONFIRM DELETE FOLDER
+	//SET MSG PAY
 	$(document).on("click","#msg_pay [name=yes]", function(e){
 		var w = window.open('wmk:payto?Purse='+WA_ManagerStorage.getConstSystemWMR()+'&Amount=5000&Desc='+WA_ManagerStorage.getUserEmail()+'&BringToFront=Y');
 		$(w).ready(function(e){
 			if(!w.closed) w.close();
 		});
 	});
-	//SET CONFIRM DELETE FOLDER
+	//SET MSG PAY
+
+	//SET CHANGE ACCOUNT PASSWORD FORM
+	$(document).on("submit","form[name=setAccountPassword]", function(e){
+		var form = this, inputs = {
+			password: this["password"],
+			code: this["code"]
+		};
+
+		if($(form).attr("wa_step") == 0){
+			if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
+				NoticeShow(insertLoc(manager.lng.form.setAccountPassword.password.error, {
+					min: WA_ManagerStorage.api.Constants.Limit.Account.Password.Length.Min,
+					max: WA_ManagerStorage.api.Constants.Limit.Account.Password.Length.Max
+				}), "error");
+				$(inputs.password).focus();
+			}else{
+				WA_ManagerStorage.setAccountPassword({
+					step_setPassword: true,
+					password: inputs.password.value,
+					callback: function(){
+						$(form).attr("wa_step", 1);
+						$(inputs.password).attr("disabled", "disabled");
+						$(inputs.code).removeAttr("disabled").focus();
+						NoticeShow(manager.lng.form.setAccountPassword.success_step1, "success");
+					}
+				});
+			};
+		}else if($(form).attr("wa_step") == 1){
+			if(!CheckType(inputs.code.value, TYPE.CODE_CONFIRM)){
+				NoticeShow(insertLoc(manager.lng.form.setAccountPassword.code.error, {
+					min: WA_ManagerStorage.api.Constants.Limit.Confirm.Code.Length.Min,
+					max: WA_ManagerStorage.api.Constants.Limit.Confirm.Code.Length.Max
+				}), "error");
+				$(inputs.code).focus();
+			}else{
+				WA_ManagerStorage.setAccountPassword({
+					step_confirmSetPassword: true,
+					code: inputs.code.value,
+					callback: function(){
+						manager.forms.setAccountPassword.hide();
+						manager.logOut();
+						NoticeShow(manager.lng.form.setAccountPassword.success_step2, "success");
+					},
+					exception: {
+						InvalidCode: function(){
+							NoticeShow(manager.lng.exception.query.confirmSetAccountPassword.InvalidCode, "error");
+							$(inputs.code).focus();
+						}
+					}
+				});
+			};
+		};
+	});
+	//SET CHANGE ACCOUNT PASSWORD FORM
 
 	//SET ADD NEW FOLDER FORM
 	$(document).on("submit","form[name=folder_add]", function(e){

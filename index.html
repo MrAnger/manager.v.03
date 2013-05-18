@@ -265,6 +265,34 @@
 		</div>
 	</div>
 </div>
+<div id="msg_setAccountPassword" class="add-box-wrap" style="display: none;">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="setAccountPassword" wa_step="0" onsubmit="return false;">
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.setAccountPassword.password.text}"></div>
+						<div class="text-line">
+							<input name="password" type="password" value placeholder autocomplete="off"
+							       wa_lang="{form.setAccountPassword.password.placeholder|attr:placeholder}"><span
+								class="show-box"></span>
+						</div>
+					</div>
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.setAccountPassword.code.text}"></div>
+						<div class="text-line">
+							<input name="code" type="text" value placeholder autocomplete="off"
+							       wa_lang="{form.setAccountPassword.code.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.send}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text" wa_lang="{loader.text}"></span>
@@ -857,7 +885,7 @@
             </tr>
             <tr name="password">
                 <td class="name" wa_lang="{form.account.password.text}"></td>
-                <td class="option"><span class="editing"></span></td>
+                <td class="option"><span class="editing" onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
                 <td class="value closed" wa_lang="{form.account.password.value_hidden}"></td>
             </tr>
             <tr name="readonlyKey">

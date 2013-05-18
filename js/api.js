@@ -897,6 +897,42 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			setAccountPassword: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.Password);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Password, data.password);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			confirmSetAccountPassword: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Confirm.SetAccountPassword);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.CodeConfirm, data.code);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {

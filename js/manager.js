@@ -631,6 +631,38 @@
 			ge_callback: options.onError
 		});
 	};
+	mStorage.setAccountPassword = function(_options){
+		var options = $.extend(true, {
+			password: "",
+			code: "",
+			step_setPassword: false,
+			step_confirmSetPassword: false,
+			exception: {
+				InvalidCode: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		if(options.step_setPassword) API_METHOD.setAccountPassword({
+			token: mStorage.getToken(),
+			password: options.password,
+			callback: function(data){
+				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+		else if(options.step_confirmSetPassword) API_METHOD.confirmSetAccountPassword({
+			token: mStorage.getToken(),
+			code: options.code,
+			callback: function(data){
+				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
 
 	mStorage.run = function(_options){
 		var options = $.extend(true, {
