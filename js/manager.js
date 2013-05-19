@@ -53,8 +53,7 @@
 		login: "",
 		balance: 0,
 		email: "",
-		readonlyKey: "",
-		deleted: false
+		readonlyKey: ""
 	};
 
 	mStorage.folders = null;
@@ -96,12 +95,6 @@
 	mStorage.getUserReadonlyKey = function(){
 		return mStorage.userData.readonlyKey;
 	};
-	mStorage.isUserDeleted = function(){
-		return mStorage.userData.deleted;
-	};
-	mStorage.isUserEnabled = function(){
-		return !mStorage.userData.deleted;
-	};
 	mStorage.setDateServer = function(date){
 		return (mStorage.systemData.date.server = date);
 	};
@@ -119,12 +112,6 @@
 	};
 	mStorage.setUserReadonlyKey = function(key){
 		return (mStorage.userData.readonlyKey = key);
-	};
-	mStorage.setUserDeleted = function(deleted){
-		return (mStorage.userData.deleted = deleted);
-	};
-	mStorage.setUserEnabled = function(state){
-		return (mStorage.userData.deleted = !state);
 	};
 
 	//METHODS SYSTEM CONST
@@ -284,9 +271,6 @@
 							break;
 						case "login":
 							mStorage.setUserLogin(val);
-							break;
-						case "deleted":
-							mStorage.setUserDeleted(val);
 							break;
 						case "balance":
 							mStorage.setUserBalance(val);
@@ -615,22 +599,6 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.restoreStatusAccount = function(_options){
-		var options = $.extend(true, {
-			callback: function(data){},
-			onError: function(data, gErrorName){}
-		}, _options);
-
-		API_METHOD.restoreStatusAccount({
-			token: mStorage.getToken(),
-			callback: function(data){
-				mStorage.setUserEnabled(true);
-
-				options.callback();
-			},
-			ge_callback: options.onError
-		});
-	};
 	mStorage.setAccountPassword = function(_options){
 		var options = $.extend(true, {
 			password: "",
@@ -658,6 +626,48 @@
 			code: options.code,
 			callback: function(data){
 				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.sendCredits = function(_options){
+		var options = $.extend(true, {
+			recipient: "",
+			amount: 0,
+			code: "",
+			step_sendCredits: false,
+			step_confirmSendCredits: false,
+			exception: {
+				LowBalance: function(){},
+				InvalidRecipient: function(){},
+				InvalidCode: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		if(options.step_sendCredits) API_METHOD.sendCredits({
+			token: mStorage.getToken(),
+			recipient: options.recipient,
+			amount: options.amount,
+			callback: function(data){
+				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+		else if(options.step_confirmSendCredits) API_METHOD.confirmSendCredits({
+			token: mStorage.getToken(),
+			code: options.code,
+			callback: function(data){
+				mStorage.setUserBalance(data.balance);
+
+				options.callback({
+					operationId: data.operationId,
+					balance: mStorage.getUserBalance(),
+					amount: data.tranferAmount
+				});
 			},
 			exception: options.exception,
 			ge_callback: options.onError

@@ -83,13 +83,16 @@
 	//console
 	$(document).ready(function(){
 		var consoleBox = $(".console-box .open-box"),
-			clip = clip_console = new ZeroClipboard.Client();
+			clip = clip_console = new ZeroClipboard.Client(),
+			clipHtml = null,
+			holder_id = "console_button_copy";
 
 		$(consoleBox).show();
-		clip.glue("console_button_copy");
+		clip.glue(holder_id);
 		$(consoleBox).hide();
 		clip.hide();
-		$("#"+$(clip.getHTML()).attr('id')).parent().css("z-index" ,"10000");
+		clipHtml = $("#"+$(clip.getHTML()).attr('id')).parent()[0];
+		$(clipHtml).css("z-index" ,"10000");
 
 		clip.addEventListener('onMouseUp', function(client){
 			var html = $(".console-box .console-text .content").html();

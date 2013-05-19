@@ -710,24 +710,11 @@
 					$("[name=form_account] [name=login] [name=value]").html(WA_ManagerStorage.getUserLogin());
 					$("[name=form_account] [name=email] [name=value]").html(WA_ManagerStorage.getUserEmail());
 					$("[name=form_account] [name=readonlyKey] [name=value]").html(WA_ManagerStorage.getUserReadonlyKey());
-					$("[name=form_account] [name=account_status] [name=value]").html((WA_ManagerStorage.isUserEnabled()) ? manager.lng.form.account.account_status.enabled : manager.lng.form.account.account_status.disabled);
-					var account_status_switcher = $("#account_status_switcher");
-					$(account_status_switcher).removeClass("status-off").addClass((WA_ManagerStorage.isUserEnabled()) ? "" : "status-off");
-					if(WA_ManagerStorage.isUserEnabled()) $(account_status_switcher).hide();
-					else $(account_status_switcher).show();
 				},
 				resetReadonlyKey: function(){
 					WA_ManagerStorage.resetReadonlyKey({
 						callback: function(key){
 							$("[name=form_account] [name=readonlyKey] [name=value]").html(key);
-						}
-					});
-				},
-				restoreStatusAccount: function(state, switcher){
-					WA_ManagerStorage.restoreStatusAccount({
-						callback: function(){
-							$("[name=form_account] [name=account_status] [name=value]").html(manager.lng.form.account.account_status.enabled);
-							$(switcher).hide();
 						}
 					});
 				}
@@ -761,6 +748,32 @@
 					}, data);
 
 					$("#msg_setAccountPassword").find(".close").click();
+
+					data.callback();
+				}
+			},
+			sendCredits: {
+				show: function(data){
+					data = $.extend(true, {
+						callback: function(){}
+					}, data);
+					var html = "",
+						msg = $("#msg_sendCredits")[0];
+
+					$(msg).fadeIn("fast").find("form").attr("wa_step", 0);
+
+					$(msg).find("[name=recipient]").removeAttr("disabled").focus().val("");
+					$(msg).find("[name=credits]").removeAttr("disabled").val(DataFormat.int(10000));
+					$(msg).find("[name=code]").attr("disabled", "disabled").val("");
+
+					data.callback();
+				},
+				hide: function(data){
+					data = $.extend(true, {
+						callback: function(){}
+					}, data);
+
+					$("#msg_sendCredits").find(".close").click();
 
 					data.callback();
 				}
@@ -861,6 +874,28 @@
 						input.value = DataFormat.int(getValue());
 
 						$("#msg_pay [name=summ]").html((parseInt(getValue()) / WA_ManagerStorage.getConstExchangeRate()).toFixed(2));
+					};
+
+					oldText = input.value;
+				};
+			}, 200);
+		interval.start();
+
+		function getValue(){
+			return input.value.replace(new RegExp(" ",'ig'), "");
+		};
+	});
+	//change summ for send credits
+	manager.events.onDomReady.push(function(){
+		var input = $("#msg_sendCredits [name=credits]")[0],
+			oldText = null,
+			interval = new WA_ManagerStorage.api.utils.interval(function(){
+				if(oldText != input.value){
+					if(isInt(getValue())){
+						input.value = DataFormat.int(getValue());
+						var val = parseInt(getValue());
+
+						$("#msg_sendCredits [name=summ]").html(DataFormat.int(Math.round(val*WA_ManagerStorage.getConstTransferPercent()/100 + val)));
 					};
 
 					oldText = input.value;
@@ -1169,6 +1204,86 @@
 		};
 	});
 	//SET CHANGE ACCOUNT PASSWORD FORM
+
+	//SET SEND CREDITS FORM
+	$(document).on("submit","form[name=send_credits]", function(e){
+		var form = this, inputs = {
+			recipient: this["recipient"],
+			amount: this["credits"],
+			code: this["code"]
+		};
+
+		if($(form).attr("wa_step") == 0){
+			if(!CheckType(inputs.recipient.value, TYPE.MAIL)){
+				NoticeShow(insertLoc(manager.lng.form.send_credits.recipient.error, {
+					min: WA_ManagerStorage.api.Constants.Limit.Account.Mail.Length.Min,
+					max: WA_ManagerStorage.api.Constants.Limit.Account.Mail.Length.Max
+				}), "error");
+				$(inputs.recipient).focus();
+			}else if(!isInt(getValue()) || parseInt(getValue()) < 10000){
+				NoticeShow(manager.lng.form.send_credits.credits.error, "error");
+				$(inputs.amount).focus();
+			}else{
+				WA_ManagerStorage.sendCredits({
+					step_sendCredits: true,
+					recipient: inputs.recipient.value,
+					amount: getValue(),
+					exception: {
+						LowBalance: function(){
+							NoticeShow(manager.lng.exception.query.sendCredits.LowBalance, "error");
+							$(inputs.amount).focus();
+						},
+						InvalidRecipient: function(){
+							NoticeShow(manager.lng.exception.query.sendCredits.InvalidRecipient, "error");
+							$(inputs.recipient).focus();
+						}
+					},
+					callback: function(data){
+						$(form).attr("wa_step", 1);
+						$(inputs.recipient).attr("disabled", "disabled");
+						$(inputs.amount).attr("disabled", "disabled");
+						$(inputs.code).removeAttr("disabled").focus();
+						NoticeShow(manager.lng.form.send_credits.success_step1, "success");
+					}
+				});
+			};
+		}else if($(form).attr("wa_step") == 1){
+			if(!CheckType(inputs.code.value, TYPE.CODE_CONFIRM)){
+				NoticeShow(insertLoc(manager.lng.form.send_credits.code.error, {
+					min: WA_ManagerStorage.api.Constants.Limit.Confirm.Code.Length.Min,
+					max: WA_ManagerStorage.api.Constants.Limit.Confirm.Code.Length.Max
+				}), "error");
+				$(inputs.code).focus();
+			}else{
+				WA_ManagerStorage.sendCredits({
+					step_confirmSendCredits: true,
+					code: inputs.code.value,
+					exception: {
+						LowBalance: function(){
+							NoticeShow(manager.lng.exception.query.sendCredits.LowBalance, "error");
+						},
+						InvalidRecipient: function(){
+							NoticeShow(manager.lng.exception.query.sendCredits.InvalidRecipient, "error");
+						},
+						InvalidCode: function(){
+							NoticeShow(manager.lng.exception.query.confirmSendCredits.InvalidCode, "error");
+							$(inputs.code).focus();
+						}
+					},
+					callback: function(data){
+						manager.forms.sendCredits.hide();
+						$("[name=form_account] [name=balance] [name=value]").html(DataFormat.int(data.balance));
+						NoticeShow(insertLoc(manager.lng.form.send_credits.success_step2, {summ: DataFormat.int(data.amount)}), "success");
+					}
+				});
+			};
+		};
+
+		function getValue(){
+			return inputs.amount.value.replace(new RegExp(" ",'ig'), "");
+		};
+	});
+	//SET SEND CREDITS FORM
 
 	//SET ADD NEW FOLDER FORM
 	$(document).on("submit","form[name=folder_add]", function(e){
@@ -1661,7 +1776,7 @@
 		}, function(){
 			setTimeout(function(){
 				if(timeout_destroy) $(msg).find("[name=close]").click();
-			}, 5 * 1000);
+			}, 7 * 1000);
 		});
 		$(msg).hover(function(){
 			timeout_destroy = false;
@@ -1669,7 +1784,7 @@
 			timeout_destroy = true;
 			setTimeout(function(){
 				if(timeout_destroy) $(msg).find("[name=close]").click();
-			}, 5 * 1000);
+			}, 7 * 1000);
 		});
 	};
 	var TYPE = {

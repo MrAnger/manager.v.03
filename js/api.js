@@ -882,22 +882,6 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			restoreStatusAccount: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Restore.Account);
-				req.setToken(data.token);
-
-				req.send(function(_data){
-					var output = {};
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
 			setAccountPassword: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -916,9 +900,33 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			sendCredits: function(data){
+				data = $.extend(true, {
+					exception: {
+						LowBalance: function(){},
+						InvalidRecipient: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Send.Credits);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Amount, data.amount);
+				req.addData(OperationItem.Recipient, data.recipient);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			confirmSetAccountPassword: function(data){
 				data = $.extend(true, {
-					exception: {}
+					exception: {
+						InvalidCode: function(){}
+					}
 				}, data);
 
 				var req = api.requestStorage.addRequest();
@@ -930,6 +938,32 @@
 
 				req.send(function(_data){
 					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			confirmSendCredits: function(data){
+				data = $.extend(true, {
+					exception: {
+						LowBalance: function(){},
+						InvalidRecipient: function(){},
+						InvalidCode: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Confirm.SendCredits);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.CodeConfirm, data.code);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.operationId = _data[OperationItem.IdOperation];
+					output.balance = _data[OperationItem.Balance];
+					output.tranferAmount = _data[OperationItem.TransferAmount];
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -1633,7 +1667,7 @@
 		this.send = function(callback, exception, ge_callback){
 			request.setData(SelfObj.toCode(data));
 			request.setCallback(function(receive_data){
-				receive_data = SelfObj.toObject(receive_data);
+				receive_data = SelfObj.toObject((receive_data.length > 0) ? receive_data : "{}");
 				if(!receive_data[api.Constants.OperationItem.Data]) receive_data[api.Constants.OperationItem.Data] = {};
 				var data = receive_data[api.Constants.OperationItem.Data];
 

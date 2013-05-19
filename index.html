@@ -56,7 +56,7 @@
         <div class="console-send" style="">
             <div class="option">
                 <span class="save"></span>
-                <span id="console_button_copy" class="copy"></span>
+                <span wa_lang="{tooltip.copyToClipboardConsoleLog|attr:title}" id="console_button_copy" class="copy"></span>
                 <span class="save"></span>
             </div>
             <form name="console_query" onsubmit="return false;">
@@ -192,26 +192,32 @@
         </div>
     </div>
 </div>
-<div id="msg_sendCredits" class="add-box-wrap" style="/*display: none;*/">
+<div id="msg_sendCredits" class="add-box-wrap" style="display: none;">
     <div class="add-box">
         <div class="add-box-content">
             <div class="close"></div>
             <div class="content">
-                <form name="task_add" onsubmit="return false;">
+                <form name="send_credits" wa_step="0" onsubmit="return false;">
                     <div class="label-block">
-                        <div class="label-text">Email аккаунта получателя</div>
+                        <div class="label-text" wa_lang="{form.send_credits.recipient.text}"></div>
                         <div class="text-line">
-                            <input name="task_name" type="text" placeholder="Email получателя">
+                            <input name="recipient" type="text" placeholder wa_lang="{form.send_credits.recipient.placeholder|attr:placeholder}">
                         </div>
                     </div>
 					<div class="label-block">
-                        <div class="label-text">Сумма перевода</div>
+                        <div class="label-text" wa_lang="{form.send_credits.credits.text}"></div>
                         <div class="text-line">
-                            <input name="task_name" type="text" placeholder="Сумма перевода">
+                            <input name="credits" type="text" placeholder wa_lang="{form.send_credits.credits.placeholder|attr:placeholder}">
                         </div>
                     </div>
-					<div class="small-text"><span>Комиссия: </span><span name="summ">1</span></div>
-                    <button type="submit" class="btn">Окаай</button>
+	                <div class="small-text"><span wa_lang="{form.send_credits.with_commission}"></span><span name="summ">1</span></div>
+	                <div class="label-block">
+		                <div class="label-text" wa_lang="{form.send_credits.code.text}"></div>
+		                <div class="text-line">
+			                <input name="code" type="text" placeholder wa_lang="{form.send_credits.code.placeholder|attr:placeholder}">
+		                </div>
+	                </div>
+                    <button type="submit" class="btn" wa_lang="{button.transfer}"></button>
                 </form>
             </div>
             <div class="footer"></div>
@@ -340,7 +346,7 @@
                                                                                           wa_lang="{menu.top-menu.iplist}"
                                                                                           onclick="WA_ManagerUi.forms.manager.show({form: 'iplist'});"></span>
         </div>
-        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span class="link login" name="login"
+        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span wa_lang="{tooltip.goAccountPage|attr:title}" class="link login" name="login"
                                                                                   onclick="WA_ManagerUi.forms.manager.show({form: 'account'});">User Login</span>
             |
             <span class="link exit" onclick="WA_ManagerUi.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
@@ -483,7 +489,7 @@
 <div class="manager">
 <div class="tasks-content" style="display: none">
 <div class="folders">
-    <div class="title"><span wa_lang="{form.folder.title}"></span><span class="add"
+    <div class="title"><span wa_lang="{form.folder.title}"></span><span wa_lang="{tooltip.addNewFolder|attr:title}" class="add"
                                                                         onclick="WA_ManagerUi.forms.folder_add.show();"></span>
     </div>
     <div class="content-height">
@@ -515,7 +521,7 @@
     </div>
 </div>
 <div class="tasks">
-    <div class="title"><span wa_lang="{form.task.title}"></span><span id="btn_add_task" class="add"
+    <div class="title"><span wa_lang="{form.task.title}"></span><span wa_lang="{tooltip.addNewTask|attr:title}" id="btn_add_task" class="add"
                                                                       onclick="WA_ManagerUi.forms.task_add.show();"></span>
     </div>
     <div class="content-height">
@@ -560,7 +566,7 @@
     <div class="task-info">
         <div class="condition">
             <span class="name" wa_lang="{form.task_setting.status}"></span>
-                <span class="switch-box" id="task-status" onchange="WA_ManagerUi.forms.task.setStatusFromSettingForm">
+                <span wa_lang="{tooltip.changeTaskStatus|attr:title}" class="switch-box" id="task-status" onchange="WA_ManagerUi.forms.task.setStatusFromSettingForm">
                     <span class="switcher"></span>
                 </span>
         </div>
@@ -801,7 +807,7 @@
 </div>
 <div class="iplists-content" style="display: none">
     <div class="iplists">
-        <div class="title"><span>Списки диапазонов IP</span><span class="add"></span></div>
+        <div class="title"><span>Списки диапазонов IP</span><span wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
         <div class="content-height">
             <ul class="item-list content-scroll" style="top:0;">
                 <li>
@@ -845,7 +851,7 @@
         </div>
     </div>
     <div class="set-iplist">
-        <div class="title"><span>Диапазоны IP</span><span class="add"></span></div>
+        <div class="title"><span>Диапазоны IP</span><span wa_lang="{tooltip.addNewIPRange|attr:title}" class="add"></span></div>
         <div class="setting-group">
             <form>
                 <div class="content-scroll" style="top:0;">
@@ -905,7 +911,7 @@
         <table class="account-set" name="form_account">
             <tr name="balance">
                 <td class="name" name="text">Баланс</td>
-                <td class="option"><span class="add" onclick="WA_ManagerUi.forms.pay.show();"></span><span class="cost-move"></span></td>
+                <td class="option"><span wa_lang="{tooltip.byCredits|attr:title}" class="add" onclick="WA_ManagerUi.forms.pay.show();"></span><span wa_lang="{tooltip.transferCredits|attr:title}" class="cost-move" onclick="WA_ManagerUi.forms.sendCredits.show();"></span></td>
                 <td class="value" name="value"></td>
             </tr>
             <tr>
@@ -923,21 +929,12 @@
             </tr>
             <tr name="password">
                 <td class="name" wa_lang="{form.account.password.text}"></td>
-                <td class="option"><span class="editing" onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
+                <td class="option"><span wa_lang="{tooltip.changeAccountPassword|attr:title}" class="editing" onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
                 <td class="value closed" wa_lang="{form.account.password.value_hidden}"></td>
             </tr>
             <tr name="readonlyKey">
                 <td class="name" name="text" wa_lang="{form.account.readonlyKey.text}"></td>
-                <td class="option"><span class="generate" onclick="WA_ManagerUi.forms.account.resetReadonlyKey();"></span><span id="btn_copy_readonlyKey" class="copy"></span></td>
-                <td class="value" name="value"></td>
-            </tr>
-            <tr name="account_status">
-                <td class="name" name="text" wa_lang="{form.account.account_status.text}"></td>
-                <td class="option">
-                    <span class="switch-box" id="account_status_switcher" onchange="WA_ManagerUi.forms.account.restoreStatusAccount" style="display: none;">
-                        <span class="switcher"></span><input type="hidden" value="true">
-                    </span>
-                </td>
+                <td class="option"><span wa_lang="{tooltip.refreshReadonlyKey|attr:title}" class="generate" onclick="WA_ManagerUi.forms.account.resetReadonlyKey();"></span><span wa_lang="{tooltip.copyToClipboardReadonlyKey|attr:title}" id="btn_copy_readonlyKey" class="copy"></span></td>
                 <td class="value" name="value"></td>
             </tr>
         </table>
