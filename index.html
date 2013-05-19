@@ -210,12 +210,7 @@
                             <input name="task_name" type="text" placeholder="Сумма перевода">
                         </div>
                     </div>
-					<div class="label-block">
-                        <div class="label-text">Комиссия</div>
-                        <div class="text-line">
-                            <input name="task_name" type="text" placeholder="Комиссия">
-                        </div>
-                    </div>
+					<div class="small-text"><span>Комиссия: </span><span name="summ">1</span></div>
                     <button type="submit" class="btn">Окаай</button>
                 </form>
             </div>
@@ -586,6 +581,10 @@
 <div class="setting-group">
 <div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 <div class="content-scroll" style="top:0;">
+<div class="set-info-box">
+	<div class="icon"></div>
+	<div class="text">В статистике задания много заданий со статусом "Отменен", это может повлиять на выдачу заданий для серфинга. Пожалуйста, проверьте настройки задания</div>
+</div>
 <form name="task-setting" onsubmit="return false;">
 <input type="hidden" name="folderId" value="0">
 <input type="hidden" name="taskId" value="0">
