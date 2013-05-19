@@ -470,7 +470,11 @@
 							lineOverload = {
 								name: "overload",
 								data: []
-							};
+							},
+							onePercent = 0,
+							summ_incomplete = 0,
+							summ_overload = 0,
+							percentControl = 5;
 
 						data.sort(function(a,b){return a.id - b.id;});
 
@@ -480,12 +484,23 @@
 							lineGive.data.push([val.id, val.give]);
 							lineIncomplete.data.push([val.id, val.incomplete]);
 							lineOverload.data.push([val.id, val.overload]);
+
+							onePercent += (val.min + val.max);
+							summ_incomplete += val.incomplete;
+							summ_overload += val.overload;
 						});
+						onePercent = (onePercent/2)/100;
+						if(onePercent > 0){
+							if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
+							if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
+						};
 
 						manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
 					})(task.getDayStat());
 				},
 				settingFormClear: function(){
+					this.notify.hide();
+
 					var inputs = [
 						{name: "name", value: ""},
 						{name: "domain", value: ""},
@@ -554,6 +569,14 @@
 					$(".main .auth-success .manager [name=not-setting]").show();
 					$(".main .auth-success .manager [name=not-setting] [name=add-task]").hide();
 					$(".main .auth-success .manager [name=not-setting] [name=add-category]").hide();
+				},
+				notify: {
+					show: function(type){
+						$("#task_setting_notify_"+type).show();
+					},
+					hide: function(){
+						$("#task_setting_notify_incomplete, #task_setting_notify_overload").hide();
+					}
 				}
 			},
 			geo: {

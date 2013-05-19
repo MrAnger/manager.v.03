@@ -587,9 +587,13 @@
 <div class="setting-group">
 <div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 <div class="content-scroll" style="top:0;">
-<div class="set-info-box">
+<div id="task_setting_notify_overload" class="set-info-box" style="/*display: none;*/">
 	<div class="icon"></div>
-	<div class="text">В статистике задания много заданий со статусом "Отменен", это может повлиять на выдачу заданий для серфинга. Пожалуйста, проверьте настройки задания</div>
+	<div class="text" wa_lang="{form.task_setting.notify.overload}"></div>
+</div>
+<div id="task_setting_notify_incomplete" class="set-info-box" style="/*display: none;*/">
+	<div class="icon"></div>
+	<div class="text" wa_lang="{form.task_setting.notify.incomplete}"></div>
 </div>
 <form name="task-setting" onsubmit="return false;">
 <input type="hidden" name="folderId" value="0">
