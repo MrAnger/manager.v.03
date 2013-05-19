@@ -1577,25 +1577,25 @@
 			NoticeShow(insertLoc(manager.lng.form.task_setting.rangeSize.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.RangeSize.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.RangeSize.Value.Max,
-				"default" : api.Constants.Limit.Task.RangeSize.Value.Default
+				"default" : WA_ManagerStorage.api.Constants.Limit.Task.RangeSize.Value.Default
 			}), "error");
 		}else if(!CheckType($(this).find("[name=uniquePeriod]").val(), TYPE.TASK_UNIQUEPERIOD)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.uniquePeriod.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.UniquePeriod.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.UniquePeriod.Value.Max,
-				"default" : api.Constants.Limit.Task.UniquePeriod.Value.Default
+				"default" : WA_ManagerStorage.api.Constants.Limit.Task.UniquePeriod.Value.Default
 			}), "error");
 		}else if(!CheckType($(this).find("[name=growth]").val(), TYPE.TASK_GROWTH)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.growth.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Growth.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Growth.Value.Max,
-				"default" : api.Constants.Limit.Task.Growth.Value.Default
+				"default" : WA_ManagerStorage.api.Constants.Limit.Task.Growth.Value.Default
 			}), "error");
 		}else if(!CheckType($(this).find("[name=days]").val(), TYPE.TASK_DAYS)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.days.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Days.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Days.Value.Max,
-				"default" : api.Constants.Limit.Task.Days.Value.Default
+				"default" : WA_ManagerStorage.api.Constants.Limit.Task.Days.Value.Default
 			}), "error");
 		}else if(!CheckType($(this).find("[name=profile]").val(), TYPE.TASK_PROFILE, true)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.profile.error, {
