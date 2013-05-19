@@ -192,7 +192,7 @@
         </div>
     </div>
 </div>
-<div class="add-box-wrap">
+<div id="msg_sendCredits" class="add-box-wrap" style="/*display: none;*/">
     <div class="add-box">
         <div class="add-box-content">
             <div class="close"></div>
@@ -231,7 +231,7 @@
         </div>
     </div>
 </div>
-<div id="confirm_deleteFolder" class="confirm-box" style="display: none">
+<div id="confirm_deleteFolder" class="confirm-box" autoclose style="display: none">
     <input name="id" type="hidden">
 
     <div class="confirm-content">
@@ -246,7 +246,7 @@
         </div>
     </div>
 </div>
-<div id="confirm_deleteTask" class="confirm-box" style="display: none">
+<div id="confirm_deleteTask" class="confirm-box" autoclose style="display: none">
 	<input name="folderId" type="hidden">
 	<input name="taskId" type="hidden">
 
@@ -291,14 +291,15 @@
 			<div class="title" name="title" wa_lang="{form.pay.title}"></div>
 			<div class="text" name="text" wa_lang="{form.pay.text}"></div>
 			<div class="label-block">
-				<div class="label-text">Введите количество кредитов</div>
+				<div class="label-text" wa_lang="{form.pay.credits.text}"></div>
 				<div class="text-line">
-					<input name="task_name" type="text" placeholder="Количество кредитов">
+					<input name="credits" type="text" placeholder wa_lang="{form.pay.credits.placeholder}">
 				</div>
-				<div class="small-text"><span>WMR: </span><span>1000</span></div>
+				<div class="small-text"><span>WMR: </span><span name="summ">1</span></div>
 			</div>
 			<div class="buttons">
-				<button name="yes" type="submit" class="btn" wa_lang="{button.okay}"></button>
+				<button name="yes" type="submit" class="btn" wa_lang="{button.pay}"></button>
+				<button name="no" type="submit" class="btn" wa_lang="{button.cancel}"></button>
 			</div>
 		</div>
 	</div>

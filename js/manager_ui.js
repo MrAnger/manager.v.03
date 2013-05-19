@@ -734,7 +734,7 @@
 			},
 			pay: {
 				show: function(data){
-					$("#msg_pay").fadeIn("fast");
+					$("#msg_pay").fadeIn("fast").find("[name=credits]").val(DataFormat.int(250000)).focus();
 				},
 				hide: function(data){
 					$("#msg_pay .close").click();
@@ -850,6 +850,27 @@
 				(isInt(uniquePeriod)) ? parseInt(uniquePeriod) : 0));
 		}, 500);
 		interval.start();
+	});
+	//change summ for pay
+	manager.events.onDomReady.push(function(){
+		var input = $("#msg_pay [name=credits]")[0],
+			oldText = null,
+			interval = new WA_ManagerStorage.api.utils.interval(function(){
+				if(oldText != input.value){
+					if(isInt(getValue())){
+						input.value = DataFormat.int(getValue());
+
+						$("#msg_pay [name=summ]").html((parseInt(getValue()) / WA_ManagerStorage.getConstExchangeRate()).toFixed(2));
+					};
+
+					oldText = input.value;
+				};
+			}, 200);
+		interval.start();
+
+		function getValue(){
+			return input.value.replace(new RegExp(" ",'ig'), "");
+		};
 	});
 
 	//SET CONSOLE FORM
@@ -1072,10 +1093,26 @@
 
 	//SET MSG PAY
 	$(document).on("click","#msg_pay [name=yes]", function(e){
-		var w = window.open('wmk:payto?Purse='+WA_ManagerStorage.getConstSystemWMR()+'&Amount=5000&Desc='+WA_ManagerStorage.getUserEmail()+'&BringToFront=Y');
-		$(w).ready(function(e){
-			if(!w.closed) w.close();
-		});
+		var SelfObj = this,
+			inputs = {
+				credits: $(this).parents("#msg_pay").find("[name=credits]")[0]
+			};
+
+		if(isInt(getValue()) && getValue() >= 1000){
+			var summ = parseInt(getValue()) / WA_ManagerStorage.getConstExchangeRate();
+			var w = window.open('wmk:payto?Purse='+WA_ManagerStorage.getConstSystemWMR()+'&Amount='+summ+'&Desc='+WA_ManagerStorage.getUserEmail()+'&BringToFront=Y');
+			$(w).ready(function(e){
+				if(!w.closed) w.close();
+			});
+			manager.forms.pay.hide();
+		}else{
+			NoticeShow(manager.lng.form.pay.credits.error, "error");
+			$(inputs.credits).focus();
+		};
+
+		function getValue(){
+			return inputs.credits.value.replace(new RegExp(" ",'ig'), "");
+		};
 	});
 	//SET MSG PAY
 
@@ -3063,7 +3100,7 @@
 	};
 	var DataFormat = {
 		int: function(int){
-			return int.toString().replace(/(?=(\d\d\d)+$)/g, ' ');
+			return int.toString().replace(/(?=(\d\d\d)+$)/g, ' ').trim();
 		}
 	};
 	function setTitle(elements){
@@ -3200,3 +3237,10 @@
 		};
 	});
 })(jQuery);
+
+//fix js object
+if(!String.prototype.trim) {
+	String.prototype.trim = function () {
+		return this.replace(/^\s+|\s+$/g,'');
+	};
+}

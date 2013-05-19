@@ -183,7 +183,7 @@
 		$(this).parents(".confirm-box").fadeOut("fast");
 	});
 	$(".confirm-box [name=yes]").click(function(e){
-		$(this).parents(".confirm-box").find(".close").click();
+		if($(this).parents(".confirm-box")[0].hasAttribute("autoclose")) $(this).parents(".confirm-box").find(".close").click();
 	});
 	$(".confirm-box [name=no]").click(function(e){
 		$(this).parents(".confirm-box").find(".close").click();
