@@ -412,6 +412,20 @@
 	mStorage.removeTaskById = function(folderId, taskId){
 		return (mStorage.getFolderById(folderId).removeTaskById(taskId));
 	};
+	mStorage.getIPListList = function(){
+		return mStorage.ipLists.getIPListList();
+	};
+	mStorage.getUsedIPList = function(){
+		var out = [];
+
+		$.each(mStorage.getFolderList(), function(key, folder){
+			$.each(folder.getTaskList(), function(key, task){
+				if(task.getListId() != 0) out.push(task.getListId());
+			});
+		});
+
+		return out;
+	};
 
 	//METHODS FOR API SERVER
 	mStorage.addFolder = function(_options){

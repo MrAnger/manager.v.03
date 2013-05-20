@@ -393,7 +393,13 @@ WA_ManagerUi.lng = {
 			}
 		},
 		"ipList": {
-			"pageTitle": "IP списки"
+			"pageTitle": "IP списки",
+			"title": "Списки диапазонов IP",
+			"not_have_ipList": "В данном аккаунте еще нет IP списков..."
+		},
+		"ipRange": {
+			"title": "Диапазоны IP",
+			"not_have_ipRange": "В данном списке еще нет IP диапазонов..."
 		},
 		"setAccountPassword": {
 			"password": {

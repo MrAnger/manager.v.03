@@ -812,51 +812,27 @@
 </div>
 <div class="iplists-content" style="display: none">
     <div class="iplists">
-        <div class="title"><span>Списки диапазонов IP</span><span wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
+        <div class="title"><span wa_lang="{form.ipList.title}"></span><span wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
         <div class="content-height">
             <ul class="item-list content-scroll" style="top:0;">
-                <li>
-                    <span class="name">По-умолчанию</span>
+                <li wa_ipList>
+                    <span class="name" name="name">По-умолчанию</span>
                     <span class="info">
-                        <span class="status on">Используется</span>
+                        <span class="status on" name="status">Используется</span>
                     </span>
                     <span class="edit">
                         <span class="edit-list">
-                            <span class="item copy">Дублировать</span>
-                            <span class="item delete">Удалить</span>
-                        </span>
-                    </span>
-                </li>
-                <li>
-                    <span class="name">По-умолчанию</span>
-                    <span class="info">
-                        <span class="status off">Не используется</span>
-                    </span>
-                    <span class="edit">
-                        <span class="edit-list">
-                            <span class="item copy">Дублировать</span>
-                            <span class="item delete">Удалить</span>
-                        </span>
-                    </span>
-                </li>
-                <li>
-                    <span class="name">По-умолчанию</span>
-                    <span class="info">
-                        <span class="status on">Используется</span>
-                    </span>
-                    <span class="edit">
-                        <span class="edit-list">
-                            <span class="item copy">Дублировать</span>
-                            <span class="item delete">Удалить</span>
+                            <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
+                            <span class="item delete" wa_lang="{menu.edit-menu.delete}"></span>
                         </span>
                     </span>
                 </li>
             </ul>
-            <div class="not-content">Нет контента блеать ...</div>
+            <div class="not-content" wa_lang="{form.ipList.not_have_ipList}"></div>
         </div>
     </div>
     <div class="set-iplist">
-        <div class="title"><span>Диапазоны IP</span><span wa_lang="{tooltip.addNewIPRange|attr:title}" class="add"></span></div>
+        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" class="add"></span></div>
         <div class="setting-group">
             <form>
                 <div class="content-scroll" style="top:0;">
@@ -867,47 +843,11 @@
                             </td>
                             <td><span class="delete"></span></td>
                         </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
                     </table>
                     <button type="submit" class="btn">Сохранить</button>
                 </div>
             </form>
-            <div class="not-content">Нет контента блеать ...</div>
+            <div class="not-content" wa_lang="{form.ipRange.not_have_ipRange}"></div>
         </div>
     </div>
 </div>
