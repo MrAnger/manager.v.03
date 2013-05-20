@@ -814,6 +814,7 @@
     <div class="iplists">
         <div class="title"><span wa_lang="{form.ipList.title}"></span><span wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
         <div class="content-height">
+		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
             <ul class="item-list content-scroll" style="top:0;">
                 <li wa_ipList>
                     <span class="name" name="name">По-умолчанию</span>
@@ -834,6 +835,7 @@
     <div class="set-iplist">
         <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" class="add"></span></div>
         <div class="setting-group">
+		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
             <form>
                 <div class="content-scroll" style="top:0;">
                     <table>
@@ -847,7 +849,7 @@
                     <button type="submit" class="btn">Сохранить</button>
                 </div>
             </form>
-            <div class="not-content" wa_lang="{form.ipRange.not_have_ipRange}"></div>
+            <div class="not-content" wa_lang="{form.ipRange.not_have_ipRange}" style="display:none;"></div>
         </div>
     </div>
 </div>

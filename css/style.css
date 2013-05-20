@@ -514,7 +514,7 @@ input[type=checkbox] {
 	overflow: hidden;
 }
 
-.tasks-content .folders .title {
+.tasks-content .folders .title, .iplists-content .iplists .title {
 	background: #d7c094;
 }
 
@@ -770,6 +770,10 @@ input[type=checkbox] {
 	position: relative;
 	overflow: hidden;
 }
+
+/*.set-iplist .setting-group {
+	margin-top:30px;
+}*/
 
 .setting-group .content-scroll {
 	padding: 0 15px;
