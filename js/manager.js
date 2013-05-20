@@ -415,6 +415,9 @@
 	mStorage.removeIPListById = function(id){
 		return (mStorage.ipLists.removeIPListById(id));
 	};
+	mStorage.removeIPRangeById = function(listId, rangeId){
+		return mStorage.getIPListById(listId).removeRangeById(rangeId);
+	};
 	mStorage.getIPListList = function(){
 		return mStorage.ipLists.getIPListList();
 	};
@@ -659,7 +662,32 @@
 			exception: options.exception,
 			ge_callback: options.onError
 		});
-	}
+	};
+	mStorage.removeIPRange = function(_options){
+		var options = $.extend(true, {
+			listId: 0,
+			ids: [],
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrIPRanges = [];
+		$.each(options.ids, function(key, id){ arrIPRanges.push(mStorage.getIPRangeById(options.listId, id));});
+
+		API_METHOD.deleteIPRanges({
+			token: mStorage.getToken(),
+			listId: options.listId,
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeIPRangeById(options.listId, id);});
+
+				options.callback(arrIPRanges);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
 	mStorage.setAccountPassword = function(_options){
 		var options = $.extend(true, {
 			password: "",

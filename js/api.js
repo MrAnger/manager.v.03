@@ -758,6 +758,25 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			deleteIPRanges: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Delete.IPRanges);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdList, data.listId);
+				req.addData(OperationItem.IdsRanges, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			renameFolder: function(data){
 				data = $.extend(true, {
 					exception: {}
