@@ -737,30 +737,6 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			moveTasks: function(data){
-				data = $.extend(true, {
-					exception: {
-						FolderNotFound: function(){},
-						TargetFolderNotFound: function(){},
-						NotEnoughSlots: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Move.Tasks);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.IdTarget, data.targetId);
-				req.addData(OperationItem.IdsTasks, data.ids);
-
-				req.send(function(_data){
-					var output = {};
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
 			resetReadonlyKey: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -794,28 +770,6 @@
 
 				req.send(function(_data){
 					var output = {};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			sendCredits: function(data){
-				data = $.extend(true, {
-					exception: {
-						LowBalance: function(){},
-						InvalidRecipient: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Send.Credits);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.Amount, data.amount);
-				req.addData(OperationItem.Recipient, data.recipient);
-
-				req.send(function(_data){
-					var output = {};
-
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
@@ -965,6 +919,52 @@
 
 				req.send(function(_data){
 					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			moveTasks: function(data){
+				data = $.extend(true, {
+					exception: {
+						FolderNotFound: function(){},
+						TargetFolderNotFound: function(){},
+						NotEnoughSlots: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Move.Tasks);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTarget, data.targetId);
+				req.addData(OperationItem.IdsTasks, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			sendCredits: function(data){
+				data = $.extend(true, {
+					exception: {
+						LowBalance: function(){},
+						InvalidRecipient: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Send.Credits);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Amount, data.amount);
+				req.addData(OperationItem.Recipient, data.recipient);
+
+				req.send(function(_data){
+					var output = {};
+
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			}
