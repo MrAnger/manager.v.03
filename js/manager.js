@@ -397,7 +397,7 @@
 	mStorage.getTaskById = function(folderId, taskId){
 		return mStorage.folders.getFolderById(folderId).getTaskById(taskId);
 	};
-	mStorage.getFolderList = function(id){
+	mStorage.getFolderList = function(){
 		return mStorage.folders.getFolderList();
 	};
 	mStorage.getTaskList = function(folderId){
@@ -425,6 +425,28 @@
 		});
 
 		return out;
+	};
+	mStorage.getIPListById = function(id){
+		return mStorage.ipLists.getIPListById(id);
+	};
+	mStorage.isUsedIPList = function(id){
+		var folderList = mStorage.getFolderList();
+		for(var i=0; i<=folderList.length-1; i++){
+			var folder = folderList[i],
+				taskList = folder.getTaskList();
+			for(var ii=0; ii<=taskList.length-1; ii++){
+				var task = taskList[ii];
+				if(task.getListId() == id) return true;
+			};
+		};
+
+		return false;
+	};
+	mStorage.getIPRangeById = function(listId, rangeId){
+		return mStorage.getIPListById(listId).getRangeById(rangeId);
+	};
+	mStorage.getIPRangeList = function(ipListId){
+		return mStorage.getIPListById(ipListId).getRangeList();
 	};
 
 	//METHODS FOR API SERVER
@@ -1219,7 +1241,7 @@
 		this.getName = function(){
 			return data.name;
 		};
-		this.getRange = function(rangeId){
+		this.getRangeById = function(rangeId){
 			return data.ranges[rangeId];
 		};
 		this.getRangeList = function(){

@@ -134,6 +134,7 @@
 						case "iplist":
 							$(".main .auth-success .iplists-content").show();
 							setTitle([manager.lng.pageTitle, manager.lng.form.ipList.pageTitle]);
+							manager.forms.ipList.updateStatusAll();
 							break;
 						case "account":
 							$(".main .auth-success .account-content").show();
@@ -799,6 +800,154 @@
 					$("#msg_sendCredits").find(".close").click();
 
 					data.callback();
+				}
+			},
+			ipList: {
+				addHtml: function(id){
+					var layout = $("[wa_ipList][default]"),
+						parent = $(layout).parent(),
+						html = $(layout).clone().removeAttr("default").appendTo(parent);
+
+					//add param to html
+					setParam(html, "id", id);
+
+					this.setName(html, WA_ManagerStorage.getIPListById(id).getName());
+					this.setStatus(html, WA_ManagerStorage.isUsedIPList(id));
+
+					this.toggleNotContent();
+				},
+				setName: function(html, val){
+					$(html).find("[name=view_name]").html(val);
+				},
+				setStatus: function(html, status){
+					$(html).find("[name=view_status]").removeClass("on off").addClass((status) ? "on" : "off").html((status) ? manager.lng.form.ipList.used : manager.lng.form.ipList.not_used);
+				},
+				getIPListsHtml: function(){
+					var out = [];
+
+					$("[wa_ipList]:not([default])").each(function(key, ipList){out.push(ipList)});
+
+					return out;
+				},
+				getActiveHtml: function(){
+					return $(".active[wa_ipList]:not([default])")[0];
+				},
+				getHtmlById: function(id){
+					var out = null;
+
+					$.each(this.getIPListsHtml(), function(key, html){
+						if(getParam(html, "id") == id) out = html;
+					});
+
+					return out;
+				},
+				toggleNotContent: function(){
+					var not_content = $(".iplists .not-content"),
+						not_content_ipRanges = $(".set-iplist .not-content"),
+						btn_add_range = $("#btn_add_ipRange");
+
+					if(manager.forms.ipList.getIPListsHtml().length == 0){
+						$(not_content).show();
+						$(not_content_ipRanges).show();
+						$(btn_add_range).hide();
+					}else{
+						$(not_content).hide();
+						$(not_content_ipRanges).hide();
+						$(btn_add_range).show();
+					};
+				},
+				load: function(){
+					//delete all ipLists
+					$(this.getIPListsHtml()).remove();
+					//add to html
+					$.each(WA_ManagerStorage.getIPListList(), function(key, ipList){
+						manager.forms.ipList.addHtml(ipList.getId());
+					});
+					this.toggleNotContent();
+					$(this.getIPListsHtml()).eq(0).click();
+				},
+				clear: function(){
+					//delete all ipLists
+					$(this.getIPListsHtml()).remove();
+					$(".iplists .not-content").hide();
+				},
+				updateStatusAll: function(){
+					var used = WA_ManagerStorage.getUsedIPList();
+					$.each(this.getIPListsHtml(), function(key, html){
+						if(used.indexOf(parseInt(getParam(html, "id"))) == -1) manager.forms.ipList.setStatus(html, false);
+						else  manager.forms.ipList.setStatus(html, true);
+					});
+				}
+			},
+			ipRange: {
+				addHtml: function(ipListId, ipRangeId){
+					var layout = $("[wa_ipRange][default]"),
+						parent = $(layout).parent(),
+						html = $(layout).clone().removeAttr("default").appendTo(parent),
+						ipRange = WA_ManagerStorage.getIPRangeById(ipListId, ipRangeId);
+
+					//add param to html
+					setParam(html, "listId", ipListId);
+					setParam(html, "rangeId", ipRangeId);
+
+					this.setValue(html, ipRange.getStart(), ipRange.getEnd());
+				},
+				setValue: function(html, start, end){
+					$(html).find("[name=value]").val(start + " - " + end);
+				},
+				getRangesHtml: function(){
+					var out = [];
+
+					$("[wa_ipRange]:not([default])").each(function(key, range){out.push(range);});
+
+					return out;
+				},
+				getHtmlById: function(ipListId, ipRangeId){
+					var out = null;
+
+					$.each(this.getRangesHtml(), function(key, html){
+						if(getParam(html, "listId") == ipListId && getParam(html, "rangeId") == ipRangeId) out = html;
+					});
+
+					return out;
+				},
+				toggleNotContent: function(){
+					var not_content = $(".set-iplist .not-content"),
+						btn_save = $("#btn_save_ipRanges");
+
+					if(manager.forms.ipRange.getRangesHtml().length == 0){
+						$(not_content).show();
+						$(btn_save).hide();
+					}else{
+						$(not_content).hide();
+						$(btn_save).show();
+					};
+				},
+				load: function(ipListId){
+					//delete all ranges
+					$(this.getRangesHtml()).remove();
+					//add to html
+					$.each(WA_ManagerStorage.getIPRangeList(ipListId), function(key, range){
+						manager.forms.ipRange.addHtml(ipListId, range.getId());
+					});
+					this.toggleNotContent();
+				},
+				clear: function(){
+					//delete all ranges
+					$(this.getRangesHtml()).remove();
+					$("#btn_save_ipRanges").hide();
+				}
+			},
+			ipList_add: {
+				show: function(){
+					var msg = $("#msg_addIPList").fadeIn("fast"),
+						input = $(msg).find("[name=ipList_name]");
+
+					$(input).val("");
+					$(input).focus();
+				},
+				hide: function(){
+					$("#msg_addIPList .add-box .close").click();
 				}
 			}
 		},
@@ -3266,6 +3415,8 @@
 		});
 		//load folders
 		manager.forms.folder.load();
+		//load ipLists
+		manager.forms.ipList.load();
 		//load account info
 		manager.forms.account.load();
 	});
@@ -3276,6 +3427,7 @@
 	WA_ManagerStorage.events.onClearData.push(function(){
 		manager.forms.folder.clear();
 		manager.forms.task.clear();
+		manager.forms.ipList.clear();
 	});
 
 	//set language

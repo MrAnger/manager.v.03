@@ -9,8 +9,13 @@
 	$(document).ready(setHeightTaskContent);
 	//  скроллинг
 	function setHeightContentScroll() {
-		$('.setting-group').css("height", $(window).height() - 90);
-		$('.content-height').css("height", $(window).height() - 60);
+		var window_height = $(window).height();
+
+		$(".setting-group, .content-height").each(function(key, html){
+			var height_minus = 0;
+			if(html.hasAttribute("height_minus")) height_minus = parseInt($(html).attr("height_minus"));
+			$(html).css("height", window_height - height_minus);
+		});
 	};
 	setHeightContentScroll();
 	$(window).resize(setHeightContentScroll);
@@ -177,6 +182,10 @@
 	//task
 	$(document).on("click", "[wa_task]", function(e){
 		WA_ManagerUi.forms.task.loadSetting(WA_ManagerUi.utils.getParam(this, "folderId"), WA_ManagerUi.utils.getParam(this, "taskId"));
+	});
+	//ipList
+	$(document).on("click", "[wa_ipList]", function(e){
+		WA_ManagerUi.forms.ipRange.load(WA_ManagerUi.utils.getParam(this, "id"));
 	});
 	//close events on messages
 	$(".add-box-wrap .close").click(function(e){

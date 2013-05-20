@@ -28,127 +28,6 @@
 			}
 		},
 		methods: {
-			auth: function(data){
-				data = $.extend(true, {
-					remember: false,
-					exception: {
-						NotMatch: function(){},
-						SessionLimit: function(){}
-					},
-					ge_callback: function(){}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.auth);
-
-				req.addData(OperationItem.Mail, data.mail);
-				req.addData(OperationItem.Password, data.password);
-				req.addData(OperationItem.Remember, data.remember);
-
-				req.send(function(_data){
-					var output = {
-						token: _data[OperationItem.Token]
-					};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			register: function(data){
-				data = $.extend(true, {
-					exception: {
-						MailExists: function(){},
-						LoginExists: function(){},
-						Forbidden: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Registration);
-
-				req.addData(OperationItem.Login, data.login);
-				req.addData(OperationItem.Mail, data.mail);
-				req.addData(OperationItem.Password, data.password);
-
-				req.send(function(_data){
-					var output = {};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			logOut: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.logOut);
-				req.setToken(data.token);
-
-				req.send(function(_data){
-					var output = {};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			resetPassword: function(data){
-				data = $.extend(true, {
-					exception: {
-						NotFound: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Reset.Password);
-
-				req.addData(OperationItem.Mail, data.mail);
-
-				req.send(function(_data){
-					var output = {};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			confirmResetPassword: function(data){
-				data = $.extend(true, {
-					exception: {
-						InvalidCode: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Confirm.resetPassword);
-
-				req.addData(OperationItem.Mail, data.mail);
-				req.addData(OperationItem.CodeConfirm, data.code);
-				req.addData(OperationItem.Password, data.password);
-
-				req.send(function(_data){
-					var output = {};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			confirmRegister: function(data){
-
-				data = $.extend(true, {
-					exception: {
-						InvalidCode: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Confirm.register);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.Mail, data.mail);
-				req.addData(OperationItem.CodeConfirm, data.code);
-
-				req.send(function(_data){
-					var output = {};
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
 			getFolders: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -169,65 +48,6 @@
 							task_count: folder[OperationItem.Tasks]
 						});
 					});
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			addFolder: function(data){
-				data = $.extend(true, {
-					exception: {
-						LimitExceeded: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Add.Folder);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.Name, data.name);
-
-				req.send(function(_data){
-					var output = {};
-
-					output.id = _data[OperationItem.IdFolder];
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			renameFolder: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Set.FolderName);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdFolder, data.id);
-				req.addData(OperationItem.Name, data.name);
-
-				req.send(function(_data){
-					var output = {};
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			deleteFolders: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Delete.Folders);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdsFolder, data.ids);
-
-				req.send(function(_data){
-					var output = {};
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -267,66 +87,6 @@
 							mask: task[OperationItem.Mask],
 							days: task[OperationItem.Days],
 							extSource: task[OperationItem.ExtSource]
-						});
-					});
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			addTask: function(data){
-				data = $.extend(true, {
-					exception: {
-						LimitExceeded: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Add.Task);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.Name, data.name);
-				req.addData(OperationItem.IdList, data.listId);
-				req.addData(OperationItem.AfterClick, data.afterClick);
-				req.addData(OperationItem.BeforeClick, data.beforeClick);
-				req.addData(OperationItem.AllowProxy, data.allowProxy);
-				req.addData(OperationItem.IgnoreGU, data.ignoreGU);
-				req.addData(OperationItem.Growth, data.growth);
-				req.addData(OperationItem.Domain, data.domain);
-				req.addData(OperationItem.Profile, data.profile);
-				req.addData(OperationItem.ListMode, data.listMode);
-				req.addData(OperationItem.RangeSize, data.rangeSize);
-				req.addData(OperationItem.UniquePeriod, data.uniquePeriod);
-				req.addData(OperationItem.Mask, data.mask);
-				req.addData(OperationItem.Days, data.days);
-				req.addData(OperationItem.ExtSource, data.extSource);
-
-				req.send(function(_data){
-					var output = {};
-
-					output.taskId = _data[OperationItem.IdTask];
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			getIpLists: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Get.IPLists);
-				req.setToken(data.token);
-
-				req.send(function(_data){
-					var output = [];
-
-					if(_data[OperationItem.IPLists]) $.each(_data[OperationItem.IPLists], function(key, list){
-						output.push({
-							id: list[OperationItem.IdList],
-							name: list[OperationItem.Name]
 						});
 					});
 
@@ -490,114 +250,6 @@
 							shortName: targ[OperationItem.Name]
 						});
 					});
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			setTaskStatus: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Set.TaskFrozen);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.IdTask, data.taskId);
-				req.addData(OperationItem.Frozen, data.frozen);
-
-				req.send(function(_data){
-					var output = {};
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			getSystemConstants: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Get.SystemConstants);
-				req.setToken(data.token);
-
-				req.send(function(_data){
-					var output = {};
-
-					$.each(_data, function(key, val){
-						switch(key){
-							case OperationItem.TaskMinCost:
-								output.taskMinCost = val;
-								break;
-							case OperationItem.TransferPercent:
-								output.transferPercent = val;
-								break;
-							case OperationItem.ProxyFactor:
-								output.proxyFactor = val;
-								break;
-							case OperationItem.TaskSecondCost:
-								output.taskSecondCost = val;
-								break;
-							case OperationItem.ExchangeRate:
-								output.exchangeRate = val;
-								break;
-							case OperationItem.SystemWMR:
-								output.systemWMR = val;
-								break;
-							case OperationItem.UniqueTimeFactor:
-								output.uniqueTimeFactor = val;
-								break;
-							case OperationItem.IPRangeFactor:
-								output.ipRangeFactor = val;
-								break;
-						};
-					});
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			deleteTasks: function(data){
-				data = $.extend(true, {
-					exception: {}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Delete.Tasks);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.IdsTasks, data.ids);
-
-				req.send(function(_data){
-					var output = {};
-
-					data.callback(output);
-				}, data.exception, data.ge_callback);
-			},
-			moveTasks: function(data){
-				data = $.extend(true, {
-					exception: {
-						FolderNotFound: function(){},
-						TargetFolderNotFound: function(){},
-						NotEnoughSlots: function(){}
-					}
-				}, data);
-
-				var req = api.requestStorage.addRequest();
-
-				req.setOpCode(OperationCode.Move.Tasks);
-				req.setToken(data.token);
-
-				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.IdTarget, data.targetId);
-				req.addData(OperationItem.IdsTasks, data.ids);
-
-				req.send(function(_data){
-					var output = {};
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -864,20 +516,90 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			resetReadonlyKey: function(data){
+			getIpLists: function(data){
 				data = $.extend(true, {
 					exception: {}
 				}, data);
 
 				var req = api.requestStorage.addRequest();
 
-				req.setOpCode(OperationCode.Reset.ReadonlyKey);
+				req.setOpCode(OperationCode.Get.IPLists);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = [];
+
+					if(_data[OperationItem.IPLists]) $.each(_data[OperationItem.IPLists], function(key, list){
+						output.push({
+							id: list[OperationItem.IdList],
+							name: list[OperationItem.Name]
+						});
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			getSystemConstants: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Get.SystemConstants);
 				req.setToken(data.token);
 
 				req.send(function(_data){
 					var output = {};
 
-					output.readonlyKey = _data[OperationItem.ReadonlyKey];
+					$.each(_data, function(key, val){
+						switch(key){
+							case OperationItem.TaskMinCost:
+								output.taskMinCost = val;
+								break;
+							case OperationItem.TransferPercent:
+								output.transferPercent = val;
+								break;
+							case OperationItem.ProxyFactor:
+								output.proxyFactor = val;
+								break;
+							case OperationItem.TaskSecondCost:
+								output.taskSecondCost = val;
+								break;
+							case OperationItem.ExchangeRate:
+								output.exchangeRate = val;
+								break;
+							case OperationItem.SystemWMR:
+								output.systemWMR = val;
+								break;
+							case OperationItem.UniqueTimeFactor:
+								output.uniqueTimeFactor = val;
+								break;
+							case OperationItem.IPRangeFactor:
+								output.ipRangeFactor = val;
+								break;
+						};
+					});
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			setTaskStatus: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.TaskFrozen);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+				req.addData(OperationItem.Frozen, data.frozen);
+
+				req.send(function(_data){
+					var output = {};
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -897,6 +619,181 @@
 				req.send(function(_data){
 					var output = {};
 
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			addFolder: function(data){
+				data = $.extend(true, {
+					exception: {
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Add.Folder);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.id = _data[OperationItem.IdFolder];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			addTask: function(data){
+				data = $.extend(true, {
+					exception: {
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Add.Task);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.Name, data.name);
+				req.addData(OperationItem.IdList, data.listId);
+				req.addData(OperationItem.AfterClick, data.afterClick);
+				req.addData(OperationItem.BeforeClick, data.beforeClick);
+				req.addData(OperationItem.AllowProxy, data.allowProxy);
+				req.addData(OperationItem.IgnoreGU, data.ignoreGU);
+				req.addData(OperationItem.Growth, data.growth);
+				req.addData(OperationItem.Domain, data.domain);
+				req.addData(OperationItem.Profile, data.profile);
+				req.addData(OperationItem.ListMode, data.listMode);
+				req.addData(OperationItem.RangeSize, data.rangeSize);
+				req.addData(OperationItem.UniquePeriod, data.uniquePeriod);
+				req.addData(OperationItem.Mask, data.mask);
+				req.addData(OperationItem.Days, data.days);
+				req.addData(OperationItem.ExtSource, data.extSource);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.taskId = _data[OperationItem.IdTask];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			deleteFolders: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Delete.Folders);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdsFolder, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			deleteTasks: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Delete.Tasks);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdsTasks, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			renameFolder: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.FolderName);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.id);
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			moveTasks: function(data){
+				data = $.extend(true, {
+					exception: {
+						FolderNotFound: function(){},
+						TargetFolderNotFound: function(){},
+						NotEnoughSlots: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Move.Tasks);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTarget, data.targetId);
+				req.addData(OperationItem.IdsTasks, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			resetReadonlyKey: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Reset.ReadonlyKey);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.readonlyKey = _data[OperationItem.ReadonlyKey];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			resetPassword: function(data){
+				data = $.extend(true, {
+					exception: {
+						NotFound: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Reset.Password);
+
+				req.addData(OperationItem.Mail, data.mail);
+
+				req.send(function(_data){
+					var output = {};
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
@@ -965,6 +862,109 @@
 					output.balance = _data[OperationItem.Balance];
 					output.tranferAmount = _data[OperationItem.TransferAmount];
 
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			confirmResetPassword: function(data){
+				data = $.extend(true, {
+					exception: {
+						InvalidCode: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Confirm.resetPassword);
+
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.CodeConfirm, data.code);
+				req.addData(OperationItem.Password, data.password);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			confirmRegister: function(data){
+
+				data = $.extend(true, {
+					exception: {
+						InvalidCode: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Confirm.register);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.CodeConfirm, data.code);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			auth: function(data){
+				data = $.extend(true, {
+					remember: false,
+					exception: {
+						NotMatch: function(){},
+						SessionLimit: function(){}
+					},
+					ge_callback: function(){}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.auth);
+
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.Password, data.password);
+				req.addData(OperationItem.Remember, data.remember);
+
+				req.send(function(_data){
+					var output = {
+						token: _data[OperationItem.Token]
+					};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			register: function(data){
+				data = $.extend(true, {
+					exception: {
+						MailExists: function(){},
+						LoginExists: function(){},
+						Forbidden: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Registration);
+
+				req.addData(OperationItem.Login, data.login);
+				req.addData(OperationItem.Mail, data.mail);
+				req.addData(OperationItem.Password, data.password);
+
+				req.send(function(_data){
+					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			logOut: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.logOut);
+				req.setToken(data.token);
+
+				req.send(function(_data){
+					var output = {};
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			}

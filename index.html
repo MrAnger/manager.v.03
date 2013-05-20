@@ -333,6 +333,26 @@
 		</div>
 	</div>
 </div>
+<div id="msg_addIPList" class="add-box-wrap" style="display: none;">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="ipList_add" onsubmit="return false;">
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.ipList_add.ipList_name.text}"></div>
+						<div class="text-line">
+							<input name="ipList_name" type="text" value placeholder
+							       wa_lang="{form.ipList_add.ipList_name.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.add}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text" wa_lang="{loader.text}"></span>
@@ -493,7 +513,7 @@
     <div class="title"><span wa_lang="{form.folder.title}"></span><span wa_lang="{tooltip.addNewFolder|attr:title}" class="add"
                                                                         onclick="WA_ManagerUi.forms.folder_add.show();"></span>
     </div>
-    <div class="content-height">
+    <div class="content-height" height_minus="60">
 	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_folder default>
@@ -525,7 +545,7 @@
     <div class="title"><span wa_lang="{form.task.title}"></span><span wa_lang="{tooltip.addNewTask|attr:title}" id="btn_add_task" class="add"
                                                                       onclick="WA_ManagerUi.forms.task_add.show();"></span>
     </div>
-    <div class="content-height">
+    <div class="content-height" height_minus="60">
 	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_task default>
@@ -585,7 +605,7 @@
     <li class="statistics" name="statistics" wa_lang="{form.task_setting.tabs.stat}"></li>
 </ul>
 <div class="tab-box-content">
-<div class="setting-group">
+<div class="setting-group" height_minus="90">
 <div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 <div class="content-scroll" style="top:0;">
 <div id="task_setting_notify_overload" class="set-info-box" style="/*display: none;*/">
@@ -812,43 +832,44 @@
 </div>
 <div class="iplists-content" style="display: none">
     <div class="iplists">
-        <div class="title"><span wa_lang="{form.ipList.title}"></span><span wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
-        <div class="content-height">
+        <div class="title"><span wa_lang="{form.ipList.title}"></span><span onclick="WA_ManagerUi.forms.ipList_add.show();" wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
+        <div class="content-height" height_minus="60">
 		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
             <ul class="item-list content-scroll" style="top:0;">
-                <li wa_ipList>
-                    <span class="name" name="name">По-умолчанию</span>
+                <li wa_ipList default>
+                    <span class="name" name="view_name"></span>
                     <span class="info">
-                        <span class="status on" name="status">Используется</span>
+                        <span class="status" name="view_status"></span>
                     </span>
                     <span class="edit">
                         <span class="edit-list">
+	                        <span class="item rename" wa_lang="{menu.edit-menu.rename}"></span>
                             <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
                             <span class="item delete" wa_lang="{menu.edit-menu.delete}"></span>
                         </span>
                     </span>
                 </li>
             </ul>
-            <div class="not-content" wa_lang="{form.ipList.not_have_ipList}"></div>
+            <div class="not-content" wa_lang="{form.ipList.not_have_ipList}" style="display: none;"></div>
         </div>
     </div>
     <div class="set-iplist">
-        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" class="add"></span></div>
-        <div class="setting-group">
+        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="add"></span></div>
+        <div class="setting-group" height_minus="60">
 		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
-            <form>
-                <div class="content-scroll" style="top:0;">
-                    <table>
-                        <tr>
-                            <td>
-                                <input type="text" value="77.40.118.0 - 77.40.119.255" class="ip">
-                            </td>
-                            <td><span class="delete"></span></td>
-                        </tr>
-                    </table>
-                    <button type="submit" class="btn">Сохранить</button>
-                </div>
-            </form>
+	        <div class="content-scroll" style="top:0;">
+		        <form name="ip_ranges" onsubmit="return false;">
+			        <table>
+				        <tr wa_ipRange default>
+					        <td>
+						        <input name="value" type="text" value class="ip">
+					        </td>
+					        <td><span class="delete" name="delete"></span></td>
+				        </tr>
+			        </table>
+			        <button id="btn_save_ipRanges" type="submit" class="btn" wa_lang="{button.save}"></button>
+		        </form>
+	        </div>
             <div class="not-content" wa_lang="{form.ipRange.not_have_ipRange}" style="display:none;"></div>
         </div>
     </div>
