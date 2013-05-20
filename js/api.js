@@ -681,6 +681,28 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			addIPList: function(data){
+				data = $.extend(true, {
+					exception: {
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Add.IPList);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.id = _data[OperationItem.IdList];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			deleteFolders: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -718,6 +740,24 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			deleteIPLists: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Delete.IPLists);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdsList, data.ids);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			renameFolder: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -729,6 +769,25 @@
 				req.setToken(data.token);
 
 				req.addData(OperationItem.IdFolder, data.id);
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			renameIPList: function(data){
+				data = $.extend(true, {
+					exception: {}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.IPListName);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdList, data.id);
 				req.addData(OperationItem.Name, data.name);
 
 				req.send(function(_data){

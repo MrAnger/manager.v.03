@@ -412,6 +412,9 @@
 	mStorage.removeTaskById = function(folderId, taskId){
 		return (mStorage.getFolderById(folderId).removeTaskById(taskId));
 	};
+	mStorage.removeIPListById = function(id){
+		return (mStorage.ipLists.removeIPListById(id));
+	};
 	mStorage.getIPListList = function(){
 		return mStorage.ipLists.getIPListList();
 	};
@@ -475,51 +478,6 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.renameFolder = function(_options){
-		var options = $.extend(true, {
-			name: "",
-			id: 0,
-			exception: {},
-			callback: function(data){},
-			onError: function(data, gErrorName){}
-		}, _options);
-
-		API_METHOD.renameFolder({
-			token: mStorage.getToken(),
-			id: options.id,
-			name: options.name,
-			callback: function(data){
-				mStorage.getFolderById(options.id).setName(options.name);
-
-				options.callback(mStorage.getFolderById(options.id));
-			},
-			exception: options.exception,
-			ge_callback: options.onError
-		});
-	};
-	mStorage.removeFolder = function(_options){
-		var options = $.extend(true, {
-			ids: [],
-			exception: {},
-			callback: function(data){},
-			onError: function(data, gErrorName){}
-		}, _options);
-
-		var arrFolders = [];
-		$.each(options.ids, function(key, id){ arrFolders.push(mStorage.getFolderById(id));});
-
-		API_METHOD.deleteFolders({
-			token: mStorage.getToken(),
-			ids: options.ids,
-			callback: function(data){
-				$.each(options.ids, function(key, id){mStorage.removeFolderById(id);});
-
-				options.callback(arrFolders);
-			},
-			exception: options.exception,
-			ge_callback: options.onError
-		});
-	};
 	mStorage.addTask = function(_options){
 		var options = $.extend(true, {
 			taskData: {},
@@ -562,6 +520,178 @@
 			ge_callback: options.onError
 		}, options.taskData));
 	};
+	mStorage.addIPList = function(_options){
+		var options = $.extend(true, {
+			name: "",
+			exception: {
+				LimitExceeded: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.addIPList({
+			token: mStorage.getToken(),
+			name: options.name,
+			callback: function(data){
+				var ipListObj = new IPList();
+				ipListObj.setId(data.id);
+				ipListObj.setName(options.name);
+				mStorage.ipLists.addIPList(ipListObj);
+
+				options.callback(ipListObj);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.renameFolder = function(_options){
+		var options = $.extend(true, {
+			name: "",
+			id: 0,
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.renameFolder({
+			token: mStorage.getToken(),
+			id: options.id,
+			name: options.name,
+			callback: function(data){
+				mStorage.getFolderById(options.id).setName(options.name);
+
+				options.callback(mStorage.getFolderById(options.id));
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.renameIPList = function(_options){
+		var options = $.extend(true, {
+			name: "",
+			id: 0,
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.renameIPList({
+			token: mStorage.getToken(),
+			id: options.id,
+			name: options.name,
+			callback: function(data){
+				mStorage.getIPListById(options.id).setName(options.name);
+
+				options.callback(mStorage.getIPListById(options.id));
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.removeFolder = function(_options){
+		var options = $.extend(true, {
+			ids: [],
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrFolders = [];
+		$.each(options.ids, function(key, id){ arrFolders.push(mStorage.getFolderById(id));});
+
+		API_METHOD.deleteFolders({
+			token: mStorage.getToken(),
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeFolderById(id);});
+
+				options.callback(arrFolders);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.removeTask = function(_options){
+		var options = $.extend(true, {
+			folderId: 0,
+			ids: [],
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrTasks = [];
+		$.each(options.ids, function(key, id){ arrTasks.push(mStorage.getTaskById(options.folderId, id));});
+
+		API_METHOD.deleteTasks({
+			token: mStorage.getToken(),
+			folderId: options.folderId,
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeTaskById(options.folderId, id);});
+
+				options.callback(arrTasks);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.removeIPList = function(_options){
+		var options = $.extend(true, {
+			ids: [],
+			exception: {},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		var arrIPLists = [];
+		$.each(options.ids, function(key, id){ arrIPLists.push(mStorage.getIPListById(id));});
+
+		API_METHOD.deleteIPLists({
+			token: mStorage.getToken(),
+			ids: options.ids,
+			callback: function(data){
+				$.each(options.ids, function(key, id){mStorage.removeIPListById(id);});
+
+				options.callback(arrIPLists);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	}
+	mStorage.setAccountPassword = function(_options){
+		var options = $.extend(true, {
+			password: "",
+			code: "",
+			step_setPassword: false,
+			step_confirmSetPassword: false,
+			exception: {
+				InvalidCode: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		if(options.step_setPassword) API_METHOD.setAccountPassword({
+			token: mStorage.getToken(),
+			password: options.password,
+			callback: function(data){
+				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+		else if(options.step_confirmSetPassword) API_METHOD.confirmSetAccountPassword({
+			token: mStorage.getToken(),
+			code: options.code,
+			callback: function(data){
+				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
 	mStorage.moveTask = function(_options){
 		var options = $.extend(true, {
 			folderId: 0,
@@ -594,31 +724,6 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.removeTask = function(_options){
-		var options = $.extend(true, {
-			folderId: 0,
-			ids: [],
-			exception: {},
-			callback: function(data){},
-			onError: function(data, gErrorName){}
-		}, _options);
-
-		var arrTasks = [];
-		$.each(options.ids, function(key, id){ arrTasks.push(mStorage.getTaskById(options.folderId, id));});
-
-		API_METHOD.deleteTasks({
-			token: mStorage.getToken(),
-			folderId: options.folderId,
-			ids: options.ids,
-			callback: function(data){
-				$.each(options.ids, function(key, id){mStorage.removeTaskById(options.folderId, id);});
-
-				options.callback(arrTasks);
-			},
-			exception: options.exception,
-			ge_callback: options.onError
-		});
-	};
 	mStorage.resetReadonlyKey = function(_options){
 		var options = $.extend(true, {
 			callback: function(data){},
@@ -632,38 +737,6 @@
 
 				options.callback(mStorage.getUserReadonlyKey());
 			},
-			ge_callback: options.onError
-		});
-	};
-	mStorage.setAccountPassword = function(_options){
-		var options = $.extend(true, {
-			password: "",
-			code: "",
-			step_setPassword: false,
-			step_confirmSetPassword: false,
-			exception: {
-				InvalidCode: function(){}
-			},
-			callback: function(data){},
-			onError: function(data, gErrorName){}
-		}, _options);
-
-		if(options.step_setPassword) API_METHOD.setAccountPassword({
-			token: mStorage.getToken(),
-			password: options.password,
-			callback: function(data){
-				options.callback();
-			},
-			exception: options.exception,
-			ge_callback: options.onError
-		});
-		else if(options.step_confirmSetPassword) API_METHOD.confirmSetAccountPassword({
-			token: mStorage.getToken(),
-			code: options.code,
-			callback: function(data){
-				options.callback();
-			},
-			exception: options.exception,
 			ge_callback: options.onError
 		});
 	};

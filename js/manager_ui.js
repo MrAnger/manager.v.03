@@ -130,6 +130,8 @@
 							//$(".main .auth-success .manager [name=not-setting] [name=add-category]").hide();
 							//$(".main .auth-success .manager [name=not-setting] [name=add-task]").hide();
 							setTitle([manager.lng.pageTitle, manager.lng.form.task.pageTitle]);
+							manager.forms.task.updateListIdAll();
+							$(manager.forms.task.getActiveHtml()).click();
 							break;
 						case "iplist":
 							$(".main .auth-success .iplists-content").show();
@@ -578,6 +580,13 @@
 					hide: function(){
 						$("#task_setting_notify_incomplete, #task_setting_notify_overload").hide();
 					}
+				},
+				updateListIdAll: function(){
+					$.each(WA_ManagerStorage.getFolderList(), function(key, folder){
+						$.each(folder.getTaskList(), function(key, task){
+							if(task.getListId() !=0 && !WA_ManagerStorage.getIPListById(task.getListId())) task.setListId(0);
+						});
+					});
 				}
 			},
 			geo: {
@@ -844,15 +853,17 @@
 				toggleNotContent: function(){
 					var not_content = $(".iplists .not-content"),
 						not_content_ipRanges = $(".set-iplist .not-content"),
-						btn_add_range = $("#btn_add_ipRange");
+						btn_add_range = $("#btn_add_ipRange"),
+						btn_save_ranges = $("#btn_save_ipRanges");
 
 					if(manager.forms.ipList.getIPListsHtml().length == 0){
 						$(not_content).show();
 						$(not_content_ipRanges).show();
 						$(btn_add_range).hide();
+						$(btn_save_ranges).hide();
 					}else{
 						$(not_content).hide();
-						$(not_content_ipRanges).hide();
+						//$(not_content_ipRanges).hide();
 						$(btn_add_range).show();
 					};
 				},
@@ -948,6 +959,32 @@
 				},
 				hide: function(){
 					$("#msg_addIPList .add-box .close").click();
+				}
+			},
+			ipList_rename: {
+				show: function(el){
+					var msg = $("#msg_renameIPList").fadeIn("fast"),
+						input_name = $(msg).find("[name=ipList_name]"),
+						input_id = $(msg).find("[name=ipList_id]"),
+						ipListId = getParam($(el).parents("[wa_ipList]"), "id");
+
+					$(input_name).val(WA_ManagerStorage.getIPListById(ipListId).getName());
+					$(input_name).focus();
+					$(input_id).val(ipListId);
+				},
+				hide: function(){
+					$("#msg_renameIPList .add-box .close").click();
+				}
+			},
+			ipList_remove: {
+				show: function(el){
+					var msg = $("#confirm_deleteIPList").fadeIn("fast"),
+						ipListObj = WA_ManagerStorage.getIPListById(getParam($(el).parents("[wa_ipList]"), "id"));
+
+					$(msg).find("[name=id]").val(ipListObj.getId());
+				},
+				hide: function(){
+					$("#confirm_deleteIPList .close").click();
 				}
 			}
 		},
@@ -1757,6 +1794,97 @@
 	});
 	//SET TASK SETTING FORM
 
+	//SET ADD NEW FOLDER FORM
+	$(document).on("submit","form[name=ipList_add]", function(e){
+		var form = this, inputs = {
+			ipList_name: this["ipList_name"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.ipList_name.value, TYPE.IPLIST_NAME)){
+			NoticeShow(insertLoc(manager.lng.form.ipList_add.ipList_name.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Max
+			}), "error");
+			$(inputs.ipList_name).focus();
+		}else{
+			WA_ManagerStorage.addIPList({
+				name: inputs.ipList_name.value,
+				exception: {
+					LimitExceeded: function(){
+						NoticeShow(manager.lng.exception.query.addIPList.LimitExceeded, "error");
+					}
+				},
+				callback: function(ipListObj){
+					manager.forms.ipList_add.hide()
+
+					manager.forms.ipList.addHtml(ipListObj.getId());
+
+					if(manager.forms.ipList.getIPListsHtml().length == 1) $(manager.forms.ipList.getIPListsHtml()).eq(0).click();
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET ADD NEW FOLDER FORM
+
+	//SET RENAME IPLIST FORM
+	$(document).on("submit","form[name=ipList_rename]", function(e){
+		var form = this, inputs = {
+			ipList_name: this["ipList_name"],
+			id: this["ipList_id"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.ipList_name.value, TYPE.IPLIST_NAME)){
+			NoticeShow(insertLoc(manager.lng.form.ipList_rename.ipList_name.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Max
+			}), "error");
+			$(inputs.ipList_name).focus();
+		}else{
+			WA_ManagerStorage.renameIPList({
+				id: inputs.id.value,
+				name: inputs.ipList_name.value,
+				callback: function(ipListObj){
+					manager.forms.ipList_rename.hide();
+
+					manager.forms.ipList.setName(manager.forms.ipList.getHtmlById(inputs.id.value), ipListObj.getName());
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET RENAME IPLIST FORM
+
+	//SET CONFIRM DELETE IPLIST
+	$(document).on("click","#confirm_deleteIPList [name=yes]", function(e){
+		var Self = this,
+			ipListId = $(Self).parents("#confirm_deleteIPList").find("[name=id]").val();
+
+		WA_ManagerStorage.removeIPList({
+			ids: [ipListId],
+			callback: function(arrIPList){
+				manager.forms.ipList_remove.hide();
+
+				var ipListObj = arrIPList[0],
+					ipLists = manager.forms.ipList.getIPListsHtml(),
+					ipList = manager.forms.ipList.getHtmlById(ipListObj.getId()),
+					isActive = (manager.forms.ipList.getActiveHtml() == ipList);
+
+				$(ipList).remove();
+
+				if(ipLists.length > 1 && isActive) $(manager.forms.ipList.getIPListsHtml()).eq(0).click();
+
+				manager.forms.ipList.toggleNotContent();
+				manager.forms.ipRange.toggleNotContent();
+			}
+		});
+	});
+	//SET CONFIRM DELETE IPLIST
+
 	//utils
 	var Cookie = {
 		get : function(name){
@@ -2055,6 +2183,18 @@
 			regexp: WA_ManagerStorage.api.Constants.Limit.Task.Profile.Regexp,
 			min:  WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Min,
 			max:  WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Max
+		},
+		IPLIST_NAME: {
+			dataType: "text",
+			regexp: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Regexp,
+			min:  WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Min,
+			max:  WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Max
+		},
+		IPLIST_IP: {
+			dataType: "text",
+			regexp: WA_ManagerStorage.api.Constants.Limit.IPLists.IP.Regexp,
+			min:  WA_ManagerStorage.api.Constants.Limit.IPLists.IP.Length.Min,
+			max:  WA_ManagerStorage.api.Constants.Limit.IPLists.IP.Length.Max
 		}
 	};
 	function CheckType(_data, _type, _allowEmpty){

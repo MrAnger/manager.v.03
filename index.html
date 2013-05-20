@@ -151,7 +151,7 @@
                                    wa_lang="{form.folder_rename.placeholder|attr:placeholder}">
                         </div>
                     </div>
-                    <button type="submit" class="btn" wa_lang="{form.folder_rename.send}"></button>
+                    <button type="submit" class="btn" wa_lang="{button.rename}"></button>
                 </form>
             </div>
             <div class="footer"></div>
@@ -349,6 +349,43 @@
 				</form>
 			</div>
 			<div class="footer"></div>
+		</div>
+	</div>
+</div>
+<div id="msg_renameIPList" class="add-box-wrap" style="display: none">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="ipList_rename" onsubmit="return false;">
+					<input name="ipList_id" type="hidden">
+
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.ipList_rename.ipList_name.text}"></div>
+						<div class="text-line">
+							<input name="ipList_name" type="text" value placeholder
+							       wa_lang="{form.ipList_rename.ipList_name.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.rename}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
+<div id="confirm_deleteIPList" class="confirm-box" autoclose style="display: none">
+	<input name="id" type="hidden">
+
+	<div class="confirm-content">
+		<div class="content">
+			<div class="close"></div>
+			<div class="title" name="title" wa_lang="{form.ipList_delete.title}"></div>
+			<div class="text" name="text" wa_lang="{form.ipList_delete.text}"></div>
+			<div class="buttons">
+				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -842,9 +879,9 @@
                     </span>
                     <span class="edit">
                         <span class="edit-list">
-	                        <span class="item rename" wa_lang="{menu.edit-menu.rename}"></span>
+	                        <span class="item rename" wa_lang="{menu.edit-menu.rename}" onclick="WA_ManagerUi.forms.ipList_rename.show(this);"></span>
                             <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
-                            <span class="item delete" wa_lang="{menu.edit-menu.delete}"></span>
+                            <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="WA_ManagerUi.forms.ipList_remove.show(this);"></span>
                         </span>
                     </span>
                 </li>
