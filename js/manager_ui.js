@@ -1959,6 +1959,67 @@
 	});
 	//SET ADD NEW IPRANGE FORM
 
+	//SET EDIT IPRANGE FORM
+	$(document).on("submit","form[name=ip_ranges]", function(e){
+		var form = this,
+			modified_ranges = [],
+			data = [],
+			error = false,
+			err_str = "",
+			err_input = null;
+
+		$.each(manager.forms.ipRange.getRangesHtml(), function(key, html){
+			var listId = getParam(html, "listId"),
+				rangeId = getParam(html, "rangeId"),
+				ipRangeObj = WA_ManagerStorage.getIPRangeById(listId, rangeId),
+				rangeData = parseString($(html).find("[name=value]").val());
+
+			if(ipRangeObj.getStart() != rangeData.start || ipRangeObj.getEnd() != rangeData.end) modified_ranges.push(html);
+		});
+
+		if(modified_ranges.length > 0){
+			for(var i=0; i<modified_ranges.length; i++){
+				var html = modified_ranges[i],
+					listId = getParam(html, "listId"),
+					rangeId = getParam(html, "rangeId"),
+					string = $(html).find("[name=value]").val(),
+					rangeData = parseString(string);
+
+				if(!CheckType(rangeData.start, TYPE.IPLIST_IP)){
+					error = true;
+					err_str = string;
+					err_input = $(html).find("[name=value]");
+					break;
+				}else if(!CheckType(rangeData.end, TYPE.IPLIST_IP)){
+					error = true;
+					err_str = string;
+					err_input = $(html).find("[name=value]");
+					break;
+				}else data.push({ipListId: listId, ipRangeId: rangeId, start: rangeData.start, end: rangeData.end});
+			};
+
+			if(error){
+				NoticeShow(insertLoc(manager.lng.form.ipRange_add.ipRange.error, {ip_range: err_str}), "error");
+				$(err_input).focus();
+			}else{
+				console.log(data);
+				alert("OLOLOLO!!!111111 wait update api server");
+			};
+		};
+
+		function parseString(string){
+			var out = {start: "", end: ""}, arr = string.split("-");
+
+			if(arr[0]) out.start = arr[0].toString().trim();
+			if(arr[1]) out.end = arr[1].toString().trim();
+
+			return out;
+		};
+
+		return false;
+	});
+	//SET EDIT IPRANGE FORM
+
 	//SET CONFIRM DELETE IPRANGE
 	$(document).on("click","#confirm_deleteIPRange [name=yes]", function(e){
 		var Self = this,
@@ -3765,8 +3826,8 @@
 })(jQuery);
 
 //fix js object
-if(!String.prototype.trim) {
-	String.prototype.trim = function () {
+if(!String.prototype.trim){
+	String.prototype.trim = function(){
 		return this.replace(/^\s+|\s+$/g,'');
 	};
-}
+};
