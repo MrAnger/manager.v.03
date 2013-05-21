@@ -26,7 +26,8 @@ WA_ManagerUi.lng = {
 		"transfer": "Перевести",
 		"save": "Сохранить",
 		"add": "Добавить",
-		"rename": "Переименовать"
+		"rename": "Переименовать",
+		"duplicate": "Дублировать"
 	},
 	"tooltip": {
 		"addNewFolder": "Добавить новую категорию",
@@ -210,6 +211,14 @@ WA_ManagerUi.lng = {
 		},
 		"task_move":{
 			"category": "Категории"
+		},
+		"task_clone":{
+			"category": "Категории",
+			"name": {
+				"text": "Имя задания",
+				"placeholder": "Имя задания",
+				"error": "Невведено название задания или оно не валидно."
+			}
 		},
 		"task_setting":{
 			"status": "Статус",
@@ -529,6 +538,11 @@ WA_ManagerUi.lng = {
 			},
 			"addIPList":{
 				"LimitExceeded": "Превышено максимально допустимое количество IP списков в аккаунте."
+			},
+			"cloneTask":{
+				"FolderNotFound": "Указанная категория(источник) не найдена.",
+				"TargetFolderNotFound": "Указанная категория(целевая) не найдена.",
+				"LimitExceeded": "Превышено максимальное число заданий в указанной категории."
 			}
 		}
 	},

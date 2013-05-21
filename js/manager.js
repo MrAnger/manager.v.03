@@ -467,7 +467,6 @@
 		newTask.setDays(sourceTask.getDays());
 		newTask.setExtSource(sourceTask.getExtSource());
 		newTask.setFrozen(true);
-		newTask.setGeoTargeting(sourceTask.getGeoTargeting());
 		newTask.setGrowth(sourceTask.getGrowth());
 		newTask.setId(targetTaskId);
 		newTask.setFolderId(targetFolderId);
@@ -481,12 +480,16 @@
 		newTask.setTimeDistribution(sourceTask.getTimeDistribution());
 		newTask.setUniquePeriod(sourceTask.getUniquePeriod());
 		newTask.setWeekTargeting(sourceTask.getWeekTargeting());
+		//prepare geo targeting
+		var geoTarg = sourceTask.getGeoTargeting();
+		$.each(geoTarg, function(id, data){$.extend(data, {recd: 0});});
+		newTask.setGeoTargeting(geoTarg);
 		//prepare day stat
 		var dayStat = sourceTask.getDayStat();
 		$.each(dayStat, function(id, data){$.extend(data, {give: 0, overload: 0, incomplete: 0});});
 		newTask.setDayStat(dayStat);
 
-		mStorage.addTaskByFolderId(targetFolderId, newTask);
+		return mStorage.addTaskByFolderId(targetFolderId, newTask);
 	};
 
 	//METHODS FOR API SERVER
@@ -741,7 +744,7 @@
 			token: mStorage.getToken(),
 			folderId: options.folderId,
 			taskId: options.taskId,
-			targetId: options.targetId,
+			targetId: options.targetFolderId,
 			name: options.name,
 			callback: function(data){
 				mStorage.cloneTask(options.folderId, options.taskId, options.targetFolderId, data.id, options.name);

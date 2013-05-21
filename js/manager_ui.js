@@ -737,6 +737,38 @@
 					data.callback();
 				}
 			},
+			task_clone: {
+				show: function(data){
+					data = $.extend(true, {
+						callback: function(){},
+						taskId: 0,
+						folderId: 0
+					}, data);
+					var html = "",
+						msg = $("#msg_cloneTask")[0];
+
+					$.each(WA_ManagerStorage.getFolderList(), function(key, folderObj){
+						html += '<option value="'+folderObj.getId()+'">'+folderObj.getName()+'</option>';
+					});
+
+					$(msg).fadeIn("fast").find("[name=selectBox_folder]").html(html);
+
+					$(msg).find("[name=folderId]").val(data.folderId);
+					$(msg).find("[name=taskId]").val(data.taskId);
+					$(msg).find("[name=task_name]").focus().val("");
+
+					data.callback();
+				},
+				hide: function(data){
+					data = $.extend(true, {
+						callback: function(){}
+					}, data);
+
+					$("#msg_cloneTask").hide();
+
+					data.callback();
+				}
+			},
 			account: {
 				load: function(){
 					$("[name=form_account] [name=balance] [name=value]").html(DataFormat.int(WA_ManagerStorage.getUserBalance()));
@@ -1633,13 +1665,22 @@
 
 		//check input data
 		if(!CheckType(inputs.name.value, TYPE.TASK_NAME)){
-			NoticeShow(manager.lng.form.task_add.name.error, "error");
+			NoticeShow(insertLoc(manager.lng.form.task_add.name.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Max
+			}), "error");
 			$(inputs.name).focus();
 		}else if(!CheckType(inputs.domain.value, TYPE.TASK_DOMAIN)){
-			NoticeShow(manager.lng.form.task_add.domain.error, "error");
+			NoticeShow(insertLoc(manager.lng.form.task_add.domain.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.Task.Domain.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.Task.Domain.Length.Max
+			}), "error");
 			$(inputs.domain).focus();
 		}else if(!CheckType(inputs.extSource.value, TYPE.TASK_EXTSOURCE)){
-			NoticeShow(manager.lng.form.task_add.extSource.error, "error");
+			NoticeShow(insertLoc(manager.lng.form.task_add.extSource.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.Task.ExtSource.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.Task.ExtSource.Length.Max
+			}), "error");
 			$(inputs.extSource).focus();
 		}else{
 			$.extend(true, task_data, {
@@ -1749,6 +1790,50 @@
 		};
 	});
 	//SET MOVE TASK FORM
+
+	//SET CLONE TASK FORM
+	$(document).on("submit","form[name=task_clone]", function(e){
+		var inputs = {
+				name: this["task_name"]
+			},
+			folderId = parseInt($(this).find("[name=folderId]").val()),
+			taskId = parseInt($(this).find("[name=taskId]").val()),
+			targetId = $(this).find("[name=selectBox_folder]").val();
+
+		//check input data
+		if(!CheckType(inputs.name.value, TYPE.TASK_NAME)){
+			NoticeShow(insertLoc(manager.lng.form.task_clone.name.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Max
+			}), "error");
+			$(inputs.name).focus();
+		}else if(targetId != null){
+			targetId = parseInt(targetId);
+			WA_ManagerStorage.api_cloneTask({
+				folderId: folderId,
+				targetFolderId: targetId,
+				taskId: taskId,
+				name: inputs.name.value,
+				callback: function(task){
+					manager.forms.task_clone.hide();
+					manager.forms.folder.setTaskCount(manager.forms.folder.getHtmlById(targetId), WA_ManagerStorage.getFolderById(targetId).getTaskCount());
+					if(folderId == targetId) manager.forms.task.addHtml(task.getFolderId(), task.getId());
+				},
+				exception: {
+					FolderNotFound: function(){
+						NoticeShow(manager.lng.exception.query.cloneTask.FolderNotFound, "error");
+					},
+					TargetFolderNotFound: function(){
+						NoticeShow(manager.lng.exception.query.cloneTask.TargetFolderNotFound, "error");
+					},
+					LimitExceeded: function(){
+						NoticeShow(manager.lng.exception.query.cloneTask.LimitExceeded, "error");
+					}
+				}
+			});
+		};
+	});
+	//SET CLONE TASK FORM
 
 	//SET TASK SETTING FORM
 	$(document).on("submit","form[name=task-setting]", function(e){

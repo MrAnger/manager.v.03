@@ -285,6 +285,35 @@
 		</div>
 	</div>
 </div>
+<div id="msg_cloneTask" class="add-box-wrap" style="display: none;">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="task_clone" onsubmit="return false;">
+					<input name="folderId" type="hidden">
+					<input name="taskId" type="hidden">
+
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.task_clone.name.text}"></div>
+						<div class="text-line">
+							<input name="task_name" type="text" value placeholder
+							       wa_lang="{form.task_clone.name.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.task_clone.category}"></div>
+						<div class="text-line">
+							<select name="selectBox_folder" size="8"></select>
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.duplicate}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
 <div id="msg_pay" class="confirm-box" style="display: none">
 	<div class="confirm-content">
 		<div class="content">
@@ -632,7 +661,7 @@
                 <span class="edit">
                     <span class="edit-list">
                         <span class="item move" wa_lang="{menu.edit-menu.move}" onclick="WA_ManagerUi.forms.task_move.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
-                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
+                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" onclick="WA_ManagerUi.forms.task_clone.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
                         <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}"></span>
                         <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}"></span>
                         <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="WA_ManagerUi.forms.task_remove.show(this);"></span>
