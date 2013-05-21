@@ -745,7 +745,7 @@
 					$("[name=form_account] [name=readonlyKey] [name=value]").html(WA_ManagerStorage.getUserReadonlyKey());
 				},
 				resetReadonlyKey: function(){
-					WA_ManagerStorage.resetReadonlyKey({
+					WA_ManagerStorage.api_resetReadonlyKey({
 						callback: function(key){
 							$("[name=form_account] [name=readonlyKey] [name=value]").html(key);
 						}
@@ -1401,7 +1401,7 @@
 				}), "error");
 				$(inputs.password).focus();
 			}else{
-				WA_ManagerStorage.setAccountPassword({
+				WA_ManagerStorage.api_setAccountPassword({
 					step_setPassword: true,
 					password: inputs.password.value,
 					callback: function(){
@@ -1420,7 +1420,7 @@
 				}), "error");
 				$(inputs.code).focus();
 			}else{
-				WA_ManagerStorage.setAccountPassword({
+				WA_ManagerStorage.api_setAccountPassword({
 					step_confirmSetPassword: true,
 					code: inputs.code.value,
 					callback: function(){
@@ -1459,7 +1459,7 @@
 				NoticeShow(manager.lng.form.send_credits.credits.error, "error");
 				$(inputs.amount).focus();
 			}else{
-				WA_ManagerStorage.sendCredits({
+				WA_ManagerStorage.api_sendCredits({
 					step_sendCredits: true,
 					recipient: inputs.recipient.value,
 					amount: getValue(),
@@ -1490,7 +1490,7 @@
 				}), "error");
 				$(inputs.code).focus();
 			}else{
-				WA_ManagerStorage.sendCredits({
+				WA_ManagerStorage.api_sendCredits({
 					step_confirmSendCredits: true,
 					code: inputs.code.value,
 					exception: {
@@ -1531,7 +1531,7 @@
 			NoticeShow(manager.lng.form.folder_add.folder_name.error, "error");
 			$(inputs.folder_name).focus();
 		}else{
-			WA_ManagerStorage.addFolder({
+			WA_ManagerStorage.api_addFolder({
 				name: inputs.folder_name.value,
 				exception: {
 					LimitExceeded: function(){
@@ -1564,7 +1564,7 @@
 			NoticeShow(manager.lng.form.folder_rename.folder_name.error, "error");
 			$(inputs.folder_name).focus();
 		}else{
-			WA_ManagerStorage.renameFolder({
+			WA_ManagerStorage.api_renameFolder({
 				id: inputs.id.value,
 				name: inputs.folder_name.value,
 				callback: function(folderObj){
@@ -1584,7 +1584,7 @@
 		var Self = this,
 			folderId = $(Self).parents("#confirm_deleteFolder").find("[name=id]").val();
 
-		WA_ManagerStorage.removeFolder({
+		WA_ManagerStorage.api_removeFolder({
 			ids: [folderId],
 			callback: function(arrFolders){
 				manager.forms.folder_remove.hide();
@@ -1649,7 +1649,7 @@
 				extSource: inputs.extSource.value
 			});
 
-			WA_ManagerStorage.addTask({
+			WA_ManagerStorage.api_addTask({
 				taskData: task_data,
 				callback: function(taskObj){
 					manager.forms.task_add.hide();
@@ -1680,7 +1680,7 @@
 			folderId = $(Self).parents("#confirm_deleteTask").find("[name=folderId]").val(),
 			taskId = $(Self).parents("#confirm_deleteTask").find("[name=taskId]").val();
 
-		WA_ManagerStorage.removeTask({
+		WA_ManagerStorage.api_removeTask({
 			folderId: folderId,
 			ids: [taskId],
 			callback: function(arrTasks){
@@ -1711,7 +1711,7 @@
 			targetId = $(this).find("[name=selectBox_folder]").val();
 
 		if(targetId != null){
-			WA_ManagerStorage.moveTask({
+			WA_ManagerStorage.api_moveTask({
 				folderId: folderId,
 				targetId: targetId,
 				ids: [taskId],
@@ -1834,7 +1834,7 @@
 			}), "error");
 			$(inputs.ipList_name).focus();
 		}else{
-			WA_ManagerStorage.addIPList({
+			WA_ManagerStorage.api_addIPList({
 				name: inputs.ipList_name.value,
 				exception: {
 					LimitExceeded: function(){
@@ -1870,7 +1870,7 @@
 			}), "error");
 			$(inputs.ipList_name).focus();
 		}else{
-			WA_ManagerStorage.renameIPList({
+			WA_ManagerStorage.api_renameIPList({
 				id: inputs.id.value,
 				name: inputs.ipList_name.value,
 				callback: function(ipListObj){
@@ -1890,7 +1890,7 @@
 		var Self = this,
 			ipListId = $(Self).parents("#confirm_deleteIPList").find("[name=id]").val();
 
-		WA_ManagerStorage.removeIPList({
+		WA_ManagerStorage.api_removeIPList({
 			ids: [ipListId],
 			callback: function(arrIPList){
 				manager.forms.ipList_remove.hide();
@@ -2026,7 +2026,7 @@
 			ipListId = $(Self).parents("#confirm_deleteIPRange").find("[name=ipListId]").val(),
 			ipRangeId = $(Self).parents("#confirm_deleteIPRange").find("[name=ipRangeId]").val();
 
-		WA_ManagerStorage.removeIPRange({
+		WA_ManagerStorage.api_removeIPRange({
 			listId: ipListId,
 			ids: [ipRangeId],
 			callback: function(arrRanges){

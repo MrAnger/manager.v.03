@@ -918,7 +918,6 @@
 				}, data.exception, data.ge_callback);
 			},
 			confirmRegister: function(data){
-
 				data = $.extend(true, {
 					exception: {
 						InvalidCode: function(){}
@@ -935,6 +934,33 @@
 
 				req.send(function(_data){
 					var output = {};
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
+			cloneTask: function(data){
+				data = $.extend(true, {
+					exception: {
+						FolderNotFound: function(){},
+						TargetFolderNotFound: function(){},
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Clone.Task);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTarget, data.targetId);
+				req.addData(OperationItem.IdTask, data.taskId);
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.id = _data[OperationItem.IdTask];
+
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
@@ -1165,6 +1191,10 @@
 
 			Move: {
 				Tasks: "Move tasks"
+			},
+
+			Clone: {
+				Task: 'Clone task'
 			}
 		},
 

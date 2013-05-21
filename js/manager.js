@@ -456,9 +456,41 @@
 	mStorage.getIPRangeList = function(ipListId){
 		return mStorage.getIPListById(ipListId).getRangeList();
 	};
+	mStorage.cloneTask = function(folderId, taskId, targetFolderId, targetTaskId, newName){
+		var newTask = new Task(), sourceTask = mStorage.getTaskById(folderId, taskId);
+
+		newTask.setAfterClick(sourceTask.getAfterClick());
+		newTask.setAllowProxy(sourceTask.getAllowProxy());
+		newTask.setBeforeClick(sourceTask.getBeforeClick());
+		newTask.setDayTargeting(sourceTask.getDayTargeting());
+		newTask.setDomain(sourceTask.getDomain());
+		newTask.setDays(sourceTask.getDays());
+		newTask.setExtSource(sourceTask.getExtSource());
+		newTask.setFrozen(true);
+		newTask.setGeoTargeting(sourceTask.getGeoTargeting());
+		newTask.setGrowth(sourceTask.getGrowth());
+		newTask.setId(targetTaskId);
+		newTask.setFolderId(targetFolderId);
+		newTask.setIgnoreGU(sourceTask.getIgnoreGU());
+		newTask.setListId(sourceTask.getListId());
+		newTask.setListMode(sourceTask.getListMode());
+		newTask.setMask(sourceTask.getMask());
+		newTask.setName(newName);
+		newTask.setProfile(sourceTask.getProfile());
+		newTask.setRangeSize(sourceTask.getRangeSize());
+		newTask.setTimeDistribution(sourceTask.getTimeDistribution());
+		newTask.setUniquePeriod(sourceTask.getUniquePeriod());
+		newTask.setWeekTargeting(sourceTask.getWeekTargeting());
+		//prepare day stat
+		var dayStat = sourceTask.getDayStat();
+		$.each(dayStat, function(id, data){$.extend(data, {give: 0, overload: 0, incomplete: 0});});
+		newTask.setDayStat(dayStat);
+
+		mStorage.addTaskByFolderId(targetFolderId, newTask);
+	};
 
 	//METHODS FOR API SERVER
-	mStorage.addFolder = function(_options){
+	mStorage.api_addFolder = function(_options){
 		var options = $.extend(true, {
 			name: "",
 			exception: {
@@ -483,7 +515,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.addTask = function(_options){
+	mStorage.api_addTask = function(_options){
 		var options = $.extend(true, {
 			taskData: {},
 			exception: {
@@ -525,7 +557,7 @@
 			ge_callback: options.onError
 		}, options.taskData));
 	};
-	mStorage.addIPList = function(_options){
+	mStorage.api_addIPList = function(_options){
 		var options = $.extend(true, {
 			name: "",
 			exception: {
@@ -550,7 +582,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.renameFolder = function(_options){
+	mStorage.api_renameFolder = function(_options){
 		var options = $.extend(true, {
 			name: "",
 			id: 0,
@@ -572,7 +604,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.renameIPList = function(_options){
+	mStorage.api_renameIPList = function(_options){
 		var options = $.extend(true, {
 			name: "",
 			id: 0,
@@ -594,7 +626,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.removeFolder = function(_options){
+	mStorage.api_removeFolder = function(_options){
 		var options = $.extend(true, {
 			ids: [],
 			exception: {},
@@ -617,7 +649,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.removeTask = function(_options){
+	mStorage.api_removeTask = function(_options){
 		var options = $.extend(true, {
 			folderId: 0,
 			ids: [],
@@ -642,7 +674,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.removeIPList = function(_options){
+	mStorage.api_removeIPList = function(_options){
 		var options = $.extend(true, {
 			ids: [],
 			exception: {},
@@ -665,7 +697,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.removeIPRange = function(_options){
+	mStorage.api_removeIPRange = function(_options){
 		var options = $.extend(true, {
 			listId: 0,
 			ids: [],
@@ -690,7 +722,37 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.setAccountPassword = function(_options){
+	mStorage.api_cloneTask = function(_options){
+		var options = $.extend(true, {
+			folderId: 0,
+			taskId: 0,
+			targetFolderId: 0,
+			name: "",
+			exception: {
+				FolderNotFound: function(){},
+				TargetFolderNotFound: function(){},
+				LimitExceeded: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.cloneTask({
+			token: mStorage.getToken(),
+			folderId: options.folderId,
+			taskId: options.taskId,
+			targetId: options.targetId,
+			name: options.name,
+			callback: function(data){
+				mStorage.cloneTask(options.folderId, options.taskId, options.targetFolderId, data.id, options.name);
+
+				options.callback(mStorage.getTaskById(options.targetFolderId, data.id));
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.api_setAccountPassword = function(_options){
 		var options = $.extend(true, {
 			password: "",
 			code: "",
@@ -722,7 +784,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.moveTask = function(_options){
+	mStorage.api_moveTask = function(_options){
 		var options = $.extend(true, {
 			folderId: 0,
 			targetId: 0,
@@ -760,7 +822,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.resetReadonlyKey = function(_options){
+	mStorage.api_resetReadonlyKey = function(_options){
 		var options = $.extend(true, {
 			callback: function(data){},
 			onError: function(data, gErrorName){}
@@ -776,7 +838,7 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.sendCredits = function(_options){
+	mStorage.api_sendCredits = function(_options){
 		var options = $.extend(true, {
 			recipient: "",
 			amount: 0,
@@ -856,8 +918,6 @@
 	mStorage.authorized = false;
 	mStorage.activated = true;
 	mStorage.dataReceived = false;
-
-	//SET SYSTEM EVENT HANDLERS
 
 	//SET MANAGER API
 	$.extend(mStorage.api.options, {
