@@ -331,6 +331,7 @@
 						taskObj.setGeoTargeting(task.geoTargeting);
 						taskObj.setGrowth(task.growth);
 						taskObj.setId(task.id);
+						taskObj.setFolderId(folderObj.getId());
 						taskObj.setIgnoreGU(task.ignoreGU);
 						taskObj.setListId(task.listId);
 						taskObj.setListMode(task.listMode);
@@ -743,8 +744,14 @@
 			targetId: options.targetId,
 			ids: options.ids,
 			callback: function(data){
+				//remove tasks from source folder
 				$.each(options.ids, function(key, id){mStorage.removeTaskById(options.folderId, id);});
-				//to do...add to other folder, wait update api server
+				//add task to target folder
+				$.each(arrTasks, function(key, task){
+					task.setFolderId(options.targetId);
+					task.setId(data.ids[key]);
+					mStorage.getFolderById(options.targetId).addTask(task);
+				});
 
 				options.callback(arrTasks);
 			},

@@ -986,6 +986,20 @@
 				hide: function(){
 					$("#confirm_deleteIPList .close").click();
 				}
+			},
+			ipRange_remove: {
+				show: function(el){
+					var msg = $("#confirm_deleteIPRange").fadeIn("fast"),
+						rangeHtml = $(el).parents("[wa_ipRange]"),
+						ipListId = getParam(rangeHtml, "listId"),
+						rangeId = getParam(rangeHtml, "rangeId");
+
+					$(msg).find("[name=ipListId]").val(ipListId);
+					$(msg).find("[name=ipRangeId]").val(rangeId);
+				},
+				hide: function(){
+					$("#confirm_deleteIPRange .close").click();
+				}
 			}
 		},
 		logOut: function(){
@@ -1794,7 +1808,7 @@
 	});
 	//SET TASK SETTING FORM
 
-	//SET ADD NEW FOLDER FORM
+	//SET ADD NEW IPLIST FORM
 	$(document).on("submit","form[name=ipList_add]", function(e){
 		var form = this, inputs = {
 			ipList_name: this["ipList_name"]
@@ -1827,7 +1841,7 @@
 
 		return false;
 	});
-	//SET ADD NEW FOLDER FORM
+	//SET ADD NEW IPLIST FORM
 
 	//SET RENAME IPLIST FORM
 	$(document).on("submit","form[name=ipList_rename]", function(e){
@@ -1884,6 +1898,28 @@
 		});
 	});
 	//SET CONFIRM DELETE IPLIST
+
+	//SET CONFIRM DELETE TASK
+	$(document).on("click","#confirm_deleteIPRange [name=yes]", function(e){
+		var Self = this,
+			ipListId = $(Self).parents("#confirm_deleteIPRange").find("[name=ipListId]").val(),
+			ipRangeId = $(Self).parents("#confirm_deleteIPRange").find("[name=ipRangeId]").val();
+
+		WA_ManagerStorage.removeIPRange({
+			listId: ipListId,
+			ids: [ipRangeId],
+			callback: function(arrRanges){
+				var rangeObj = arrRanges[0],
+					ranges = manager.forms.ipRange.getRangesHtml(),
+					range = manager.forms.ipRange.getHtmlById(ipListId, ipRangeId);
+
+				$(range).remove();
+
+				manager.forms.ipRange.toggleNotContent();
+			}
+		});
+	});
+	//SET CONFIRM DELETE TASK
 
 	//utils
 	var Cookie = {

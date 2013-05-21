@@ -389,6 +389,22 @@
 		</div>
 	</div>
 </div>
+<div id="confirm_deleteIPRange" class="confirm-box" autoclose style="display: none">
+	<input name="ipListId" type="hidden">
+	<input name="ipRangeId" type="hidden">
+
+	<div class="confirm-content">
+		<div class="content">
+			<div class="close"></div>
+			<div class="title" name="title" wa_lang="{form.ipRange_delete.title}"></div>
+			<div class="text" name="text" wa_lang="{form.ipRange_delete.text}"></div>
+			<div class="buttons">
+				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
         <span class="loader-text" wa_lang="{loader.text}"></span>
@@ -900,7 +916,7 @@
 					        <td>
 						        <input name="value" type="text" value class="ip">
 					        </td>
-					        <td><span class="delete" name="delete"></span></td>
+					        <td><span wa_lang="{tooltip.removeIPRange|attr:title}" class="delete" name="delete" onclick="WA_ManagerUi.forms.ipRange_remove.show(this);"></span></td>
 				        </tr>
 			        </table>
 			        <button id="btn_save_ipRanges" type="submit" class="btn" wa_lang="{button.save}"></button>

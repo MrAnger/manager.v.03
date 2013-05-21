@@ -41,7 +41,8 @@ WA_ManagerUi.lng = {
 		"refreshReadonlyKey": "Изменить гостевой ключ",
 		"changeAccountStatus": "Восстановить аккаунт",
 		"copyToClipboardReadonlyKey": "Скопировать в буфер обмена гостевой ключ",
-		"copyToClipboardConsoleLog": "Скопировать в буфер обмена лог консоли"
+		"copyToClipboardConsoleLog": "Скопировать в буфер обмена лог консоли",
+		"removeIPRange" : "Удалить IP диапазон"
 	},
 	"loader":{
 		"text": "Пожалуйста, подождите ..."
@@ -457,6 +458,10 @@ WA_ManagerUi.lng = {
 		"ipList_delete":{
 			"title": "Предупреждение",
 			"text": "После удаления IP списка безвозратно удалятся все диапазоны IP адресов находящиеся в нём! Вы хотите продолжить?"
+		},
+		"ipRange_delete":{
+			"title": "Предупреждение",
+			"text": "IP диапазон будет удален безвозратно! Вы хотите продолжить?"
 		}
 	},
 	"language":{

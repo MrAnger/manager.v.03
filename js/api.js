@@ -1014,12 +1014,14 @@
 				req.setOpCode(OperationCode.Move.Tasks);
 				req.setToken(data.token);
 
-				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.IdTarget, data.targetId);
+				req.addData(OperationItem.SourceFolder, data.folderId);
+				req.addData(OperationItem.TargetFolder, data.targetId);
 				req.addData(OperationItem.IdsTasks, data.ids);
 
 				req.send(function(_data){
 					var output = {};
+
+					output.ids = _data[OperationItem.IdsNew];
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -1239,6 +1241,7 @@
 			IdList: 'List ID',
 			IdRange: 'Range ID',
 			IdTarget: 'Target ID',
+			IdsNew: 'New IDs',
 			Day: 'Day',
 			IdOperation: 'Operation ID',
 			Recd: 'Recd',
@@ -1279,7 +1282,9 @@
 			Timestamp: 'Timestamp',
 			DayStatistic: 'Day stats',
 			SystemConstants: 'System constants',
-			GeoZones: 'Geo zones'
+			GeoZones: 'Geo zones',
+			SourceFolder: 'Source folder',
+			TargetFolder: 'Target folder'
 		},
 
 		ResponseStatus : {
