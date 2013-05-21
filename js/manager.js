@@ -302,6 +302,7 @@
 					$.each(ipList.ranges, function(key, range){
 						var rangeObj = new IPRange();
 						rangeObj.setId(range.id);
+						rangeObj.setListId(ipListObj.getId());
 						rangeObj.setStart(range.start);
 						rangeObj.setEnd(range.end);
 

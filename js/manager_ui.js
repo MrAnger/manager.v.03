@@ -987,6 +987,18 @@
 					$("#confirm_deleteIPList .close").click();
 				}
 			},
+			ipRange_add: {
+				show: function(){
+					var msg = $("#msg_addIPRange").fadeIn("fast"),
+						input = $(msg).find("[name=ipRange]");
+
+					$(input).val("");
+					$(input).focus();
+				},
+				hide: function(){
+					$("#msg_addIPRange .add-box .close").click();
+				}
+			},
 			ipRange_remove: {
 				show: function(el){
 					var msg = $("#confirm_deleteIPRange").fadeIn("fast"),
@@ -1899,7 +1911,55 @@
 	});
 	//SET CONFIRM DELETE IPLIST
 
-	//SET CONFIRM DELETE TASK
+	//SET ADD NEW IPRANGE FORM
+	$(document).on("submit","form[name=ipRange_add]", function(e){
+		var form = this, inputs = {
+			ipRange: this["ipRange"]
+		};
+
+		//check input data
+		if(inputs.ipRange.value.length > 0){
+			var lines = [], error = false, err_str = "", ranges = [];
+			$.each(inputs.ipRange.value.split("\n"), function(key, string){
+				if(string.length > 0) lines.push(string);
+			});
+			for(var i=0; i<lines.length; i++){
+				var index = i, line = lines[index];
+
+				if(line.indexOf("-") == -1){
+					error = true;
+					err_str = line;
+					break;
+				}else if(line.indexOf("-") != -1){
+					var arr = line.split("-"),
+						start = arr[0].toString().trim(),
+						end = arr[1].toString().trim();
+
+					if(!CheckType(start, TYPE.IPLIST_IP)){
+						error = true;
+						err_str = line;
+						break;
+					}else if(!CheckType(end, TYPE.IPLIST_IP)){
+						error = true;
+						err_str = line;
+						break;
+					}else ranges.push({start: start, end: end});
+				}
+			};
+			if(error){
+				NoticeShow(insertLoc(manager.lng.form.ipRange_add.ipRange.error, {ip_range: err_str}), "error");
+				$(inputs.ipRange).focus();
+			}else{
+				console.log(ranges);
+				alert("OLOLOLO!!!111111 wait update api server");
+			};
+		};
+
+		return false;
+	});
+	//SET ADD NEW IPRANGE FORM
+
+	//SET CONFIRM DELETE IPRANGE
 	$(document).on("click","#confirm_deleteIPRange [name=yes]", function(e){
 		var Self = this,
 			ipListId = $(Self).parents("#confirm_deleteIPRange").find("[name=ipListId]").val(),
@@ -1919,7 +1979,7 @@
 			}
 		});
 	});
-	//SET CONFIRM DELETE TASK
+	//SET CONFIRM DELETE IPRANGE
 
 	//utils
 	var Cookie = {

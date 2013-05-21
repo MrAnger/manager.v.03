@@ -389,6 +389,25 @@
 		</div>
 	</div>
 </div>
+<div id="msg_addIPRange" class="add-box-wrap" style="display: none;">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="ipRange_add" onsubmit="return false;">
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.ipRange_add.ipRange.text}"></div>
+						<div class="text-line">
+							<textarea name="ipRange" placeholder wrap="off" wa_lang="{form.ipRange_add.ipRange.placeholder|attr:placeholder}"></textarea>
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.add}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
 <div id="confirm_deleteIPRange" class="confirm-box" autoclose style="display: none">
 	<input name="ipListId" type="hidden">
 	<input name="ipRangeId" type="hidden">
@@ -906,7 +925,7 @@
         </div>
     </div>
     <div class="set-iplist">
-        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="add"></span></div>
+        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="add" onclick="WA_ManagerUi.forms.ipRange_add.show();"></span></div>
         <div class="setting-group" height_minus="60">
 		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 	        <div class="content-scroll" style="top:0;">
