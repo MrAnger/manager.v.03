@@ -802,7 +802,7 @@
 						html += '<option value="'+folderObj.getId()+'">'+folderObj.getName()+'</option>';
 					});
 
-					$(msg).find("[name=settings]").find("input[type=checkbox]").prop("checked", true);
+					$(msg).find("[name=settings]").find("input[type=checkbox]").prop("checked", false);
 					$(msg).find("[name=selectBox_taskId]").html("");
 
 					$(msg).fadeIn("fast").find("[name=selectBox_folderId]").html(html);
