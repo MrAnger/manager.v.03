@@ -1279,3 +1279,18 @@ embed:hover .copy {
 	background: rgba(202, 139, 0, 0.9) url(../img/info.png) no-repeat 50% 50%;
 	border-radius:3px 0 0 3px;
 }
+
+.box-line {
+	max-width:450px;
+	font-size:.9em;
+}
+
+.box-line .box-table {
+	display:table;
+	width:100%;
+}
+.box-line .box {
+	display:table-cell;
+	width:50%;
+	padding:5px;
+}
