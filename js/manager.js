@@ -462,7 +462,6 @@
 		newTask.setAfterClick(sourceTask.getAfterClick());
 		newTask.setAllowProxy(sourceTask.getAllowProxy());
 		newTask.setBeforeClick(sourceTask.getBeforeClick());
-		newTask.setDayTargeting(sourceTask.getDayTargeting());
 		newTask.setDomain(sourceTask.getDomain());
 		newTask.setDays(sourceTask.getDays());
 		newTask.setExtSource(sourceTask.getExtSource());
@@ -477,19 +476,105 @@
 		newTask.setName(newName);
 		newTask.setProfile(sourceTask.getProfile());
 		newTask.setRangeSize(sourceTask.getRangeSize());
-		newTask.setTimeDistribution(sourceTask.getTimeDistribution());
 		newTask.setUniquePeriod(sourceTask.getUniquePeriod());
-		newTask.setWeekTargeting(sourceTask.getWeekTargeting());
 		//prepare geo targeting
-		var geoTarg = sourceTask.getGeoTargeting();
-		$.each(geoTarg, function(id, data){$.extend(data, {recd: 0});});
-		newTask.setGeoTargeting(geoTarg);
+		var geoTargeting = [];
+		$.each(sourceTask.getGeoTargeting(), function(key, data){geoTargeting[key] = $.extend(true, {}, data, {recd: 0});});
+		newTask.setGeoTargeting(geoTargeting);
 		//prepare day stat
-		var dayStat = sourceTask.getDayStat();
-		$.each(dayStat, function(id, data){$.extend(data, {give: 0, overload: 0, incomplete: 0});});
+		var dayStat = [];
+		$.each(sourceTask.getDayStat(), function(key, data){dayStat[key] = $.extend(true, {}, data, {give: 0, overload: 0, incomplete: 0});});
 		newTask.setDayStat(dayStat);
+		//prepare day targeting
+		var dayTargeting = [];
+		$.each(sourceTask.getDayTargeting(), function(key, data){dayTargeting[key] = $.extend(true, {}, data);});
+		newTask.setDayTargeting(dayTargeting);
+		//prepare time distribution
+		var timeDistribution = [];
+		$.each(sourceTask.getTimeDistribution(), function(key, data){timeDistribution[key] = $.extend(true, {}, data);});
+		newTask.setTimeDistribution(timeDistribution);
+		//prepare week targeting
+		var weekTargeting = [];
+		$.each(sourceTask.getWeekTargeting(), function(key, data){weekTargeting[key] = $.extend(true, {}, data);});
+		newTask.setWeekTargeting(weekTargeting);
 
 		return mStorage.addTaskByFolderId(targetFolderId, newTask);
+	};
+	mStorage.copyTaskSettings = function(folderSourceId, taskSourceId, folderTargetId, arr_taskTargetId, copyParams){
+		var sourceTask = mStorage.getTaskById(folderSourceId, taskSourceId);
+
+		$.each(arr_taskTargetId, function(key, taskId){
+			var task = mStorage.getTaskById(folderTargetId, taskId);
+			$.each(copyParams, function(key, param){
+				switch(param){
+					case API_OP_ITEM.Mask:
+						task.setMask(sourceTask.getMask());
+						break;
+					case API_OP_ITEM.IgnoreGU:
+						task.setIgnoreGU(sourceTask.getIgnoreGU());
+						break;
+					case API_OP_ITEM.AllowProxy:
+						task.setAllowProxy(sourceTask.getAllowProxy());
+						break;
+					case API_OP_ITEM.UniquePeriod:
+						task.setUniquePeriod(sourceTask.getUniquePeriod());
+						break;
+					case API_OP_ITEM.RangeSize:
+						task.setRangeSize(sourceTask.getRangeSize());
+						break;
+					case API_OP_ITEM.BeforeClick:
+						task.setBeforeClick(sourceTask.getBeforeClick());
+						break;
+					case API_OP_ITEM.AfterClick:
+						task.setAfterClick(sourceTask.getAfterClick());
+						break;
+					case API_OP_ITEM.Domain:
+						task.setDomain(sourceTask.getDomain());
+						break;
+					case API_OP_ITEM.ExtSource:
+						task.setExtSource(sourceTask.getExtSource());
+						break;
+					case API_OP_ITEM.Frozen:
+						task.setFrozen(sourceTask.getFrozen());
+						break;
+					case API_OP_ITEM.Growth:
+						task.setGrowth(sourceTask.getGrowth());
+						break;
+					case API_OP_ITEM.IdList:
+						task.setListId(sourceTask.getListId());
+						break;
+					case API_OP_ITEM.ListMode:
+						task.setListMode(sourceTask.getListMode());
+						break;
+					case API_OP_ITEM.Days:
+						task.setDays(sourceTask.getDays());
+						break;
+					case API_OP_ITEM.Profile:
+						task.setProfile(sourceTask.getProfile());
+						break;
+					case API_OP_ITEM.GeoTargeting:
+						var geoTargeting = [];
+						$.each(sourceTask.getGeoTargeting(), function(key, targ){geoTargeting[key] = $.extend(true, {}, targ, {recd: 0});});
+						task.setGeoTargeting(geoTargeting);
+						break;
+					case API_OP_ITEM.DayTargeting:
+						var dayTargeting = [];
+						$.each(sourceTask.getDayTargeting(), function(key, targ){dayTargeting[key] = $.extend(true, {}, targ);});
+						task.setDayTargeting(dayTargeting);
+						break;
+					case API_OP_ITEM.WeekTargeting:
+						var weekTargeting = [];
+						$.each(sourceTask.getWeekTargeting(), function(key, targ){weekTargeting[key] = $.extend(true, {}, targ);});
+						task.setWeekTargeting(weekTargeting);
+						break;
+					case API_OP_ITEM.TimeDistribution:
+						var timeDistribution = [];
+						$.each(sourceTask.getTimeDistribution(), function(key, targ){timeDistribution[key] = $.extend(true, {}, targ);});
+						task.setTimeDistribution(timeDistribution);
+						break;
+				};
+			});
+		});
 	};
 
 	//METHODS FOR API SERVER
@@ -1106,7 +1191,8 @@
 	//SHORT LINKS
 	var CONST = mStorage.const,
 		CONST_STORAGE = CONST.dataStorage,
-		API_METHOD = mStorage.api.methods;
+		API_METHOD = mStorage.api.methods,
+		API_OP_ITEM = mStorage.api.Constants.OperationItem;
 
 	//OBJECTS
 	function FolderContainer(){

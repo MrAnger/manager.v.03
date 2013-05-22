@@ -1073,6 +1073,32 @@
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
+			},
+			taskCopySettings: function(data){
+				data = $.extend(true, {
+					exception: {
+						FolderNotFound: function(){},
+						TargetFolderNotFound: function(){},
+						TaskNotFound: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Copy.TaskSettings);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.SourceFolder, data.folderSourceId);
+				req.addData(OperationItem.IdSourceTask, data.taskSourceId);
+				req.addData(OperationItem.TargetFolder, data.folderTargetId);
+				req.addData(OperationItem.TargetTasks, data.ids);
+				req.addData(OperationItem.Settings, data.settings);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
 			}
 		},
 		utils: {
@@ -1195,6 +1221,10 @@
 
 			Clone: {
 				Task: 'Clone task'
+			},
+
+			Copy: {
+				TaskSettings: 'Copy task settings'
 			}
 		},
 
@@ -1272,6 +1302,7 @@
 			IdRange: 'Range ID',
 			IdTarget: 'Target ID',
 			IdsNew: 'New IDs',
+			IdSourceTask: 'Source task ID',
 			Day: 'Day',
 			IdOperation: 'Operation ID',
 			Recd: 'Recd',
@@ -1314,7 +1345,9 @@
 			SystemConstants: 'System constants',
 			GeoZones: 'Geo zones',
 			SourceFolder: 'Source folder',
-			TargetFolder: 'Target folder'
+			TargetFolder: 'Target folder',
+			TargetTasks: 'Target tasks',
+			Settings: 'Settings'
 		},
 
 		ResponseStatus : {
@@ -1362,7 +1395,8 @@
 			InvalidRecipient: 'Invalid recipient',
 			FolderNotFound: 'Folder not found',
 			TargetFolderNotFound: 'Target folder not found',
-			NotEnoughSlots: 'Not enough slots'
+			NotEnoughSlots: 'Not enough slots',
+			TaskNotFound: 'Task not found'
 		},
 
 		AccountStatus : {
