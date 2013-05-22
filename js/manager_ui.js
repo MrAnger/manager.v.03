@@ -769,6 +769,59 @@
 					data.callback();
 				}
 			},
+			task_copy_settings: {
+				show: function(data){
+					data = $.extend(true, {
+						callback: function(){},
+						sourceFolderId: 0,
+						sourceTaskId: 0,
+						targetFolderId: 0,
+						targetTaskId: 0,
+						copy_out: false,
+						copy_in: false
+					}, data);
+
+					var html = "",
+						msg = $("#msg_copyTaskSettings")[0];
+
+					if(data.copy_in){
+						$(msg).find("[name=helper_text]").html(manager.lng.form.task_copy_settings.title.copy_in);
+						$(msg).find("form").attr("copy", "in");
+						$(msg).find("[name=selectBox_taskId]").attr("multiple", "true");
+					}else if(data.copy_out){
+						$(msg).find("[name=helper_text]").html(manager.lng.form.task_copy_settings.title.copy_out);
+						$(msg).find("form").attr("copy", "out");
+						$(msg).find("[name=selectBox_taskId]").removeAttr("multiple");
+					}else{
+						$(msg).find("[name=helper_text]").html("");
+						$(msg).find("form").removeAttr("copy");
+						$(msg).find("[name=selectBox_taskId]").removeAttr("multiple");
+					};
+
+					$.each(WA_ManagerStorage.getFolderList(), function(key, folderObj){
+						html += '<option value="'+folderObj.getId()+'">'+folderObj.getName()+'</option>';
+					});
+
+					$(msg).find("[name=settings]").find("input[type=checkbox]").prop("checked", true);
+					$(msg).find("[name=selectBox_taskId]").html("");
+
+					$(msg).fadeIn("fast").find("[name=selectBox_folderId]").html(html);
+
+					$(msg).find("[name=folderId]").val((data.copy_in) ? data.sourceFolderId : data.targetFolderId);
+					$(msg).find("[name=taskId]").val((data.copy_in) ? data.sourceTaskId : data.targetTaskId);
+
+					data.callback();
+				},
+				hide: function(data){
+					data = $.extend(true, {
+						callback: function(){}
+					}, data);
+
+					$("#msg_copyTaskSettings").hide();
+
+					data.callback();
+				}
+			},
 			account: {
 				load: function(){
 					$("[name=form_account] [name=balance] [name=value]").html(DataFormat.int(WA_ManagerStorage.getUserBalance()));
@@ -1173,6 +1226,58 @@
 		function getValue(){
 			return input.value.replace(new RegExp(" ",'ig'), "");
 		};
+	});
+	//print copy task settings
+	manager.events.onDomReady.push(function(){
+		var OP_ITEM = WA_ManagerStorage.api.Constants.OperationItem,
+			lng = manager.lng.form.task_copy_settings.settings,
+			settings = [
+				{value: OP_ITEM.Domain, name: lng.domain},
+				{value: OP_ITEM.UniquePeriod, name: lng.uniquePeriod},
+				{value: OP_ITEM.ExtSource, name: lng.extSource},
+				{value: OP_ITEM.RangeSize, name: lng.rangeSize},
+				{value: OP_ITEM.Mask, name: lng.mask},
+				{value: OP_ITEM.BeforeClick, name: lng.beforeClick},
+				{value: OP_ITEM.Profile, name: lng.profile},
+				{value: OP_ITEM.AfterClick, name: lng.afterClick},
+				{value: OP_ITEM.IgnoreGU, name: lng.ignoreGU},
+				{value: OP_ITEM.IdList, name: lng.listId},
+				{value: OP_ITEM.AllowProxy, name: lng.allowProxy},
+				{value: OP_ITEM.ListMode, name: lng.listMode},
+				{value: OP_ITEM.Frozen, name: lng.frozen},
+				{value: OP_ITEM.DayTargeting, name: lng.dayTargeting},
+				{value: OP_ITEM.Growth, name: lng.growth},
+				{value: OP_ITEM.TimeDistribution, name: lng.timeDistribution},
+				{value: OP_ITEM.Days, name: lng.days},
+				{value: OP_ITEM.WeekTargeting, name: lng.weekTargeting},
+				{value: OP_ITEM.GeoTargeting, name: lng.geoTargeting}
+			],
+			data = [],
+			selector = "#msg_copyTaskSettings [name=two_settings][default]",
+			parent = $(selector).parent();
+		for(var i=0; i<settings.length; i++){
+			var arr = [];
+			arr.push(settings[i]);
+			if(settings[i+1]){
+				arr.push(settings[i+1]);
+				i++;
+			};
+			data.push(arr);
+		};
+		//print settings
+		$.each(data, function(key, arr){
+			var twoSettingsHtml = $(selector).clone().removeAttr("default").appendTo(parent),
+				firstSetting = $(twoSettingsHtml).find("[name=setting]").eq(0),
+				secondSetting = $(twoSettingsHtml).find("[name=setting]").eq(1).hide();
+
+			$(firstSetting).find("input[type=checkbox]").val(arr[0].value);
+			$(firstSetting).find("[name=name]").html(arr[0].name);
+
+			if(arr[1]){
+				$(secondSetting).show().find("input[type=checkbox]").val(arr[1].value);
+				$(secondSetting).find("[name=name]").html(arr[1].name);
+			};
+		});
 	});
 
 	//SET CONSOLE FORM

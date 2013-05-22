@@ -364,4 +364,24 @@
 		WA_ManagerUi.forms.geo.addHtml(WA_ManagerUi.data.geoStorage.getById(this.value));
 		$(this).remove();
 	});
+	//task setting copy
+	$("#msg_copyTaskSettings").find("[name=selectBox_folderId]").change(function(){
+		var folderId = parseInt($(this).parents("#msg_copyTaskSettings").find("[name=folderId]").val()),
+			taskId = parseInt($(this).parents("#msg_copyTaskSettings").find("[name=taskId]").val()),
+			selectBox_tasks = $(this).parents("#msg_copyTaskSettings").find("[name=selectBox_taskId]")[0];
+
+		if(this.value != 0 && this.value != null){
+			var html = "";
+
+			$.each(WA_ManagerStorage.getTaskList(parseInt(this.value)), function(key, task){
+				if(task.getFolderId() == folderId){
+					if(task.getId() != taskId) html += '<option value='+task.getId()+'>'+task.getName()+'</option>';
+				}else{
+					html += '<option value='+task.getId()+'>'+task.getName()+'</option>';
+				};
+			});
+
+			$(selectBox_tasks).html(html);
+		};
+	});
 })(jQuery);

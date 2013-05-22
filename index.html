@@ -319,52 +319,41 @@
 		<div class="add-box-content">
 			<div class="close"></div>
 			<div class="content">
-				<form onsubmit="return false;">
+				<form name="task_copy_settings" onsubmit="return false;">
+					<input type="hidden" name="folderId">
+					<input type="hidden" name="taskId">
+
 					<div class="label-block">
-						<div class="label-text">Копировать настройки из:</div>
+						<div class="label-text" name="helper_text"></div>
 						<div class="box-line">
 							<div class="box-table">
 								<div class="box">
-									<div class="label-text">Выбор папки:</div>
-									<select size="5"></select>
+									<div class="label-text" wa_lang="{form.task_copy_settings.select_folder}"></div>
+									<select name="selectBox_folderId" size="5"></select>
 								</div>
 								<div class="box">
-									<div class="label-text">Выбор задания:</div>
-									<select size="5"></select>
+									<div class="label-text" wa_lang="{form.task_copy_settings.select_task}"></div>
+									<select name="selectBox_taskId" size="5"></select>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="label-block">
-						<div class="label-text">Выберите нужные настройки:</div>
-						<div class="box-line">
-							<div class="box-table">
-								<label class="box"><input type="checkbox" checked><span class="boxname">Время выполнения</span></label>
-								<label class="box"><input type="checkbox" checked><span class="boxname">Маска</span></label>
-							</div>
-							<div class="box-table">
-								<label class="box"><input type="checkbox" checked><span class="boxname">Размер разброса IP в подсети</span></label>
-								<label class="box"><input type="checkbox" checked><span class="boxname">Время уникальности IP</span></label>
-							</div>
-							<div class="box-table">
-								<label class="box"><input type="checkbox" checked><span class="boxname">Суточный прирост</span></label>
-								<label class="box"><input type="checkbox" checked><span class="boxname">Профиль</span></label>
-							</div>
-							<div class="box-table">
-								<label class="box"><input type="checkbox" checked><span class="boxname">Суточный таргетинг</span></label>
-								<label class="box"><input type="checkbox" checked><span class="boxname">Недельный таргетинг</span></label>
-							</div>
-							<div class="box-table">
-								<label class="box"><input type="checkbox" checked><span class="boxname">Временное распределение</span></label>
-								<label class="box"><input type="checkbox" checked><span class="boxname">Геотаргетинг</span></label>
-							</div>
-							<div class="box-table">
-								<label class="box"><input type="checkbox" checked><span class="boxname">Фильтр по IP-списку</span></label>
-								<label class="box"><input type="checkbox" checked><span class="boxname">Профиль</span></label>
+						<div class="label-text" wa_lang="{form.task_copy_settings.select_settings}"></div>
+						<div class="box-line" name="settings">
+							<div class="box-table" name="two_settings" default>
+								<label class="box" name="setting">
+									<input type="checkbox" checked>
+									<span class="boxname" name="name"></span>
+								</label>
+								<label class="box" name="setting">
+									<input type="checkbox" checked>
+									<span class="boxname" name="name"></span>
+								</label>
 							</div>
 						</div>
 					</div>
-					<button type="submit" class="btn">Скопировать</button>
+					<button type="submit" class="btn" wa_lang="{button.copy}"></button>
 				</form>
 			</div>
 			<div class="footer"></div>
@@ -688,7 +677,6 @@
                 <span class="edit-list">
                     <span class="item rename" wa_lang="{menu.edit-menu.rename}"
                           onclick="WA_ManagerUi.forms.folder_rename.show(this);"></span>
-                    <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"></span>
                     <span class="item delete" wa_lang="{menu.edit-menu.delete}"
                           onclick="WA_ManagerUi.forms.folder_remove.show(this);"></span>
                 </span>
@@ -719,8 +707,8 @@
                     <span class="edit-list">
                         <span class="item move" wa_lang="{menu.edit-menu.move}" onclick="WA_ManagerUi.forms.task_move.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
                         <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" onclick="WA_ManagerUi.forms.task_clone.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
-                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}"></span>
-                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}"></span>
+                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}" onclick="showFormTaskCopySettings(this, true);"></span>
+                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}" onclick="showFormTaskCopySettings(this, false);"></span>
                         <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="WA_ManagerUi.forms.task_remove.show(this);"></span>
                     </span>
                 </span>
@@ -728,6 +716,26 @@
         </ul>
         <div class="not-content" style="display: none;" wa_lang="{form.task.not_have_task}"></div>
     </div>
+	<script type="text/javascript">
+		function showFormTaskCopySettings(el, copy_in){
+			var folderId = WA_ManagerUi.utils.getParam($(el).parents('[wa_task]'), 'folderId'),
+				taskId = WA_ManagerUi.utils.getParam($(el).parents('[wa_task]'), 'taskId');
+
+			if(copy_in){
+				WA_ManagerUi.forms.task_copy_settings.show({
+					sourceFolderId: folderId,
+					sourceTaskId: taskId,
+					copy_in: true
+				});
+			}else{
+				WA_ManagerUi.forms.task_copy_settings.show({
+					targetFolderId: folderId,
+					targetTaskId: taskId,
+					copy_out: true
+				});
+			};
+		};
+	</script>
 </div>
 <div class="set-task" name="holder-task-setting">
 <div class="not-settings-content" name="not-setting">

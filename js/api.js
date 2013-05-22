@@ -1470,7 +1470,7 @@
 					Value: {
 						Min: 4,
 						Max: 24,
-						Default: 16
+						Default: 10
 					}
 				},
 				Mask: {
