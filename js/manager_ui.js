@@ -1837,70 +1837,238 @@
 
 	//SET TASK SETTING FORM
 	$(document).on("submit","form[name=task-setting]", function(e){
-		var folderId = $(this).find("[name=folderId]").val(),
-			taskId = $(this).find("[name=taskId]").val();
+		var form = this,
+			inputs = {
+				name: this["name"],
+				domain: this["domain"],
+				extSource: this["extSource"],
+				beforeClick: this["beforeClick"],
+				afterClick: this["afterClick"],
+				mask: this["mask"],
+				rangeSize: this["rangeSize"],
+				uniquePeriod: this["uniquePeriod"],
+				growth: this["growth"],
+				days: this["days"],
+				profile: this["profile"],
+				ignoreGU: this["ignoreGU"],
+				allowProxy: this["allowProxy"],
+				listId: this["listId"]
+			},
+			folderId = $(this).find("[name=folderId]").val(),
+			taskId = $(this).find("[name=taskId]").val(),
+			modified_params = {},
+			taskObj = WA_ManagerStorage.getTaskById(folderId, taskId);
 
-		if(!CheckType($(this).find("[name=name]").val(), TYPE.TASK_NAME)){
+		if(!CheckType(inputs.name.value, TYPE.TASK_NAME)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.name.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Max
 			}), "error");
-		}else if(!CheckType($(this).find("[name=domain]").val(), TYPE.TASK_DOMAIN)){
+		}else if(!CheckType(inputs.domain.value, TYPE.TASK_DOMAIN)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.domain.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Domain.Length.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Domain.Length.Max
 			}), "error");
-		}else if(!CheckType($(this).find("[name=extSource]").val(), TYPE.TASK_EXTSOURCE)){
+		}else if(!CheckType(inputs.extSource.value, TYPE.TASK_EXTSOURCE)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.extSource.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.ExtSource.Length.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.ExtSource.Length.Max
 			}), "error");
-		}else if(!CheckType($(this).find("[name=beforeClick]").val(), TYPE.TASK_BEFORECLICK)){
+		}else if(!CheckType(inputs.beforeClick.value, TYPE.TASK_BEFORECLICK)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.beforeClick.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.BeforeClick.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.BeforeClick.Value.Max
 			}), "error");
-		}else if(!CheckType($(this).find("[name=afterClick]").val(), TYPE.TASK_AFTERCLICK)){
+		}else if(!CheckType(inputs.afterClick.value, TYPE.TASK_AFTERCLICK)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.afterClick.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.AfterClick.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.AfterClick.Value.Max
 			}), "error");
-		}else if(!CheckType($(this).find("[name=mask]").val(), TYPE.TASK_MASK, true)){
+		}else if(!CheckType(inputs.mask.value, TYPE.TASK_MASK, true)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.mask.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Mask.Length.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Mask.Length.Max
 			}), "error");
-		}else if(!CheckType($(this).find("[name=rangeSize]").val(), TYPE.TASK_RANGESIZE)){
+		}else if(!CheckType(inputs.rangeSize.value, TYPE.TASK_RANGESIZE)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.rangeSize.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.RangeSize.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.RangeSize.Value.Max,
 				"default" : WA_ManagerStorage.api.Constants.Limit.Task.RangeSize.Value.Default
 			}), "error");
-		}else if(!CheckType($(this).find("[name=uniquePeriod]").val(), TYPE.TASK_UNIQUEPERIOD)){
+		}else if(!CheckType(inputs.uniquePeriod.value, TYPE.TASK_UNIQUEPERIOD)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.uniquePeriod.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.UniquePeriod.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.UniquePeriod.Value.Max,
 				"default" : WA_ManagerStorage.api.Constants.Limit.Task.UniquePeriod.Value.Default
 			}), "error");
-		}else if(!CheckType($(this).find("[name=growth]").val(), TYPE.TASK_GROWTH)){
+		}else if(!CheckType(inputs.growth.value, TYPE.TASK_GROWTH)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.growth.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Growth.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Growth.Value.Max,
 				"default" : WA_ManagerStorage.api.Constants.Limit.Task.Growth.Value.Default
 			}), "error");
-		}else if(!CheckType($(this).find("[name=days]").val(), TYPE.TASK_DAYS)){
+		}else if(!CheckType(inputs.days.value, TYPE.TASK_DAYS)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.days.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Days.Value.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Days.Value.Max,
 				"default" : WA_ManagerStorage.api.Constants.Limit.Task.Days.Value.Default
 			}), "error");
-		}else if(!CheckType($(this).find("[name=profile]").val(), TYPE.TASK_PROFILE, true)){
+		}else if(!CheckType(inputs.profile.value, TYPE.TASK_PROFILE, true)){
 			NoticeShow(insertLoc(manager.lng.form.task_setting.profile.error, {
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Max
 			}), "error");
 		}else{
-			alert("GO GO GO блеать....");
+			if(taskObj.getName() != inputs.name.value) modified_params.name = inputs.name.value;
+			if(taskObj.getDomain() != inputs.domain.value) modified_params.domain = inputs.domain.value;
+			if(taskObj.getExtSource() != inputs.extSource.value) modified_params.extSource = inputs.extSource.value;
+			if(taskObj.getMask() != inputs.mask.value) modified_params.mask = inputs.mask.value;
+			if(taskObj.getProfile() != inputs.profile.value) modified_params.profile = inputs.profile.value;
+			if(taskObj.getBeforeClick() != parseInt(inputs.beforeClick.value)) modified_params.beforeClick = parseInt(inputs.beforeClick.value);
+			if(taskObj.getAfterClick() != parseInt(inputs.afterClick.value)) modified_params.afterClick = parseInt(inputs.afterClick.value);
+			if(taskObj.getRangeSize() != parseInt(inputs.rangeSize.value)) modified_params.rangeSize = parseInt(inputs.rangeSize.value);
+			if(taskObj.getUniquePeriod() != parseInt(inputs.uniquePeriod.value)) modified_params.uniquePeriod = parseInt(inputs.uniquePeriod.value);
+			if(taskObj.getGrowth() != parseFloat(inputs.growth.value)) modified_params.growth = parseFloat(inputs.growth.value);
+			if(taskObj.getDays() != parseInt(inputs.days.value)) modified_params.days = parseInt(inputs.days.value);
+			if(taskObj.getListId() != parseInt(inputs.listId.value)) modified_params.listId = parseInt(inputs.listId.value);
+			if(taskObj.getIgnoreGU() != inputs.ignoreGU.checked) modified_params.ignoreGU = inputs.ignoreGU.checked;
+			if(taskObj.getAllowProxy() != !inputs.allowProxy.checked) modified_params.allowProxy = !inputs.allowProxy.checked;
+			if(taskObj.getListMode() != eval($(form).find("[name=listIp-type]:checked").val())) modified_params.listMode = eval($(form).find("[name=listIp-type]:checked").val());
+			var newDayTargeting = convertToDayTargeting(WA_ManagerUi.data.graphs.dayTargeting.getData());
+			if(!isEqualDayTargeting(taskObj.getDayTargeting(), newDayTargeting)) modified_params.dayTargeting = newDayTargeting;
+			var newWeekTargeting = convertToWeekTargeting(WA_ManagerUi.data.graphs.weekTargeting.getData());
+			if(!isEqualWeekTargeting(taskObj.getWeekTargeting(), newWeekTargeting)) modified_params.weekTargeting = newWeekTargeting;
+			var newTimeDistribution = convertToTimeDistribution(WA_ManagerUi.data.graphs.timeDistribution.getData());
+			if(!isEqualTimeDistribution(taskObj.getTimeDistribution(), newTimeDistribution)) modified_params.timeDistribution = newTimeDistribution;
+			var newGeoTargeting = convertToGeoTargeting(WA_ManagerUi.data.geoStorage.getSelected());
+			if(!isEqualGeoTargeting(taskObj.getGeoTargeting(), newGeoTargeting)) modified_params.geoTargeting = newGeoTargeting;
+
+			if(!$.isEmptyObject(modified_params)){
+				console.log(modified_params);
+				alert("OLOLOLO!!!111111 wait update api server");
+			};
+		};
+
+		function convertToDayTargeting(data){
+			var out = [];
+
+			$.each(data, function(key, arr){
+				$.each(arr, function(_key, _arr){
+					if(!out[_arr[0]]) out[_arr[0]] = {id: _arr[0]};
+					var obj = {};
+					obj[key] = _arr[1];
+					$.extend(out[_arr[0]], obj);
+				});
+			});
+
+			return out;
+		};
+		function isEqualDayTargeting(dayTarg1, dayTarg2){
+			var out = true, command_break = false;
+
+			for(var i=0; i<dayTarg1.length; i++){
+				command_break = false;
+				$.each(dayTarg1[i], function(key, val){
+					if(dayTarg1[i][key] != dayTarg2[i][key]){
+						out = false;
+						command_break = true;
+					};
+				});
+				if(command_break) break;
+			};
+
+			return out;
+		};
+		function convertToWeekTargeting(data){
+			var out = [];
+
+			$.each(data, function(key, arr){
+				$.each(arr, function(_key, _arr){
+					out[_arr[0]] = {id: _arr[0], val: _arr[1]};
+				});
+			});
+
+			return out;
+		};
+		function isEqualWeekTargeting(weekTarg1, weekTarg2){
+			var out = true, command_break = false;
+
+			for(var i=0; i<weekTarg1.length; i++){
+				command_break = false;
+				$.each(weekTarg1[i], function(key, val){
+					if(weekTarg1[i][key] != weekTarg2[i][key]){
+						out = false;
+						command_break = true;
+					};
+				});
+				if(command_break) break;
+			};
+
+			return out;
+		};
+		function convertToTimeDistribution(data){
+			var out = [];
+
+			$.each(data, function(key, arr){
+				$.each(arr, function(_key, _arr){
+					out[_arr[0]-1] = {id: _arr[0], val: _arr[1]};
+				});
+			});
+
+			var i = 1;
+			while(i<=100){
+				if(!out[i-1]) out[i-1] = {id: i, val: 0};
+				i++;
+			};
+
+			return out;
+		};
+		function isEqualTimeDistribution(timeDistr1, timeDistr2){
+			var out = true, command_break = false;
+
+			for(var i=0; i<timeDistr1.length; i++){
+				command_break = false;
+				$.each(timeDistr1[i], function(key, val){
+					if(timeDistr1[i][key] != timeDistr2[i][key]){
+						out = false;
+						command_break = true;
+					};
+				});
+				if(command_break) break;
+			};
+
+			return out;
+		};
+		function convertToGeoTargeting(data){
+			var out = [];
+
+			$.each(data, function(key, obj){
+				var _obj = {};
+				$.each(obj, function(_key, _val){
+					_obj[_key] = _val;
+				});
+				out.push(_obj);
+			});
+
+			return out;
+		};
+		function isEqualGeoTargeting(geoTarg1, geoTarg2){
+			var out = true;
+
+			if(geoTarg1.length != geoTarg2.length){
+				out = false;
+			}else{
+				for(var i=0; i<geoTarg1.length; i++){
+					var obj1 = geoTarg1[i],
+						obj2 = geoTarg2[i];
+					if(obj1.id != obj2.id || obj1.target != obj2.target){
+						out = false;
+						break;
+					};
+				};
+			};
+
+			return out;
 		};
 	});
 	//SET TASK SETTING FORM
