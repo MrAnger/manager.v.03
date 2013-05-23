@@ -182,6 +182,7 @@
 	//task
 	$(document).on("click", "[wa_task]", function(e){
 		WA_ManagerUi.forms.task.loadSetting(WA_ManagerUi.utils.getParam(this, "folderId"), WA_ManagerUi.utils.getParam(this, "taskId"));
+		WA_ManagerUi.data.interval_updateTaskStat.reInit();
 	});
 	//ipList
 	$(document).on("click", "[wa_ipList]", function(e){

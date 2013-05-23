@@ -1219,6 +1219,28 @@
 			ge_callback: options.onError
 		});
 	};
+	mStorage.api_updateTaskStat = function(_options){
+		var options = $.extend(true, {
+			folderId: 0,
+			taskId: 0,
+			silent: false,
+			callback: function(data){},
+			exception: {},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.getDayStat({
+			token: mStorage.getToken(),
+			folderId: options.folderId,
+			taskId: options.taskId,
+			callback: function(stat){
+				var task = mStorage.getTaskById(options.folderId, options.taskId);
+				task.setDayStat(stat);
+				options.callback(task.getDayStat());
+			},
+			ge_callback: options.onError
+		}, options.silent);
+	};
 
 	mStorage.run = function(_options){
 		var options = $.extend(true, {
@@ -1302,6 +1324,9 @@
 			},
 			Blocked: function(data){
 				//WA_MS code..
+				mStorage.clearToken();
+				DataStorage.remove(CONST_STORAGE.token);
+				mStorage.clearData();
 
 				mStorage.apiUserException.Blocked(data);
 			},

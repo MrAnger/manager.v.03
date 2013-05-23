@@ -9,7 +9,8 @@
 		},
 		data: {
 			graphs: {},
-			geoStorage: null
+			geoStorage: null,
+			interval_updateTaskStat: null
 		},
 		events: {
 			onDomReady: []
@@ -1293,6 +1294,74 @@
 				$(secondSetting).find("[name=name]").html(arr[1].name);
 			};
 		});
+	});
+	//updater task stats
+	manager.events.onDomReady.push(function(){
+		manager.data.interval_updateTaskStat = new WA_ManagerStorage.api.utils.interval(function(){
+			var form_task_settings = $("[name=task-setting]")[0],
+				folderIdInput = $(form_task_settings).find("[name=folderId]")[0],
+				taskIdInput = $(form_task_settings).find("[name=taskId]")[0],
+				folderId = parseInt(folderIdInput.value),
+				taskId = parseInt(taskIdInput.value);
+
+			WA_ManagerStorage.api_updateTaskStat({
+				folderId: folderId,
+				taskId: taskId,
+				silent: true,
+				callback: function(stat){
+					if(folderId == parseInt($(folderIdInput).val()) && taskId == parseInt($(taskIdInput).val())){
+						//DayStat
+						(function(data){
+							var lineMin = {
+									name: "min",
+									data: []
+								},
+								lineMax = {
+									name: "max",
+									data: []
+								},
+								lineGive = {
+									name: "give",
+									data: []
+								},
+								lineIncomplete = {
+									name: "incomplete",
+									data: []
+								},
+								lineOverload = {
+									name: "overload",
+									data: []
+								},
+								onePercent = 0,
+								summ_incomplete = 0,
+								summ_overload = 0,
+								percentControl = 5;
+
+							data.sort(function(a,b){return a.id - b.id;});
+
+							$.each(data, function(key, val){
+								lineMin.data.push([val.id, val.min]);
+								lineMax.data.push([val.id, val.max]);
+								lineGive.data.push([val.id, val.give]);
+								lineIncomplete.data.push([val.id, val.incomplete]);
+								lineOverload.data.push([val.id, val.overload]);
+
+								onePercent += (val.min + val.max);
+								summ_incomplete += val.incomplete;
+								summ_overload += val.overload;
+							});
+							onePercent = (onePercent/2)/100;
+							if(onePercent > 0){
+								if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
+								if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
+							};
+
+							manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
+						})(stat);
+					};
+				}
+			});
+		}, 5*60*1000);
 	});
 
 	//SET CONSOLE FORM
@@ -4287,6 +4356,7 @@
 		manager.forms.folder.clear();
 		manager.forms.task.clear();
 		manager.forms.ipList.clear();
+		manager.data.interval_updateTaskStat.stop();
 	});
 
 	//set language
@@ -4331,6 +4401,13 @@
 			switch(key){
 				case "WrongSessionId":
 					WA_ManagerStorage.apiUserException[key] = function(){
+						manager.forms.manager.hide();
+						manager.forms.auth.show();
+					};
+					break;
+				case "Blocked":
+					WA_ManagerStorage.apiUserException[key] = function(){
+						NoticeShow(manager.lng.exception.general[key], "error");
 						manager.forms.manager.hide();
 						manager.forms.auth.show();
 					};

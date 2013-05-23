@@ -158,12 +158,13 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			getDayStat: function(data){
+			getDayStat: function(data, silent){
 				data = $.extend(true, {
 					exception: {}
 				}, data);
 
 				var req = api.requestStorage.addRequest();
+				if(silent) req.silent = true;
 
 				req.setOpCode(OperationCode.Get.DayStats);
 				req.setToken(data.token);
@@ -1786,19 +1787,28 @@
 		}
 	};
 	function Interval(action, time){
-		var stop = false;
+		var SelfObj = this, stop = false, first = true, timeout = null;
 
 		function interval(){
-			action();
-			if(!stop) setTimeout(arguments.callee, time);
+			if(!stop){
+				if(first) first = false;
+				else action();
+				timeout = setTimeout(arguments.callee, time);
+			};
 		};
 
 		this.start = function(){
 			stop = false;
+			first = true;
 			interval();
 		};
 		this.stop = function(){
 			stop = true;
+		};
+		this.reInit = function(){
+			stop = true;
+			clearTimeout(timeout);
+			SelfObj.start();
 		};
 	};
 	function cwe(tag, attr, parent){
@@ -1971,6 +1981,7 @@
 		);
 
 		this.state = request.state;
+		this.silent = false;
 
 		this.setOpCode = function(opCode){
 			data[api.Constants.OperationItem.Action] = opCode;
@@ -2013,7 +2024,7 @@
 						if(exception){
 							$.each(api.Constants.QueryError, function(key, val){
 								if(val == receive_data[api.Constants.OperationItem.Error]){
-									exception[key](data);
+									if(exception[key]) exception[key](data);
 								};
 							});
 						};
@@ -2023,7 +2034,7 @@
 						$.each(api.Constants.GeneralError, function(key, val){
 							if(val == receive_data[api.Constants.OperationItem.Error]){
 								errorName = key;
-								api.options.exception[key](data);
+								if(api.options.exception[key]) api.options.exception[key](data);
 							};
 						});
 						if(ge_callback) ge_callback(data, errorName);
@@ -2045,7 +2056,7 @@
 					var req = listRequest[iStart];
 
 					if(req.state == "loading"){
-						count_worked++;
+						if(req.silent == false) count_worked++;
 					}else if(req.state == "canceled" || req.state == "completed"){
 						listRequest.splice(iStart, 1);
 						iStart--;
