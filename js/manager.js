@@ -587,6 +587,23 @@
 
 		return mStorage.addTaskByFolderId(targetFolderId, newTask);
 	};
+	mStorage.cloneIPList = function(sourceIPListId, targetIPListId, newName){
+		var sourceList = mStorage.getIPListById(sourceIPListId), targetIPList = new IPList();
+
+		targetIPList.setId(targetIPListId);
+		targetIPList.setName(newName);
+
+		$.each(sourceIPListId.getRangeList(), function(key, range){
+			var newRange = new IPRange();
+			newRange.setId(range.getId());
+			newRange.setListId(targetIPList.getId());
+			newRange.setStart(range.getStart());
+			newRange.setEnd(range.getEnd());
+			targetIPList.addRange(newRange);
+		});
+
+		return targetIPList;
+	};
 	mStorage.copyTaskSettings = function(folderSourceId, taskSourceId, folderTargetId, arr_taskTargetId, copyParams){
 		var sourceTask = mStorage.getTaskById(folderSourceId, taskSourceId);
 
@@ -955,6 +972,31 @@
 				mStorage.cloneTask(options.folderId, options.taskId, options.targetFolderId, data.id, options.name);
 
 				options.callback(mStorage.getTaskById(options.targetFolderId, data.id));
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.api_cloneIPList = function(_options){
+		var options = $.extend(true, {
+			listId: 0,
+			name: "",
+			exception: {
+				IPListNotFound: function(){},
+				LimitExceeded: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.cloneIPList({
+			token: mStorage.getToken(),
+			sourceList: options.listId,
+			name: options.name,
+			callback: function(data){
+				mStorage.cloneIPList(options.listId, data.id, options.name);
+
+				options.callback(mStorage.getIPListById(data.id));
 			},
 			exception: options.exception,
 			ge_callback: options.onError

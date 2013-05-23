@@ -1122,6 +1122,30 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			cloneIPList: function(data){
+				data = $.extend(true, {
+					exception: {
+						IPListNotFound: function(){},
+						LimitExceeded: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Clone.IPList);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.SourceList, data.sourceList);
+				req.addData(OperationItem.Name, data.name);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.id = _data[OperationItem.IdList];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			auth: function(data){
 				data = $.extend(true, {
 					remember: false,
@@ -1380,7 +1404,8 @@
 			},
 
 			Clone: {
-				Task: 'Clone task'
+				Task: 'Clone task',
+				IPList: 'Clone IP list'
 			},
 
 			Copy: {
@@ -1506,6 +1531,7 @@
 			GeoZones: 'Geo zones',
 			SourceFolder: 'Source folder',
 			SourceTask: 'Source task',
+			SourceList: 'Source list',
 			TargetFolder: 'Target folder',
 			TargetTasks: 'Target tasks',
 			Settings: 'Settings'

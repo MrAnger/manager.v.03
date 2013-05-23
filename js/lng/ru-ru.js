@@ -591,6 +591,10 @@ WA_ManagerUi.lng = {
 			},
 			"setIPRanges":{
 				"IPListNotFound": "IP список не найден."
+			},
+			"cloneIPList":{
+				"IPListNotFound": "IP список не найден.",
+				"LimitExceeded": "Превышено максимальное количество IP списков аккаунте."
 			}
 		}
 	},
