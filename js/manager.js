@@ -968,6 +968,41 @@
 			ge_callback: options.onError
 		});
 	};
+	mStorage.api_copyTaskSettings = function(_options){
+		var options = $.extend(true, {
+			sourceFolder: 0,
+			sourceTask: 0,
+			targetFolder: 0,
+			targetTasks: [],
+			settings: [],
+			exception: {
+				FolderNotFound: function(){},
+				TargetFolderNotFound: function(){},
+				TaskNotFound: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.taskCopySettings({
+			token: mStorage.getToken(),
+			folderSourceId: options.sourceFolder,
+			taskSourceId: options.sourceTask,
+			folderTargetId: options.targetFolder,
+			ids: options.targetTasks,
+			settings: options.settings,
+			callback: function(data){
+				var out = [];
+
+				mStorage.copyTaskSettings(options.sourceFolder, options.sourceTask, options.targetFolder, options.targetTasks, options.settings);
+				$.each(options.targetTasks, function(key, taskId){out.push(mStorage.getTaskById(options.targetFolder, taskId));});
+
+				options.callback(out);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
 
 	mStorage.run = function(_options){
 		var options = $.extend(true, {

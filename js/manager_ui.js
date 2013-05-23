@@ -1940,6 +1940,66 @@
 	});
 	//SET CLONE TASK FORM
 
+	//SET CLONE TASK FORM
+	$(document).on("submit","form[name=task_copy_settings]", function(e){
+		var forms = this,
+			inputs = {
+				selectBox_folderId: this["selectBox_folderId"],
+				selectBox_taskId: this["selectBox_taskId"]
+			},
+			folderId = parseInt($(this).find("[name=folderId]").val()),
+			taskId = parseInt($(this).find("[name=taskId]").val());
+		var sourceFolder = 0,
+			sourceTask = 0,
+			targetFolder = 0,
+			targetTasks = [],
+			settings = [];
+
+		$(this).find("[name=settings] input[type=checkbox]:checked").each(function(key, checkbox){settings.push($(checkbox).val());});
+
+		if(inputs.selectBox_folderId.value != null && inputs.selectBox_taskId.value != null && settings.length != 0){
+			if($(forms).attr("copy") == "in"){
+				sourceFolder = folderId;
+				sourceTask = taskId;
+				targetFolder = parseInt(inputs.selectBox_folderId.value);
+				$(inputs.selectBox_taskId.selectedOptions).each(function(key, option){targetTasks.push(parseInt(option.value));});
+			}else if($(forms).attr("copy") == "out"){
+				sourceFolder = inputs.selectBox_folderId.value;
+				sourceTask = inputs.selectBox_taskId.value;
+				targetFolder = folderId;
+				targetTasks = [taskId];
+			};
+
+			WA_ManagerStorage.api_copyTaskSettings({
+				sourceFolder: sourceFolder,
+				sourceTask: sourceTask,
+				targetFolder: targetFolder,
+				targetTasks: targetTasks,
+				settings: settings,
+				callback: function(arrTasks){
+					manager.forms.task_copy_settings.hide();
+					$.each(arrTasks, function(key, task){
+						var html = manager.forms.task.getHtmlById(task.getFolderId(), task.getId());
+						manager.forms.task.setStatus(html, task.isEnabled());
+						$(manager.forms.task.getActiveHtml()).click();
+					});
+				},
+				exception: {
+					FolderNotFound: function(){
+						NoticeShow(manager.lng.exception.query.copyTaskSettings.FolderNotFound, "error");
+					},
+					TargetFolderNotFound: function(){
+						NoticeShow(manager.lng.exception.query.copyTaskSettings.TargetFolderNotFound, "error");
+					},
+					TaskNotFound: function(){
+						NoticeShow(manager.lng.exception.query.copyTaskSettings.TaskNotFound, "error");
+					}
+				}
+			});
+		};
+	});
+	//SET CLONE TASK FORM
+
 	//SET TASK SETTING FORM
 	$(document).on("submit","form[name=task-setting]", function(e){
 		var form = this,

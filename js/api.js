@@ -1089,7 +1089,7 @@
 				req.setToken(data.token);
 
 				req.addData(OperationItem.SourceFolder, data.folderSourceId);
-				req.addData(OperationItem.IdSourceTask, data.taskSourceId);
+				req.addData(OperationItem.SourceTask, data.taskSourceId);
 				req.addData(OperationItem.TargetFolder, data.folderTargetId);
 				req.addData(OperationItem.TargetTasks, data.ids);
 				req.addData(OperationItem.Settings, data.settings);
@@ -1345,6 +1345,7 @@
 			SystemConstants: 'System constants',
 			GeoZones: 'Geo zones',
 			SourceFolder: 'Source folder',
+			SourceTask: 'Source task',
 			TargetFolder: 'Target folder',
 			TargetTasks: 'Target tasks',
 			Settings: 'Settings'

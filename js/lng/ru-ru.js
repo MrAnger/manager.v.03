@@ -575,6 +575,11 @@ WA_ManagerUi.lng = {
 				"FolderNotFound": "Указанная категория(источник) не найдена.",
 				"TargetFolderNotFound": "Указанная категория(целевая) не найдена.",
 				"LimitExceeded": "Превышено максимальное число заданий в указанной категории."
+			},
+			"copyTaskSettings":{
+				"FolderNotFound": "Исходная папка не найдена.",
+				"TargetFolderNotFound": "Целевая папка не найдена.",
+				"TaskNotFound": "Исходное задание не найдено."
 			}
 		}
 	},
