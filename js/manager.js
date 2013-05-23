@@ -478,7 +478,7 @@
 					task.setWeekTargeting(val);
 					break;
 				case "dayTargeting":
-					task.setGeoTargeting(val);
+					task.setDayTargeting(val);
 					break;
 			};
 		});
@@ -593,7 +593,7 @@
 		targetIPList.setId(targetIPListId);
 		targetIPList.setName(newName);
 
-		$.each(sourceIPListId.getRangeList(), function(key, range){
+		$.each(sourceList.getRangeList(), function(key, range){
 			var newRange = new IPRange();
 			newRange.setId(range.getId());
 			newRange.setListId(targetIPList.getId());

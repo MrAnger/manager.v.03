@@ -1046,6 +1046,21 @@
 					$("#msg_addIPList .add-box .close").click();
 				}
 			},
+			ipList_clone: {
+				show: function(el){
+					var msg = $("#msg_cloneIPList").fadeIn("fast"),
+						input_name = $(msg).find("[name=ipList_name]"),
+						input_id = $(msg).find("[name=ipList_id]"),
+						ipListId = getParam($(el).parents("[wa_ipList]"), "id");
+
+					$(input_name).val(WA_ManagerStorage.getIPListById(ipListId).getName());
+					$(input_name).focus();
+					$(input_id).val(ipListId);
+				},
+				hide: function(){
+					$("#msg_cloneIPList .add-box .close").click();
+				}
+			},
 			ipList_rename: {
 				show: function(el){
 					var msg = $("#msg_renameIPList").fadeIn("fast"),
@@ -2364,6 +2379,44 @@
 		return false;
 	});
 	//SET RENAME IPLIST FORM
+
+	//SET CLONE IPLIST FORM
+	$(document).on("submit","form[name=ipList_clone]", function(e){
+		var form = this, inputs = {
+			ipList_name: this["ipList_name"],
+			id: this["ipList_id"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.ipList_name.value, TYPE.IPLIST_NAME)){
+			NoticeShow(insertLoc(manager.lng.form.ipList_clone.ipList_name.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.IPLists.Name.Length.Max
+			}), "error");
+			$(inputs.ipList_name).focus();
+		}else{
+			WA_ManagerStorage.api_cloneIPList({
+				listId: parseInt(inputs.id.value),
+				name: inputs.ipList_name.value,
+				callback: function(ipList){
+					manager.forms.ipList_clone.hide();
+					manager.forms.ipList.addHtml(ipList.getId());
+					manager.forms.ipList.toggleNotContent();
+				},
+				exception: {
+					IPListNotFound: function(){
+						NoticeShow(manager.lng.exception.query.cloneIPList.IPListNotFound, "error");
+					},
+					LimitExceeded: function(){
+						NoticeShow(manager.lng.exception.query.cloneIPList.LimitExceeded, "error");
+					}
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET CLONE IPLIST FORM
 
 	//SET CONFIRM DELETE IPLIST
 	$(document).on("click","#confirm_deleteIPList [name=yes]", function(e){
