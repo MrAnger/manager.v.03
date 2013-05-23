@@ -622,6 +622,94 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			setTask: function(data){
+				data = $.extend(true, {
+					exception: {
+						FolderNotFound: function(){},
+						TaskNotFound: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.Task);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdFolder, data.folderId);
+				req.addData(OperationItem.IdTask, data.taskId);
+
+				if(data.mask) req.addData(OperationItem.Mask, data.mask);
+				if(data.name) req.addData(OperationItem.Name, data.name);
+				if(data.ignoreGU) req.addData(OperationItem.IgnoreGU, data.ignoreGU);
+				if(data.allowProxy) req.addData(OperationItem.AllowProxy, data.allowProxy);
+				if(data.uniquePeriod) req.addData(OperationItem.UniquePeriod, data.uniquePeriod);
+				if(data.rangeSize) req.addData(OperationItem.RangeSize, data.rangeSize);
+				if(data.domain) req.addData(OperationItem.Domain, data.domain);
+				if(data.extSource) req.addData(OperationItem.ExtSource, data.extSource);
+				if(data.beforeClick) req.addData(OperationItem.BeforeClick, data.beforeClick);
+				if(data.afterClick) req.addData(OperationItem.AfterClick, data.afterClick);
+				if(data.frozen) req.addData(OperationItem.Frozen, data.frozen);
+				if(data.growth) req.addData(OperationItem.Growth, data.growth);
+				if(data.days) req.addData(OperationItem.Days, data.days);
+				if(data.listId) req.addData(OperationItem.IdList, data.listId);
+				if(data.listMode) req.addData(OperationItem.ListMode, data.listMode);
+				if(data.profile) req.addData(OperationItem.Profile, data.profile);
+				if(data.geoTargeting){
+					var geoTargeting = [];
+					$.each(data.geoTargeting, function(key, targ){
+						if(targ.target != 0){
+							geoTargeting.push(paramTransfer({}, targ, [
+								["id", OperationItem.IdZone],
+								["target", OperationItem.Target]
+							]));
+						};
+					});
+					req.addData(OperationItem.GeoTargeting, geoTargeting);
+				};
+				if(data.dayTargeting){
+					var dayTargeting = [];
+					$.each(data.dayTargeting, function(key, targ){
+						if(targ.min != 0 || targ.max != 0){
+							dayTargeting.push(paramTransfer({}, targ, [
+								["id", OperationItem.Hour],
+								["min", OperationItem.Min],
+								["max", OperationItem.Max]
+							]));
+						};
+					});
+					req.addData(OperationItem.DayTargeting, dayTargeting);
+				};
+				if(data.weekTargeting){
+					var weekTargeting = [];
+					$.each(data.weekTargeting, function(key, targ){
+						if(targ.val != 100){
+							weekTargeting.push(paramTransfer({}, targ, [
+								["id", OperationItem.Day],
+								["val", OperationItem.Target]
+							]));
+						};
+					});
+					req.addData(OperationItem.WeekTargeting, weekTargeting);
+				};
+				if(data.timeDistribution){
+					var timeDistribution = [];
+					$.each(data.timeDistribution, function(key, targ){
+						if(targ.val != 0){
+							timeDistribution.push(paramTransfer({}, targ, [
+								["id", OperationItem.Percent],
+								["val", OperationItem.Priority]
+							]));
+						};
+					});
+					req.addData(OperationItem.TimeDistribution, timeDistribution);
+				};
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			addFolder: function(data){
 				data = $.extend(true, {
 					exception: {
@@ -1031,7 +1119,7 @@
 					exception: {
 						FolderNotFound: function(){},
 						TargetFolderNotFound: function(){},
-						NotEnoughSlots: function(){}
+						LimitExceeded: function(){}
 					}
 				}, data);
 
@@ -1396,7 +1484,6 @@
 			InvalidRecipient: 'Invalid recipient',
 			FolderNotFound: 'Folder not found',
 			TargetFolderNotFound: 'Target folder not found',
-			NotEnoughSlots: 'Not enough slots',
 			TaskNotFound: 'Task not found'
 		},
 

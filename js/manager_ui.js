@@ -1887,8 +1887,8 @@
 					TargetFolderNotFound: function(){
 						NoticeShow(manager.lng.exception.query.moveTask.TargetFolderNotFound, "error");
 					},
-					NotEnoughSlots: function(){
-						NoticeShow(manager.lng.exception.query.moveTask.NotEnoughSlots, "error");
+					LimitExceeded: function(){
+						NoticeShow(manager.lng.exception.query.moveTask.LimitExceeded, "error");
 					}
 				}
 			});
@@ -2019,8 +2019,8 @@
 				allowProxy: this["allowProxy"],
 				listId: this["listId"]
 			},
-			folderId = $(this).find("[name=folderId]").val(),
-			taskId = $(this).find("[name=taskId]").val(),
+			folderId = parseInt($(this).find("[name=folderId]").val()),
+			taskId = parseInt($(this).find("[name=taskId]").val()),
 			modified_params = {},
 			taskObj = WA_ManagerStorage.getTaskById(folderId, taskId);
 
@@ -2109,8 +2109,70 @@
 			if(!isEqualGeoTargeting(taskObj.getGeoTargeting(), newGeoTargeting)) modified_params.geoTargeting = newGeoTargeting;
 
 			if(!$.isEmptyObject(modified_params)){
-				console.log(modified_params);
-				alert("OLOLOLO!!!111111 wait update api server");
+				WA_ManagerStorage.api_setTaskParameters({
+					folderId: folderId,
+					taskId: taskId,
+					taskParameters: modified_params,
+					callback: function(taskObj){
+						//DayStat
+						(function(data){
+							var lineMin = {
+									name: "min",
+									data: []
+								},
+								lineMax = {
+									name: "max",
+									data: []
+								},
+								lineGive = {
+									name: "give",
+									data: []
+								},
+								lineIncomplete = {
+									name: "incomplete",
+									data: []
+								},
+								lineOverload = {
+									name: "overload",
+									data: []
+								},
+								onePercent = 0,
+								summ_incomplete = 0,
+								summ_overload = 0,
+								percentControl = 5;
+
+							data.sort(function(a,b){return a.id - b.id;});
+
+							$.each(data, function(key, val){
+								lineMin.data.push([val.id, val.min]);
+								lineMax.data.push([val.id, val.max]);
+								lineGive.data.push([val.id, val.give]);
+								lineIncomplete.data.push([val.id, val.incomplete]);
+								lineOverload.data.push([val.id, val.overload]);
+
+								onePercent += (val.min + val.max);
+								summ_incomplete += val.incomplete;
+								summ_overload += val.overload;
+							});
+							onePercent = (onePercent/2)/100;
+							manager.forms.task.notify.hide();
+							if(onePercent > 0){
+								if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
+								if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
+							};
+
+							manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
+						})(task.getDayStat());
+					},
+					exception: {
+						FolderNotFound: function(){
+							NoticeShow(manager.lng.exception.query.setTask.FolderNotFound, "error");
+						},
+						TaskNotFound: function(){
+							NoticeShow(manager.lng.exception.query.setTask.TaskNotFound, "error");
+						}
+					}
+				});
 			};
 		};
 

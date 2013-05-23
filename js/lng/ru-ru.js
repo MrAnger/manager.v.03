@@ -554,7 +554,7 @@ WA_ManagerUi.lng = {
 			"moveTask":{
 				"FolderNotFound": "Указанная исходная категория не найдена.",
 				"TargetFolderNotFound": "Указанная категория не найдена.",
-				"NotEnoughSlots": "В указанной категории нет необходимого колличества свободных слотов для перемещения заданий."
+				"LimitExceeded": "В указанной категории нет необходимого колличества свободных слотов для перемещения заданий."
 			},
 			"confirmSetAccountPassword": {
 				"InvalidCode": "Неверный код подтверждения."
@@ -580,6 +580,10 @@ WA_ManagerUi.lng = {
 				"FolderNotFound": "Исходная папка не найдена.",
 				"TargetFolderNotFound": "Целевая папка не найдена.",
 				"TaskNotFound": "Исходное задание не найдено."
+			},
+			"setTask":{
+				"FolderNotFound": "Папка задания не найдена.",
+				"TaskNotFound": "Не найдено задание в папке."
 			}
 		}
 	},
