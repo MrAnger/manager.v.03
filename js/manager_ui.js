@@ -2466,7 +2466,8 @@
 			data = [],
 			error = false,
 			err_str = "",
-			err_input = null;
+			err_input = null,
+			listId = parseInt(getParam(manager.forms.ipList.getActiveHtml(), "id"));
 
 		$.each(manager.forms.ipRange.getRangesHtml(), function(key, html){
 			var listId = getParam(html, "listId"),
@@ -2495,15 +2496,23 @@
 					err_str = string;
 					err_input = $(html).find("[name=value]");
 					break;
-				}else data.push({ipListId: listId, ipRangeId: rangeId, start: rangeData.start, end: rangeData.end});
+				}else data.push({listId: listId, rangeId: rangeId, start: rangeData.start, end: rangeData.end});
 			};
 
 			if(error){
 				NoticeShow(insertLoc(manager.lng.form.ipRange_add.ipRange.error, {ip_range: err_str}), "error");
 				$(err_input).focus();
 			}else{
-				console.log(data);
-				alert("OLOLOLO!!!111111 wait update api server");
+				WA_ManagerStorage.api_setIPRanges({
+					listId: listId,
+					ranges: data,
+					callback: function(ipRanges){},
+					exception: {
+						IPListNotFound: function(){
+							NoticeShow(manager.lng.exception.query.setIPRanges.IPListNotFound, "error");
+						}
+					}
+				});
 			};
 		};
 

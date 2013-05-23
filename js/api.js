@@ -710,6 +710,40 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			setIPRanges: function(data){
+				data = $.extend(true, {
+					exception: {
+						IPListNotFound: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Set.IPRanges);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdList, data.listId);
+				var ranges = [];
+				$.each(data.ranges, function(key, range){
+					range.start = dot2num(range.start);
+					range.end = dot2num(range.end);
+
+					var rangeObj = paramTransfer({}, range, [
+						["rangeId", OperationItem.Id],
+						["start", OperationItem.Start],
+						["end", OperationItem.End]
+					]);
+
+					ranges.push(rangeObj);
+				});
+				req.addData(OperationItem.Ranges, ranges);
+
+				req.send(function(_data){
+					var output = {};
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			addFolder: function(data){
 				data = $.extend(true, {
 					exception: {
@@ -1289,7 +1323,8 @@
 				WeekTargeting: 'Set week targeting',
 				IPListName: 'Set IP list name',
 				IPRange: 'Set IP range',
-				TimeDistribution: "Set time distribution"
+				TimeDistribution: 'Set time distribution',
+				IPRanges: 'Set IP ranges'
 			},
 
 			Add : {

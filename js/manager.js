@@ -1017,6 +1017,35 @@
 			ge_callback: options.onError
 		}));
 	};
+	mStorage.api_setIPRanges = function(_options){
+		var options = $.extend(true, {
+			listId: 0,
+			ranges: [],
+			exception: {
+				IPListNotFound: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.setIPRanges({
+			token: mStorage.getToken(),
+			listId: options.listId,
+			ranges: options.ranges,
+			callback: function(data){
+				var ranges = [];
+				$.each(options.ranges, function(key, range){
+					var rangeObj = mStorage.getIPRangeById(range.listId, range.rangeId);
+					rangeObj.setStart(range.start);
+					rangeObj.setStart(range.end);
+					ranges.push(rangeObj);
+				});
+				options.callback(ranges);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
 	mStorage.api_moveTask = function(_options){
 		var options = $.extend(true, {
 			folderId: 0,

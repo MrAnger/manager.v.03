@@ -588,6 +588,9 @@ WA_ManagerUi.lng = {
 			"addIPRanges":{
 				"LimitExceeded": "Превышено максимальное количество диапазонов в списке.",
 				"IPListNotFound": "IP список не найден."
+			},
+			"setIPRanges":{
+				"IPListNotFound": "IP список не найден."
 			}
 		}
 	},
