@@ -739,7 +739,21 @@
 				taskObj.setName(taskData.name);
 				taskObj.setProfile(taskData.profile);
 				taskObj.setRangeSize(taskData.rangeSize);
-				taskObj.setUniquePeriod(taskData.uniquePeriod);;
+				taskObj.setUniquePeriod(taskData.uniquePeriod);
+
+				var dayTargeting = [];
+				for(var i=0; i<=23; i++) dayTargeting.push({id: i, min: 0, max: 0});
+				taskObj.setDayTargeting(dayTargeting);
+				var weekTargeting = [];
+				for(var i=0; i<=6; i++) weekTargeting.push({id: i, val: 100});
+				taskObj.setWeekTargeting(weekTargeting);
+				var timeDistribution = [];
+				for(var i=1; i<=100; i++) timeDistribution.push({id: i, val: 0});
+				taskObj.setTimeDistribution(timeDistribution);
+				taskObj.setGeoTargeting([]);
+				var dayStat = [];
+				for(var i=0; i<=23; i++) dayStat.push({id: i, min: 0, max: 0, give: 0, incomplete: 0, overload: 0});
+				taskObj.setDayStat(dayStat);
 
 				mStorage.addTaskByFolderId(options.taskData.folderId, taskObj);
 
@@ -1461,6 +1475,8 @@
 			case 6:
 				return 5;
 				break;
+			default:
+				return -1;
 		};
 	};
 

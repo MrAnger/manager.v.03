@@ -302,7 +302,9 @@
 					if(this.getTasksHtml().length == 0){
 						$(not_content).show();
 						$(not_setting).show();
-						$(add_task).show();
+						if(manager.forms.folder.getFoldersHtml().length > 0){
+							$(add_task).show();
+						};
 					}else{
 						$(not_content).hide();
 						$(not_setting).hide();
@@ -1823,6 +1825,7 @@
 
 				$(folder).remove();
 
+				if(isActive) $(manager.forms.task.getTasksHtml()).remove();
 				if(folders.length > 1 && isActive) $(manager.forms.folder.getFoldersHtml()).eq(0).click();
 
 				manager.forms.folder.toggleNotContent();
@@ -2510,7 +2513,8 @@
 
 				$(ipList).remove();
 
-				if(ipLists.length > 1 && isActive) $(manager.forms.ipList.getIPListsHtml()).eq(0).click();
+				if(isActive) $(manager.forms.ipRange.getRangesHtml()).remove();
+				if(ipLists.length > 1 && isActive)$(manager.forms.ipList.getIPListsHtml()).eq(0).click();
 
 				manager.forms.ipList.toggleNotContent();
 				manager.forms.ipRange.toggleNotContent();

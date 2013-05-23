@@ -70,51 +70,32 @@
         </div>
     </div>
 </div>
-<div class="add-box-wrap" style="display: none">
-    <div class="add-box">
-        <div class="add-box-content">
-            <div class="close"></div>
-            <div class="content">
-                <form name="add-folder">
-                    <div class="label-block">
-                        <div class="label-text">Имя категории</div>
-                        <div class="text-line">
-                            <input type="text" value="" placeholder="Имя категории">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-                <form name="add-task">
-                    <div class="label-block">
-                        <div class="label-text">Имя задания</div>
-                        <div class="text-line">
-                            <input type="text" value="" placeholder="Имя задания">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-                <form name="add-iplist">
-                    <div class="label-block">
-                        <div class="label-text">Имя IP списка</div>
-                        <div class="text-line">
-                            <input type="text" value="" placeholder="Имя IP списка">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-                <form name="add-ip-range">
-                    <div class="label-block">
-                        <div class="label-text">IP-диапазоны</div>
-                        <div class="text-line">
-                            <textarea placeholder="IP-диапазоны" wrap="off"></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-            </div>
-            <div class="footer"></div>
-        </div>
-    </div>
+<div id="msg_accountActivation" class="add-box-wrap" style="display: none">
+	<div class="add-box">
+		<div class="add-box-content">
+			<div class="close"></div>
+			<div class="content">
+				<form name="account_activation" onsubmit="return false;">
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.account_activation.email.text}"></div>
+						<div class="text-line">
+							<input name="email" type="text" value placeholder autocomplete="false"
+							       wa_lang="{form.account_activation.email.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<div class="label-block">
+						<div class="label-text" wa_lang="{form.account_activation.code.text}"></div>
+						<div class="text-line">
+							<input name="code" type="text" value placeholder autocomplete="false"
+							       wa_lang="{form.account_activation.code.placeholder|attr:placeholder}">
+						</div>
+					</div>
+					<button type="submit" class="btn" wa_lang="{button.confirm}"></button>
+				</form>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
 </div>
 <div id="msg_addFolder" class="add-box-wrap" style="display: none">
     <div class="add-box">
