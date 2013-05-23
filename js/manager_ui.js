@@ -836,6 +836,12 @@
 							$("[name=form_account] [name=readonlyKey] [name=value]").html(key);
 						}
 					});
+				},
+				clear: function(){
+					$("[name=form_account] [name=balance] [name=value]").html("");
+					$("[name=form_account] [name=login] [name=value]").html("");
+					$("[name=form_account] [name=email] [name=value]").html("");
+					$("[name=form_account] [name=readonlyKey] [name=value]").html("");
 				}
 			},
 			pay: {
@@ -4333,7 +4339,7 @@
 	}
 
 	//set events on WA_ManagerStorage
-	WA_ManagerStorage.events.onLogin.push(function(){
+	function initDataManager(){
 		manager.forms.auth.hide();
 		manager.forms.manager.show();
 		$(".header [name=login]").html((WA_ManagerStorage.getUserLogin()) ? WA_ManagerStorage.getUserLogin() : "USER");
@@ -4347,7 +4353,8 @@
 		manager.forms.ipList.load();
 		//load account info
 		manager.forms.account.load();
-	});
+	}
+	WA_ManagerStorage.events.onLogin.push(initDataManager);
 	WA_ManagerStorage.events.onLogOut.push(function(){
 		manager.forms.manager.hide();
 		manager.forms.auth.show();
@@ -4356,6 +4363,8 @@
 		manager.forms.folder.clear();
 		manager.forms.task.clear();
 		manager.forms.ipList.clear();
+		manager.forms.ipRange.clear();
+		manager.forms.account.clear();
 		manager.data.interval_updateTaskStat.stop();
 	});
 
@@ -4438,7 +4447,7 @@
 				WA_ManagerStorage.run({
 					checkDataStorage: false,
 					onErrorInLogin: function(data, gErrorName){
-						if(gErrorName != "WrongSessionId"){
+						if(gErrorName != "WrongSessionId" && gErrorName != "Blocked"){
 							manager.forms.manager.show();
 							$(".header [name=login]").html("User Login");
 							manager.forms.folder.load();
@@ -4450,7 +4459,7 @@
 			//run manager
 			WA_ManagerStorage.run({
 				onErrorInLogin: function(data, gErrorName){
-					if(gErrorName != "WrongSessionId"){
+					if(gErrorName != "WrongSessionId" && gErrorName != "Blocked"){
 						manager.forms.manager.show();
 						$(".header [name=login]").html("User Login");
 						manager.forms.folder.load();
