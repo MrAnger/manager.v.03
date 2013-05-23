@@ -1255,6 +1255,28 @@
 			ge_callback: options.onError
 		}, options.silent);
 	};
+	mStorage.api_accountActivate = function(_options){
+		var options = $.extend(true, {
+			email: "",
+			code: "",
+			callback: function(data){},
+			exception:{
+				InvalidCode: function(){}
+			},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.confirmRegister({
+			token: mStorage.getToken(),
+			mail: options.email,
+			code: options.code,
+			callback: function(data){
+				options.callback();
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
 
 	mStorage.run = function(_options){
 		var options = $.extend(true, {
@@ -1291,7 +1313,6 @@
 
 	//PROPERTIES
 	mStorage.authorized = false;
-	mStorage.activated = true;
 	mStorage.dataReceived = false;
 
 	//SET MANAGER API

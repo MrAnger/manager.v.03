@@ -1121,6 +1121,31 @@
 				hide: function(){
 					$("#confirm_deleteIPRange .close").click();
 				}
+			},
+			account_activate: {
+				show: function(data){
+					data = $.extend(true, {
+						callback: function(){},
+						email: ""
+					}, data);
+
+					var msg = $("#msg_accountActivation").fadeIn("fast"),
+						input_mail = $(msg).find("[name=email]")[0],
+						input_code = $(msg).find("[name=code]")[0];
+
+					$(input_mail).val("").focus();
+					$(input_code).val("");
+
+					if(data.email.length > 0){
+						$(input_mail).val(data.email);
+						$(input_code).focus();
+					};
+
+					data.callback();
+				},
+				hide: function(){
+					$("#msg_accountActivation .add-box .close").click();
+				}
 			}
 		},
 		logOut: function(){
@@ -1668,6 +1693,48 @@
 		};
 	});
 	//SET CHANGE ACCOUNT PASSWORD FORM
+
+	//SET ACCOUNT ACTIVATION FORM
+	$(document).on("submit","form[name=account_activation]", function(e){
+		var form = this, inputs = {
+			email: this["email"],
+			code: this["code"]
+		};
+
+		//check input data
+		if(!CheckType(inputs.email.value, TYPE.MAIL)){
+			NoticeShow(manager.lng.form.account_activation.email.error, "error");
+			$(inputs.email).focus();
+		}else if(!CheckType(inputs.code.value, TYPE.CODE_CONFIRM)){
+			NoticeShow(insertLoc(manager.lng.form.account_activation.code.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.Confirm.Code.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.Confirm.Code.Length.Max
+			}), "error");
+			$(inputs.code).focus();
+		}else{
+			WA_ManagerStorage.api_accountActivate({
+				email: inputs.email.value,
+				code: inputs.code.value,
+				callback: function(data){
+					manager.forms.account_activate.hide();
+					NoticeShow(manager.lng.form.account_activation.success, "success");
+					WA_ManagerStorage.readData({
+						callback: function(){
+							initDataManager();
+						}
+					});
+				},
+				exception:{
+					InvalidCode: function(){
+						NoticeShow(manager.lng.exception.query.confirmRegister.InvalidCode, "error");
+					}
+				}
+			});
+		};
+
+		return false;
+	});
+	//SET ACCOUNT ACTIVATION FORM
 
 	//SET SEND CREDITS FORM
 	$(document).on("submit","form[name=send_credits]", function(e){
@@ -4423,6 +4490,12 @@
 						NoticeShow(manager.lng.exception.general[key], "error");
 						manager.forms.manager.hide();
 						manager.forms.auth.show();
+					};
+					break;
+				case "NotActivated":
+					WA_ManagerStorage.apiUserException[key] = function(){
+						NoticeShow(manager.lng.exception.general[key], "error");
+						manager.forms.account_activate.show();
 					};
 					break;
 				default:

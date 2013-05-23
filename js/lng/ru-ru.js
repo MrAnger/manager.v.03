@@ -616,6 +616,9 @@ WA_ManagerUi.lng = {
 			"cloneIPList":{
 				"IPListNotFound": "IP список не найден.",
 				"LimitExceeded": "Превышено максимальное количество IP списков аккаунте."
+			},
+			"confirmRegister":{
+				"InvalidCode": "Неверный код подтверждения или код просрочен."
 			}
 		}
 	},
