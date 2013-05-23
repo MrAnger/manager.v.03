@@ -2395,7 +2395,8 @@
 	$(document).on("submit","form[name=ipRange_add]", function(e){
 		var form = this, inputs = {
 			ipRange: this["ipRange"]
-		};
+		},
+			listId = parseInt(getParam(manager.forms.ipList.getActiveHtml(), "id"));
 
 		//check input data
 		if(inputs.ipRange.value.length > 0){
@@ -2430,8 +2431,27 @@
 				NoticeShow(insertLoc(manager.lng.form.ipRange_add.ipRange.error, {ip_range: err_str}), "error");
 				$(inputs.ipRange).focus();
 			}else{
-				console.log(ranges);
-				alert("OLOLOLO!!!111111 wait update api server");
+				if(ranges.length > 0){
+					WA_ManagerStorage.api_addIPRanges({
+						listId: listId,
+						ranges: ranges,
+						callback: function(ipRanges){
+							manager.forms.ipRange_add.hide();
+							$.each(ipRanges, function(key, range){
+								manager.forms.ipRange.addHtml(range.getListId(), range.getId());
+							});
+							manager.forms.ipRange.toggleNotContent();
+						},
+						exception: {
+							LimitExceeded: function(){
+								NoticeShow(manager.lng.exception.query.addIPRanges.LimitExceeded, "error");
+							},
+							IPListNotFound: function(){
+								NoticeShow(manager.lng.exception.query.addIPRanges.IPListNotFound, "error");
+							}
+						}
+					});
+				};
 			};
 		};
 

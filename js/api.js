@@ -791,6 +791,42 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+			addIPRanges: function(data){
+				data = $.extend(true, {
+					exception: {
+						LimitExceeded: function(){},
+						IPListNotFound: function(){}
+					}
+				}, data);
+
+				var req = api.requestStorage.addRequest();
+
+				req.setOpCode(OperationCode.Add.IPRanges);
+				req.setToken(data.token);
+
+				req.addData(OperationItem.IdList, data.listId);
+				var ranges = [];
+				$.each(data.ranges, function(key, range){
+					range.start = dot2num(range.start);
+					range.end = dot2num(range.end);
+
+					var rangeObj = paramTransfer({}, range, [
+						["start", OperationItem.Start],
+						["end", OperationItem.End]
+					]);
+
+					ranges.push(rangeObj);
+				});
+				req.addData(OperationItem.Ranges, ranges);
+
+				req.send(function(_data){
+					var output = {};
+
+					output.ids = _data[OperationItem.IdsRanges];
+
+					data.callback(output);
+				}, data.exception, data.ge_callback);
+			},
 			deleteFolders: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -1262,7 +1298,8 @@
 				Mask: 'Add mask',
 				Task: 'Add task',
 				IPList: 'Add IP list',
-				IPRange: 'Add IP range'
+				IPRange: 'Add IP range',
+				IPRanges: 'Add IP ranges'
 			},
 
 			Delete : {
@@ -1484,7 +1521,8 @@
 			InvalidRecipient: 'Invalid recipient',
 			FolderNotFound: 'Folder not found',
 			TargetFolderNotFound: 'Target folder not found',
-			TaskNotFound: 'Task not found'
+			TaskNotFound: 'Task not found',
+			IPListNotFound: 'IPList not found'
 		},
 
 		AccountStatus : {

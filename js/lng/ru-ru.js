@@ -584,6 +584,10 @@ WA_ManagerUi.lng = {
 			"setTask":{
 				"FolderNotFound": "Папка задания не найдена.",
 				"TaskNotFound": "Не найдено задание в папке."
+			},
+			"addIPRanges":{
+				"LimitExceeded": "Превышено максимальное количество диапазонов в списке.",
+				"IPListNotFound": "IP список не найден."
 			}
 		}
 	},

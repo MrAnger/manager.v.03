@@ -393,6 +393,10 @@
 	mStorage.addTaskByFolderId = function(folderId, task){
 		return (mStorage.getFolderById(folderId).addTask(task));
 	};
+	mStorage.addIPRangesByIPListId = function(listId, ranges){
+		var ipList = mStorage.getIPListById(listId);
+		$.each(ranges, function(key, range){ipList.addRange(range);});
+	};
 	mStorage.getFolderById = function(id){
 		return mStorage.folders.getFolderById(id);
 	};
@@ -408,6 +412,9 @@
 	mStorage.getIPListList = function(){
 		return mStorage.ipLists.getIPListList();
 	};
+	mStorage.getIPListById = function(listId){
+		return mStorage.ipLists.getIPListById(listId);
+	}
 	mStorage.setTaskParameters = function(folderId, taskId, params){
 		var task = mStorage.getTaskById(folderId, taskId);
 
@@ -745,6 +752,39 @@
 				mStorage.ipLists.addIPList(ipListObj);
 
 				options.callback(ipListObj);
+			},
+			exception: options.exception,
+			ge_callback: options.onError
+		});
+	};
+	mStorage.api_addIPRanges = function(_options){
+		var options = $.extend(true, {
+			listId: 0,
+			ranges: [],
+			exception: {
+				LimitExceeded: function(){},
+				IPListNotFound: function(){}
+			},
+			callback: function(data){},
+			onError: function(data, gErrorName){}
+		}, _options);
+
+		API_METHOD.addIPRanges({
+			token: mStorage.getToken(),
+			listId: options.listId,
+			ranges: options.ranges,
+			callback: function(data){
+				var ranges = [];
+				$.each(data.ids, function(key, id){
+					var range = new IPRange();
+					range.setId(id);
+					range.setListId(options.listId);
+					range.setStart(options.ranges[key].start);
+					range.setEnd(options.ranges[key].end);
+					ranges.push(range);
+				});
+				mStorage.addIPRangesByIPListId(options.listId, ranges);
+				options.callback(ranges);
 			},
 			exception: options.exception,
 			ge_callback: options.onError
