@@ -638,23 +638,23 @@
 				req.addData(OperationItem.IdFolder, data.folderId);
 				req.addData(OperationItem.IdTask, data.taskId);
 
-				if(data.mask) req.addData(OperationItem.Mask, data.mask);
-				if(data.name) req.addData(OperationItem.Name, data.name);
-				if(data.ignoreGU) req.addData(OperationItem.IgnoreGU, data.ignoreGU);
-				if(data.allowProxy) req.addData(OperationItem.AllowProxy, data.allowProxy);
-				if(data.uniquePeriod) req.addData(OperationItem.UniquePeriod, data.uniquePeriod);
-				if(data.rangeSize) req.addData(OperationItem.RangeSize, data.rangeSize);
-				if(data.domain) req.addData(OperationItem.Domain, data.domain);
-				if(data.extSource) req.addData(OperationItem.ExtSource, data.extSource);
-				if(data.beforeClick) req.addData(OperationItem.BeforeClick, data.beforeClick);
-				if(data.afterClick) req.addData(OperationItem.AfterClick, data.afterClick);
-				if(data.frozen) req.addData(OperationItem.Frozen, data.frozen);
-				if(data.growth) req.addData(OperationItem.Growth, data.growth);
-				if(data.days) req.addData(OperationItem.Days, data.days);
-				if(data.listId) req.addData(OperationItem.IdList, data.listId);
-				if(data.listMode) req.addData(OperationItem.ListMode, data.listMode);
-				if(data.profile) req.addData(OperationItem.Profile, data.profile);
-				if(data.geoTargeting){
+				if(data.mask != null) req.addData(OperationItem.Mask, data.mask);
+				if(data.name != null) req.addData(OperationItem.Name, data.name);
+				if(data.ignoreGU != null) req.addData(OperationItem.IgnoreGU, data.ignoreGU);
+				if(data.allowProxy != null) req.addData(OperationItem.AllowProxy, data.allowProxy);
+				if(data.uniquePeriod != null) req.addData(OperationItem.UniquePeriod, data.uniquePeriod);
+				if(data.rangeSize != null) req.addData(OperationItem.RangeSize, data.rangeSize);
+				if(data.domain != null) req.addData(OperationItem.Domain, data.domain);
+				if(data.extSource != null) req.addData(OperationItem.ExtSource, data.extSource);
+				if(data.beforeClick != null) req.addData(OperationItem.BeforeClick, data.beforeClick);
+				if(data.afterClick != null) req.addData(OperationItem.AfterClick, data.afterClick);
+				if(data.frozen != null) req.addData(OperationItem.Frozen, data.frozen);
+				if(data.growth != null) req.addData(OperationItem.Growth, data.growth);
+				if(data.days != null) req.addData(OperationItem.Days, data.days);
+				if(data.listId != null) req.addData(OperationItem.IdList, data.listId);
+				if(data.listMode != null) req.addData(OperationItem.ListMode, data.listMode);
+				if(data.profile != null) req.addData(OperationItem.Profile, data.profile);
+				if(data.geoTargeting != null){
 					var geoTargeting = [];
 					$.each(data.geoTargeting, function(key, targ){
 						if(targ.target != 0){
@@ -666,7 +666,7 @@
 					});
 					req.addData(OperationItem.GeoTargeting, geoTargeting);
 				};
-				if(data.dayTargeting){
+				if(data.dayTargeting != null){
 					var dayTargeting = [];
 					$.each(data.dayTargeting, function(key, targ){
 						if(targ.min != 0 || targ.max != 0){
@@ -679,7 +679,7 @@
 					});
 					req.addData(OperationItem.DayTargeting, dayTargeting);
 				};
-				if(data.weekTargeting){
+				if(data.weekTargeting != null){
 					var weekTargeting = [];
 					$.each(data.weekTargeting, function(key, targ){
 						if(targ.val != 100){
@@ -691,7 +691,7 @@
 					});
 					req.addData(OperationItem.WeekTargeting, weekTargeting);
 				};
-				if(data.timeDistribution){
+				if(data.timeDistribution != null){
 					var timeDistribution = [];
 					$.each(data.timeDistribution, function(key, targ){
 						if(targ.val != 0){

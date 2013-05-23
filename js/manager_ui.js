@@ -2162,7 +2162,7 @@
 							};
 
 							manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
-						})(task.getDayStat());
+						})(taskObj.getDayStat());
 					},
 					exception: {
 						FolderNotFound: function(){
