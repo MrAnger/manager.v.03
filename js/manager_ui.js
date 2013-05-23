@@ -3331,7 +3331,14 @@
 			var curData = SelfObj.graph.getData(),
 				maxY = 0;
 
-			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+			for(var i=0; i<=arr.length-1; i++){
+				var graph = searchGraphInData(arr[i].name, curData);
+				if(graph){
+					graph.data = arr[i].data;
+				}else{
+					searchLineInOption(arr[i].name).data = arr[i].data;
+				};
+			};
 
 			var _y = getMaxY(curData);
 			maxY = ((_y < options.graphOptions.yaxis.maxDefault) ? options.graphOptions.yaxis.maxDefault : _y);
@@ -3944,7 +3951,14 @@
 			var curData = SelfObj.graph.getData(),
 				maxY = 0;
 
-			for(var i=0; i<=arr.length-1; i++) searchGraphInData(arr[i].name, curData).data = arr[i].data;
+			for(var i=0; i<=arr.length-1; i++){
+				var graph = searchGraphInData(arr[i].name, curData);
+				if(graph){
+					graph.data = arr[i].data;
+				}else{
+					searchLineInOption(arr[i].name).data = arr[i].data;
+				};
+			};
 
 			var _y = getMaxY(curData);
 			maxY = ((_y < options.graphOptions.yaxis.maxDefault) ? options.graphOptions.yaxis.maxDefault : _y);
@@ -3957,6 +3971,7 @@
 
 			function searchGraphInData(name, data){
 				for(var i=0; i<=data.length-1; i++)if(data[i].name == name) return data[i];
+				return false;
 			};
 			function getMaxY(data){
 				var arr = [];
