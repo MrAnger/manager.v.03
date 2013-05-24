@@ -1353,10 +1353,15 @@ embed:hover .copy {
 	background: rgba(202, 139, 0, 0.2);
 	border:1px solid rgba(202, 139, 0, 0.9);
 	border-radius:0 3px 3px 3px;
+	-o-border-radius:0 3px 3px 3px;
+	-moz-border-radius:0 3px 3px 3px;
+	-khtml-border-radius: 0 3px 3px 3px;
+	-webkit-border-radius:0 3px 3px 3px;
 }
 .set-info-box .text {
 	padding:5px 10px;
 	font-size:.85em;
+	min-height: 20px;
 }
 
 .set-info-box .icon {
@@ -1368,6 +1373,43 @@ embed:hover .copy {
 	line-height:30px;
 	background: rgba(202, 139, 0, 0.9) url(../img/info.png) no-repeat 50% 50%;
 	border-radius:3px 0 0 3px;
+	-o-border-radius:3px 0 0 3px;
+	-moz-border-radius:3px 0 0 3px;
+	-khtml-border-radius:3px 0 0 3px;
+	-webkit-border-radius:3px 0 0 3px;
+}
+
+.spoiler-info.set-info-box {
+	position: relative;
+	margin: 10px 10px 5px 30px;
+	background: rgba(65, 150, 200, 0.2);
+	border: 1px solid rgba(65, 150, 200, 0.9);
+	border-radius: 0 3px 3px 3px;
+	-o-border-radius: 0 3px 3px 3px;
+	-moz-border-radius: 0 3px 3px 3px;
+	-khtml-border-radius: 0 3px 3px 3px;
+	-webkit-border-radius: 0 3px 3px 3px;
+}
+
+.spoiler-info.set-info-box .text {
+	padding: 5px 10px;
+	min-height:20px;
+	font-size: .9em;
+}
+
+.spoiler-info.set-info-box .icon {
+	position: absolute;
+	left: -30px;
+	top: -1px;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	background: rgba(65, 150, 200, 0.9) url(../img/info.png) no-repeat 50% 50%;
+	border-radius: 3px 0 0 3px;
+	-o-border-radius: 3px 0 0 3px;
+	-moz-border-radius: 3px 0 0 3px;
+	-khtml-border-radius: 3px 0 0 3px;
+	-webkit-border-radius: 3px 0 0 3px;
 }
 
 .box-line {
