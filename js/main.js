@@ -1,13 +1,16 @@
 (function($){
 	var clip_console = null,
 		clip_btn_readonlyKey = null,
-		scrollbars = [];
+		scrollbars = [],
+		scrollbarIndex = -1;
 
 	//prepare info for scrollbars
 	$(".scrollbar").each(function(key, scrollbar){
 		var data = {
 			scrollbar: scrollbar,
-			scroller: $(scrollbar).find(".scroller")[0]
+			scroller: $(scrollbar).find(".scroller")[0],
+			scrolling: false,
+			prevY: 0
 		};
 		var index = scrollbars.push(data)-1;
 
@@ -20,8 +23,6 @@
 		data.content = $(data.contentHolder).find(".content-scroll")[0];
 		$(data.content).attr("arr_index", index);
 	});
-	console.log(scrollbars);
-	window.s = scrollbars;
 
 	//auto change scroller height
 	new WA_ManagerApi.utils.interval(function(){
@@ -34,6 +35,45 @@
 			else $(data.scroller).height(newHeightScroller+"%");
 		});
 	}, 350).start();
+
+	//set scroll action
+	function scrolling(e){
+		if(scrollbarIndex != -1){
+			var scrollData = scrollbars[scrollbarIndex],
+				scrollVal = 0,
+				scrollerTop = parseInt($(scrollData.scroller).css("top")),
+				pageYChange = e.pageY-scrollData.prevY;
+
+			if(scrollerTop+pageYChange < 0){
+				scrollVal = 0;
+			}else if(scrollerTop+pageYChange+$(scrollData.scroller).height() > $(scrollData.scrollbar).height()){
+				scrollVal = $(scrollData.scrollbar).height()-$(scrollData.scroller).height();
+			}else{
+				scrollVal = scrollerTop+pageYChange;
+			};
+			scrollData.prevY = e.pageY;
+
+			$(scrollData.scroller).css("top", scrollVal);
+			$(scrollData.content).css("top", scrollVal/$(scrollData.scrollbar).height()*$(scrollData.content).height()*-1);
+		};
+	};
+	$.each(scrollbars, function(key, data){
+		$(data.scroller).mousedown(function(e){
+			$(document).disableSelection();
+			data.prevY = e.pageY;
+			scrollbarIndex = key;
+			data.scrolling = true;
+			$(window).mousemove(scrolling);
+		});
+	});
+	$(window).mouseup(function(e){
+		$(document).enableSelection();
+		scrollbarIndex = -1;
+		$.each(scrollbars, function(key, data){
+			data.scrolling = false;
+		});
+		$(window).unbind("mousemove", scrolling);
+	});
 
 	function setHeightTaskContent() {
 		$(".tasks-content").css("height", $(window).height() - 30);
