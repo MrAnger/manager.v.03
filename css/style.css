@@ -1389,3 +1389,7 @@ embed:hover .copy {
 	font-weight: bold;
 	border-bottom: 1px dashed #2d2d2d;
 }
+
+.box-line .box .name:hover {
+	border-bottom: 0;
+}
