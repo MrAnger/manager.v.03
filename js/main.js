@@ -1,6 +1,39 @@
 (function($){
 	var clip_console = null,
-		clip_btn_readonlyKey = null;
+		clip_btn_readonlyKey = null,
+		scrollbars = [];
+
+	//prepare info for scrollbars
+	$(".scrollbar").each(function(key, scrollbar){
+		var data = {
+			scrollbar: scrollbar,
+			scroller: $(scrollbar).find(".scroller")[0]
+		};
+		var index = scrollbars.push(data)-1;
+
+		if($(data.scrollbar).parents(".content-height").length > 0){
+			data.contentHolder = $(data.scrollbar).parents(".content-height")[0];
+		}else{
+			data.contentHolder = $(data.scrollbar).parents(".setting-group")[0];
+		};
+
+		data.content = $(data.contentHolder).find(".content-scroll")[0];
+		$(data.content).attr("arr_index", index);
+	});
+	console.log(scrollbars);
+	window.s = scrollbars;
+
+	//auto change scroller height
+	new WA_ManagerApi.utils.interval(function(){
+		$.each(scrollbars, function(key, data){
+			var contentHeight = $(data.content).height(),
+				scrollbarHeight = $(data.scrollbar).height();
+
+			var newHeightScroller = (scrollbarHeight/contentHeight)*100;
+			if(newHeightScroller > 100) $(data.scroller).height("100%");
+			else $(data.scroller).height(newHeightScroller+"%");
+		});
+	}, 350).start();
 
 	function setHeightTaskContent() {
 		$(".tasks-content").css("height", $(window).height() - 30);
@@ -20,7 +53,9 @@
 	setHeightContentScroll();
 	$(window).resize(setHeightContentScroll);
 	$('.content-scroll').mousewheel(function (e, delta) {
-		var scrollSize = 15;
+		var scrollSize = 15, scrollData = null;
+		if(this.hasAttribute("arr_index")) scrollData = scrollbars[$(this).attr("arr_index")];
+
 		if (delta > 0) {
 			if (parseInt($(this).css("top")) != 0) {
 				var top = parseInt($(this).css("top")) + scrollSize * delta;
@@ -30,7 +65,11 @@
 			if ($(this).parent().height() + Math.abs(parseInt($(this).css("top"))) <= $(this).height()) {
 				$(this).css("top", parseInt($(this).css("top")) + scrollSize * delta);
 			}
-		}
+		};
+
+		if(scrollData != null){
+			$(scrollData.scroller).css("top",Math.abs(parseInt($(this).css("top")))*$(scrollData.scrollbar).height()/$(scrollData.content).height());
+		};
 	});
 
 	//MrAnger edit script
@@ -385,4 +424,5 @@
 			$(selectBox_tasks).html(html);
 		};
 	});
+
 })(jQuery);
