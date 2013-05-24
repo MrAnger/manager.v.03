@@ -127,10 +127,6 @@ body {
 	background: #fff;
 	border-radius: 3px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
-	-o-box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
-	-moz-box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
-	-khtml-box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
-	-webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
 }
 
 .add-box-content textarea {
@@ -415,17 +411,11 @@ input[type=checkbox] {
 	border: 0;
 	color: #2d2d2d;
 	background: #ffcc00;
-	background-image: linear-gradient(#ffcc00, #ff9933);
-	background-image: -o-linear-gradient(#ffcc00, #ff9933);
-	background-image: -moz-linear-gradient(#ffcc00, #ff9933);
-	background-image: -khtml-linear-gradient(#ffcc00, #ff9933);
-	background-image: -webkit-linear-gradient(#ffcc00, #ff9933);
 	border-radius: 2px;
 	-o-border-radius: 2px;
 	-moz-border-radius: 2px;
 	-khtml-border-radius: 2px;
 	-webkit-border-radius: 2px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
 }
 
 .btn.big {
@@ -438,24 +428,17 @@ input[type=checkbox] {
 
 .btn.cancel, .btn.gray {
 	background: #dbdbdb;
-	background-image: linear-gradient(#dbdbdb, #ababab);
-	background-image: -o-linear-gradient(#dbdbdb, #ababab);
-	background-image: -moz-linear-gradient(#dbdbdb, #ababab);
-	background-image: -khtml-linear-gradient(#dbdbdb, #ababab);
-	background-image: -webkit-linear-gradient(#dbdbdb, #ababab);
 }
 
 .btn:hover {
-	box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+	opacity: .9;
 }
 
 .btn:active {
-	box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
 	background: #ffcc00;
 }
 
 .btn.gray:active, .btn.cancel:active {
-	box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
 	background: #dbdbdb;
 }
 
@@ -644,7 +627,7 @@ input[type=checkbox] {
 	background: #ff9933;
 }
 
-.tasks .item-list li.active {
+.tasks .item-list li.active, .tasks .item-list li.selected {
 	background: #cccccc;
 }
 
