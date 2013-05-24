@@ -322,6 +322,12 @@
 					<div class="label-block">
 						<div class="label-text" wa_lang="{form.task_copy_settings.select_settings}"></div>
 						<div class="box-line" name="settings">
+							<div class="box-table">
+								<label class="box" >
+									<input id="checkbox_allTaskParameters" type="checkbox">
+									<span class="boxname select-all" wa_lang="{form.task_copy_settings.select_all}"></span>
+								</label>
+							</div>
 							<div class="box-table" name="two_settings" default>
 								<label class="box" name="setting">
 									<input type="checkbox">
@@ -909,7 +915,7 @@
             <div class="spoiler active" wa_lang="{form.task_setting.dayTargeting.text}"></div>
         </div>
         <div class="spoiler-box-content">
-            <div class="spoiler-info">info</div>
+            <div class="spoiler-info" wa_lang="{form.task_setting.dayTargeting.info}"></div>
             <div class="graph-view-set">
                 <label id="dayTargeting_cb_min"><input disabled type="checkbox" checked><span class="graph-set min" wa_lang="{form.task_setting.dayTargeting.min}"></span>(<span class="graph-value" name="value">0</span>)</label>
                 <label id="dayTargeting_cb_max"><input disabled type="checkbox" checked><span class="graph-set max" wa_lang="{form.task_setting.dayTargeting.max}"></span>(<span class="graph-value" name="value">0</span>)</label>
@@ -922,6 +928,7 @@
             <div class="spoiler" wa_lang="{form.task_setting.weekTargeting.text}"></div>
         </div>
         <div class="spoiler-box-content">
+	        <div class="spoiler-info" wa_lang="{form.task_setting.weekTargeting.info}"></div>
             <div class="graph-box" id="graph_weekTargeting"></div>
         </div>
     </div>
@@ -930,6 +937,7 @@
 			<div class="spoiler" wa_lang="{form.task_setting.timeDistribution.text}"></div>
 		</div>
 		<div class="spoiler-box-content">
+			<div class="spoiler-info" wa_lang="{form.task_setting.timeDistribution.info}"></div>
 			<div class="graph-box" id="graph_timeDistribution"></div>
 		</div>
 	</div>

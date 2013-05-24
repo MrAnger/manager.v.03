@@ -2074,7 +2074,9 @@
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Name.Length.Max
 			}), "error");
 			$(inputs.name).focus();
-		}else if(targetId != null){
+		}else if(targetId == null){
+			NoticeShow(manager.lng.form.task_clone.notSelectedFolder, "error");
+		}else{
 			targetId = parseInt(targetId);
 			WA_ManagerStorage.api_cloneTask({
 				folderId: folderId,
@@ -2102,7 +2104,7 @@
 	});
 	//SET CLONE TASK FORM
 
-	//SET CLONE TASK FORM
+	//SET COPY SETTINGS TASK FORM
 	$(document).on("submit","form[name=task_copy_settings]", function(e){
 		var forms = this,
 			inputs = {
@@ -2117,9 +2119,15 @@
 			targetTasks = [],
 			settings = [];
 
-		$(this).find("[name=settings] input[type=checkbox]:checked").each(function(key, checkbox){settings.push($(checkbox).val());});
+		$(this).find("[name=settings] [name=two_settings] input[type=checkbox]:checked").each(function(key, checkbox){settings.push($(checkbox).val());});
 
-		if(inputs.selectBox_folderId.value != null && inputs.selectBox_taskId.value != null && settings.length != 0){
+		if(!inputs.selectBox_folderId.value){
+			NoticeShow(manager.lng.form.task_copy_settings.notSelectedFolder, "error");
+		}else if(!inputs.selectBox_taskId.value){
+			NoticeShow(manager.lng.form.task_copy_settings.notSelectedTask, "error");
+		}else if(settings.length == 0){
+			NoticeShow(manager.lng.form.task_copy_settings.notSelectedParams, "error");
+		}else{
 			if($(forms).attr("copy") == "in"){
 				sourceFolder = folderId;
 				sourceTask = taskId;
@@ -2160,7 +2168,7 @@
 			});
 		};
 	});
-	//SET CLONE TASK FORM
+	//SET COPY SETTINGS TASK FORM
 
 	//SET TASK SETTING FORM
 	$(document).on("submit","form[name=task-setting]", function(e){

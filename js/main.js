@@ -471,5 +471,9 @@
 			$(selectBox_tasks).html(html);
 		};
 	});
-
+	$("#msg_copyTaskSettings #checkbox_allTaskParameters").change(function(e){
+		var msg = $(this).parents("#msg_copyTaskSettings")[0];
+		if(this.checked) $(msg).find("[name=two_settings] input[type=checkbox]").prop("checked", true);
+		else $(msg).find("[name=two_settings] input[type=checkbox]").prop("checked", false);
+	});
 })(jQuery);
