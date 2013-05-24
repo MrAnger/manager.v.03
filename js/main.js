@@ -257,6 +257,7 @@
 	//folder
 	$(document).on("click", "[wa_folder]", function(e){
 		WA_ManagerUi.forms.task.load(WA_ManagerUi.utils.getParam(this, "id"));
+		$(".tasks .content-scroll, .tasks .scroller").css("top", 0);
 	});
 	//task
 	$(document).on("click", "[wa_task]", function(e){
