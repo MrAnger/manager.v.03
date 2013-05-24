@@ -1379,37 +1379,12 @@ embed:hover .copy {
 	-webkit-border-radius:3px 0 0 3px;
 }
 
-.spoiler-info.set-info-box {
+.spoiler-info {
 	position: relative;
-	margin: 10px 10px 5px 30px;
-	background: rgba(65, 150, 200, 0.2);
-	border: 1px solid rgba(65, 150, 200, 0.9);
-	border-radius: 0 3px 3px 3px;
-	-o-border-radius: 0 3px 3px 3px;
-	-moz-border-radius: 0 3px 3px 3px;
-	-khtml-border-radius: 0 3px 3px 3px;
-	-webkit-border-radius: 0 3px 3px 3px;
-}
-
-.spoiler-info.set-info-box .text {
-	padding: 5px 10px;
-	min-height:20px;
+	margin: 5px 10px;
+	padding: 5px 10px 5px 20px;
+	background: url(../img/info-icon.png) no-repeat 0 5px;
 	font-size: .9em;
-}
-
-.spoiler-info.set-info-box .icon {
-	position: absolute;
-	left: -30px;
-	top: -1px;
-	width: 30px;
-	height: 30px;
-	line-height: 30px;
-	background: rgba(65, 150, 200, 0.9) url(../img/info.png) no-repeat 50% 50%;
-	border-radius: 3px 0 0 3px;
-	-o-border-radius: 3px 0 0 3px;
-	-moz-border-radius: 3px 0 0 3px;
-	-khtml-border-radius: 3px 0 0 3px;
-	-webkit-border-radius: 3px 0 0 3px;
 }
 
 .box-line {
