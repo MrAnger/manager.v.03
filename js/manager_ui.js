@@ -2279,11 +2279,12 @@
 			if(!isEqualGeoTargeting(taskObj.getGeoTargeting(), newGeoTargeting)) modified_params.geoTargeting = newGeoTargeting;
 
 			if(!$.isEmptyObject(modified_params)){
-				WA_ManagerStorage.api_setTaskParameters({
+				WA_ManagerStorage.api_setTasksParameters({
 					folderId: folderId,
-					taskId: taskId,
+					ids: [taskId],
 					taskParameters: modified_params,
 					callback: function(taskObj){
+						taskObj = taskObj[0];
 						//DayStat
 						(function(data){
 							var lineMin = {

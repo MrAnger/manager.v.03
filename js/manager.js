@@ -415,85 +415,90 @@
 	mStorage.getIPListById = function(listId){
 		return mStorage.ipLists.getIPListById(listId);
 	}
-	mStorage.setTaskParameters = function(folderId, taskId, params){
-		var task = mStorage.getTaskById(folderId, taskId);
+	mStorage.setTasksParameters = function(folderId, tasksIds, params){
+		var tasks = [];
 
-		$.each(params, function(param, val){
-			switch(param){
-				case "afterClick":
-					task.setAfterClick(val);
-					break;
-				case "beforeClick":
-					task.setBeforeClick(val);
-					break;
-				case "allowProxy":
-					task.setAllowProxy(val);
-					break;
-				case "domain":
-					task.setDomain(val);
-					break;
-				case "days":
-					task.setDays(val);
-					break;
-				case "extSource":
-					task.setExtSource(val);
-					break;
-				case "frozen":
-					task.setFrozen(val);
-					break;
-				case "growth":
-					task.setGrowth(val);
-					break;
-				case "ignoreGU":
-					task.setIgnoreGU(val);
-					break;
-				case "listId":
-					task.setListId(val);
-					break;
-				case "listMode":
-					task.setListMode(val);
-					break;
-				case "mask":
-					task.setMask(val);
-					break;
-				case "name":
-					task.setName(val);
-					break;
-				case "profile":
-					task.setProfile(val);
-					break;
-				case "rangeSize":
-					task.setRangeSize(val);
-					break;
-				case "uniquePeriod":
-					task.setUniquePeriod(val);
-					break;
-				case "geoTargeting":
-					task.setGeoTargeting(val);
-					break;
-				case "timeDistribution":
-					task.setTimeDistribution(val);
-					break;
-				case "weekTargeting":
-					task.setWeekTargeting(val);
-					break;
-				case "dayTargeting":
-					task.setDayTargeting(val);
-					break;
-			};
+		$.each(tasksIds, function(key, taskId){
+			var task = mStorage.getTaskById(folderId, taskId);
+			tasks.push(task);
+
+			$.each(params, function(param, val){
+				switch(param){
+					case "afterClick":
+						task.setAfterClick(val);
+						break;
+					case "beforeClick":
+						task.setBeforeClick(val);
+						break;
+					case "allowProxy":
+						task.setAllowProxy(val);
+						break;
+					case "domain":
+						task.setDomain(val);
+						break;
+					case "days":
+						task.setDays(val);
+						break;
+					case "extSource":
+						task.setExtSource(val);
+						break;
+					case "frozen":
+						task.setFrozen(val);
+						break;
+					case "growth":
+						task.setGrowth(val);
+						break;
+					case "ignoreGU":
+						task.setIgnoreGU(val);
+						break;
+					case "listId":
+						task.setListId(val);
+						break;
+					case "listMode":
+						task.setListMode(val);
+						break;
+					case "mask":
+						task.setMask(val);
+						break;
+					case "name":
+						task.setName(val);
+						break;
+					case "profile":
+						task.setProfile(val);
+						break;
+					case "rangeSize":
+						task.setRangeSize(val);
+						break;
+					case "uniquePeriod":
+						task.setUniquePeriod(val);
+						break;
+					case "geoTargeting":
+						task.setGeoTargeting(val);
+						break;
+					case "timeDistribution":
+						task.setTimeDistribution(val);
+						break;
+					case "weekTargeting":
+						task.setWeekTargeting(val);
+						break;
+					case "dayTargeting":
+						task.setDayTargeting(val);
+						break;
+				};
+			});
+
+			$.each(task.getDayStat(), function(id, data){
+				var minDef = task.getDayTargeting()[id].min,
+					maxDef = task.getDayTargeting()[id].max,
+					growth = task.getGrowth()/100,
+					weekTarg = task.getWeekTargeting()[getNumberDayForApi(mStorage.getDateServer())].val/100;
+
+				data.min = Math.round((minDef+growth*task.getDays())*weekTarg);
+				data.max = Math.round((maxDef+growth*task.getDays())*weekTarg);
+			});
 		});
 
-		$.each(task.getDayStat(), function(id, data){
-			var minDef = task.getDayTargeting()[id].min,
-				maxDef = task.getDayTargeting()[id].max,
-				growth = task.getGrowth()/100,
-				weekTarg = task.getWeekTargeting()[getNumberDayForApi(mStorage.getDateServer())].val/100;
-
-			data.min = Math.round((minDef+growth*task.getDays())*weekTarg);
-			data.max = Math.round((maxDef+growth*task.getDays())*weekTarg);
-		});
-
-		return task;
+		return tasks;
 	};
 	mStorage.removeFolderById = function(id){
 		return (mStorage.folders.removeFolderById(id));
@@ -1048,10 +1053,10 @@
 			ge_callback: options.onError
 		});
 	};
-	mStorage.api_setTaskParameters = function(_options){
+	mStorage.api_setTasksParameters = function(_options){
 		var options = $.extend(true, {
 			folderId: 0,
-			taskId: 0,
+			ids: [],
 			taskParameters: {},
 			exception: {
 				FolderNotFound: function(){},
@@ -1061,13 +1066,13 @@
 			onError: function(data, gErrorName){}
 		}, _options);
 
-		API_METHOD.setTask($.extend(true, options.taskParameters, {
+		API_METHOD.setTasksParams($.extend(true, options.taskParameters, {
 			token: mStorage.getToken(),
 			folderId: options.folderId,
-			taskId: options.taskId,
+			ids: options.ids,
 			callback: function(data){
-				mStorage.setTaskParameters(options.folderId, options.taskId, options.taskParameters);
-				options.callback(mStorage.getTaskById(options.folderId, options.taskId));
+				var tasks = mStorage.setTasksParameters(options.folderId, options.ids, options.taskParameters);
+				options.callback(tasks);
 			},
 			exception: options.exception,
 			ge_callback: options.onError

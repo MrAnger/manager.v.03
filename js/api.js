@@ -623,7 +623,7 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
-			setTask: function(data){
+			setTasksParams: function(data){
 				data = $.extend(true, {
 					exception: {
 						FolderNotFound: function(){},
@@ -633,11 +633,11 @@
 
 				var req = api.requestStorage.addRequest();
 
-				req.setOpCode(OperationCode.Set.Task);
+				req.setOpCode(OperationCode.Set.TasksParams);
 				req.setToken(data.token);
 
 				req.addData(OperationItem.IdFolder, data.folderId);
-				req.addData(OperationItem.IdTask, data.taskId);
+				req.addData(OperationItem.IdsTasks, data.ids);
 
 				if(data.mask != null) req.addData(OperationItem.Mask, data.mask);
 				if(data.name != null) req.addData(OperationItem.Name, data.name);
@@ -1349,7 +1349,8 @@
 				IPListName: 'Set IP list name',
 				IPRange: 'Set IP range',
 				TimeDistribution: 'Set time distribution',
-				IPRanges: 'Set IP ranges'
+				IPRanges: 'Set IP ranges',
+				TasksParams: 'Set tasks params'
 			},
 
 			Add : {
