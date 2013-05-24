@@ -1064,7 +1064,7 @@
 						input_id = $(msg).find("[name=ipList_id]"),
 						ipListId = getParam($(el).parents("[wa_ipList]"), "id");
 
-					$(input_name).val(WA_ManagerStorage.getIPListById(ipListId).getName());
+					$(input_name).val("");
 					$(input_name).focus();
 					$(input_id).val(ipListId);
 				},
