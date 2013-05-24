@@ -4424,7 +4424,23 @@
 		});
 
 		document.title = title.substr(0, title.length - 3);
-	}
+	};
+	function parseUrl(){
+		var GET = {};
+
+		var url = document.location.search;
+		if(url.indexOf('?') != -1) url = url.substr(url.indexOf('?') + 1);
+
+		var arr = url.split('&');
+
+		$.each(arr, function(key, value){
+			var temp = value.split('=');
+
+			GET[temp[0]] = temp[1];
+		});
+
+		return GET;
+	};
 
 	//set events on WA_ManagerStorage
 	function initDataManager(){
@@ -4551,6 +4567,7 @@
 			};
 		}else{
 			//run manager
+			var urlParams = parseUrl();
 			WA_ManagerStorage.run({
 				onErrorInLogin: function(data, gErrorName){
 					if(gErrorName != "WrongSessionId" && gErrorName != "Blocked"){
@@ -4560,7 +4577,8 @@
 					};
 				},
 				onNeedAuth: function(){
-					manager.forms.auth.show();
+					if(urlParams.form && urlParams.form == "reg") manager.forms.reg.show();
+					else manager.forms.auth.show();
 				}
 			});
 		};
