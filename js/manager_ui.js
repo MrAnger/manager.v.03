@@ -304,6 +304,8 @@
 						$(not_setting).show();
 						if(manager.forms.folder.getFoldersHtml().length > 0){
 							$(add_task).show();
+						}else{
+							$(add_task).hide();
 						};
 					}else{
 						$(not_content).hide();
