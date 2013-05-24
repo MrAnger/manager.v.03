@@ -31,8 +31,14 @@
 				scrollbarHeight = $(data.scrollbar).height();
 
 			var newHeightScroller = (scrollbarHeight/contentHeight)*100;
-			if(newHeightScroller > 100) $(data.scroller).height("100%");
-			else $(data.scroller).height(newHeightScroller+"%");
+			if(newHeightScroller > 100){
+				$(data.scroller).height("100%");
+				$(data.scrollbar).hide();
+			}
+			else{
+				$(data.scrollbar).show();
+				$(data.scroller).height(newHeightScroller+"%");;
+			};
 		});
 	}, 350).start();
 
