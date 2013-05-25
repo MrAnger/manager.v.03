@@ -555,16 +555,26 @@
 				},
 				setStatusFromSettingForm: function(state, switcher){
 					var task = WA_ManagerStorage.folders.getFolderById(getParam(manager.forms.task.getActiveHtml(), "folderId")).getTaskById(getParam(manager.forms.task.getActiveHtml(), "taskId"));
-					WA_ManagerStorage.api.methods.setTaskStatus({
-						token: WA_ManagerStorage.getToken(),
-						folderId: getParam(manager.forms.task.getActiveHtml(), "folderId"),
-						taskId: getParam(manager.forms.task.getActiveHtml(), "taskId"),
-						frozen: !task.getFrozen(),
-						callback: function(){
-							task.setFrozen(!task.getFrozen());
-							manager.forms.task.setStatus(manager.forms.task.getActiveHtml(), task.isEnabled());
+
+					WA_ManagerStorage.api_setTasksParameters({
+						folderId: parseInt(getParam(manager.forms.task.getActiveHtml(), "folderId")),
+						ids: [parseInt(getParam(manager.forms.task.getActiveHtml(), "taskId"))],
+						taskParameters: {
+							frozen: !task.getFrozen()
 						},
-						ge_callback: function(){
+						callback: function(taskObj){
+							taskObj = taskObj[0];
+							manager.forms.task.setStatus(manager.forms.task.getActiveHtml(), taskObj.isEnabled());
+						},
+						exception: {
+							FolderNotFound: function(){
+								NoticeShow(manager.lng.exception.query.setTask.FolderNotFound, "error");
+							},
+							TaskNotFound: function(){
+								NoticeShow(manager.lng.exception.query.setTask.TaskNotFound, "error");
+							}
+						},
+						onError: function(){
 							if(state) $(switcher).addClass("status-off");
 							else $(switcher).removeClass("status-off");
 						}
@@ -2285,6 +2295,7 @@
 					taskParameters: modified_params,
 					callback: function(taskObj){
 						taskObj = taskObj[0];
+						manager.forms.task.setName(manager.forms.task.getActiveHtml(), taskObj.getName());
 						//DayStat
 						(function(data){
 							var lineMin = {
