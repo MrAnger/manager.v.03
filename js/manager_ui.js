@@ -4466,6 +4466,12 @@
 		manager.forms.auth.hide();
 		manager.forms.manager.show();
 		$(".header [name=login]").html((WA_ManagerStorage.getUserLogin()) ? WA_ManagerStorage.getUserLogin() : "USER");
+		//check checkbox on graph day stat
+		$("#dayStat_cb_max input[type=checkbox], #dayStat_cb_min input[type=checkbox], #dayStat_cb_give input[type=checkbox], #dayStat_cb_incomplete input[type=checkbox], #dayStat_cb_overload input[type=checkbox]").prop("checked", true);
+		//graphs, set default state
+		$.each(manager.data.graphs, function(key, graph){
+			if(graph.setDefaultState) graph.setDefaultState();
+		});
 		//load geo zones
 		$.each(WA_ManagerStorage.geoZones.getGeoZoneList(), function(key, geoZone){
 			manager.data.geoStorage.add(geoZone.getId(), geoZone.getName(), 0, 0);
@@ -4476,12 +4482,6 @@
 		manager.forms.ipList.load();
 		//load account info
 		manager.forms.account.load();
-		//check checkbox on graph day stat
-		$("#dayStat_cb_max input[type=checkbox], #dayStat_cb_min input[type=checkbox], #dayStat_cb_give input[type=checkbox], #dayStat_cb_incomplete input[type=checkbox], #dayStat_cb_overload input[type=checkbox]").prop("checked", true);
-		//graphs, set default state
-		$.each(manager.data.graphs, function(key, graph){
-			if(graph.setDefaultState) graph.setDefaultState();
-		});
 	}
 	WA_ManagerStorage.events.onLogin.push(initDataManager);
 	WA_ManagerStorage.events.onLogOut.push(function(){
