@@ -494,7 +494,7 @@
 					manager.data.graphs.dayTargeting.setDefaultState();
 					manager.data.graphs.weekTargeting.setDefaultState();
 					manager.data.graphs.timeDistribution.setDefaultState();
-					manager.data.graphs.dayStat.setDefaultState();
+					manager.data.graphs.dayStat.setDefaultValue();
 
 					manager.data.geoStorage.clear();
 					//delete all printed countries
@@ -502,11 +502,6 @@
 					$("[name=task-setting] [name=selectBox_country]").html("");
 
 					$("#task-status").removeClass("status-off");
-
-					//check checkbox on graph day stat
-					$("#dayStat_cb_max input[type=checkbox], #dayStat_cb_min input[type=checkbox], #dayStat_cb_give input[type=checkbox], #dayStat_cb_incomplete input[type=checkbox], #dayStat_cb_overload input[type=checkbox]").each(function(key, el){
-						el.checked = true;
-					});
 				},
 				setStatusFromSettingForm: function(state, switcher){
 					var task = WA_ManagerStorage.folders.getFolderById(getParam(manager.forms.task.getActiveHtml(), "folderId")).getTaskById(getParam(manager.forms.task.getActiveHtml(), "taskId"));
@@ -3381,10 +3376,20 @@
 			});
 			SelfObj.setData(def_lines);
 		};
+		this.setDefaultValue = function(){
+			var values = [];
+			$.each(options.lines, function(key, line){
+				values.push($.extend(true, {name: line.name}, {data: searchLineInDefaultLines(line.name).data}));
+			});
+			SelfObj.setData(values);
+		};
 
 		//functions
 		function searchLineInOption(lineName){
 			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+		function searchLineInDefaultLines(lineName){
+			for(var i=0; i<= def_lines.length-1; i++) if(def_lines[i].name == lineName) return def_lines[i];
 		};
 		function getListLineNames(){
 			var out = [];
@@ -3953,10 +3958,16 @@
 			function getMaxY(data){
 				var arr = [];
 
-				$.each(data, function(key, line){
-					$.each(line.data, function(key, val){
-						arr.push(val[1]);
-					});
+				$.each(options.lines, function(key, line){
+					if(line.show){
+						$.each(searchGraphInData(line.name, data).data, function(key, val){
+							arr.push(val[1]);
+						});
+					}else{
+						$.each(line.data, function(key, val){
+							arr.push(val[1]);
+						});
+					};
 				});
 
 				arr.sort(function(a,b){return a-b;});
@@ -4002,10 +4013,20 @@
 			});
 			SelfObj.setData(def_lines);
 		};
+		this.setDefaultValue = function(){
+			var values = [];
+			$.each(options.lines, function(key, line){
+				values.push($.extend(true, {name: line.name}, {data: searchLineInDefaultLines(line.name).data}));
+			});
+			SelfObj.setData(values);
+		};
 
 		//functions
 		function searchLineInOption(lineName){
 			for(var i=0; i<= options.lines.length-1; i++) if(options.lines[i].name == lineName) return options.lines[i];
+		};
+		function searchLineInDefaultLines(lineName){
+			for(var i=0; i<= def_lines.length-1; i++) if(def_lines[i].name == lineName) return def_lines[i];
 		};
 		function getListLineNames(){
 			var out = [];
@@ -4455,6 +4476,12 @@
 		manager.forms.ipList.load();
 		//load account info
 		manager.forms.account.load();
+		//check checkbox on graph day stat
+		$("#dayStat_cb_max input[type=checkbox], #dayStat_cb_min input[type=checkbox], #dayStat_cb_give input[type=checkbox], #dayStat_cb_incomplete input[type=checkbox], #dayStat_cb_overload input[type=checkbox]").prop("checked", true);
+		//graphs, set default state
+		$.each(manager.data.graphs, function(key, graph){
+			if(graph.setDefaultState) graph.setDefaultState();
+		});
 	}
 	WA_ManagerStorage.events.onLogin.push(initDataManager);
 	WA_ManagerStorage.events.onLogOut.push(function(){
