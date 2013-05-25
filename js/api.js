@@ -1694,7 +1694,7 @@
 					}
 				},
 				Growth: {
-					Regexp: /^\d*$/,
+					Regexp: /^\d+(\.\d+){0,1}$/,
 					Value: {
 						Min: 0,
 						Max: 100,
