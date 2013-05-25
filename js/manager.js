@@ -1257,6 +1257,7 @@
 				task.setDayStat(stat);
 				options.callback(task.getDayStat());
 			},
+			exception: options.exception,
 			ge_callback: options.onError
 		}, options.silent);
 	};
@@ -1615,7 +1616,8 @@
 				weekTargeting: [],
 				timeDistribution: [],
 				geoTargeting: [],
-				dayStat: []
+				dayStat: [],
+				lastUpdateDayStat: null
 			};
 
 		this.getId = function(){
@@ -1687,6 +1689,9 @@
 		this.getDayStat = function(){
 			return data.dayStat;
 		};
+		this.getLastUpdateDayStat = function(){
+			return data.lastUpdateDayStat;
+		};
 		this.setId = function(id){
 			return (data.taskId = id);
 		};
@@ -1754,7 +1759,11 @@
 			return (data.geoTargeting = geoTargeting);
 		};
 		this.setDayStat = function(dayStat){
-			return (data.dayStat = dayStat);
+			data.dayStat = dayStat;
+			SelfObj.setLastUpdateDayStat(new Date());
+		};
+		this.setLastUpdateDayStat = function(date){
+			return (data.lastUpdateDayStat = date);
 		};
 		this.isEnabled = function(){
 			return !data.frozen;

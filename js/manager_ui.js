@@ -18,7 +18,8 @@
 		utils: {
 			noticeShow: NoticeShow,
 			getParam: getParam,
-			setParam: setParam
+			setParam: setParam,
+			dateDiff: dateDiff
 		},
 		forms: {
 			auth: {
@@ -458,53 +459,7 @@
 					})(task.getGeoTargeting());
 
 					//DayStat
-					(function(data){
-						var lineMin = {
-								name: "min",
-								data: []
-							},
-							lineMax = {
-								name: "max",
-								data: []
-							},
-							lineGive = {
-								name: "give",
-								data: []
-							},
-							lineIncomplete = {
-								name: "incomplete",
-								data: []
-							},
-							lineOverload = {
-								name: "overload",
-								data: []
-							},
-							onePercent = 0,
-							summ_incomplete = 0,
-							summ_overload = 0,
-							percentControl = 5;
-
-						data.sort(function(a,b){return a.id - b.id;});
-
-						$.each(data, function(key, val){
-							lineMin.data.push([val.id, val.min]);
-							lineMax.data.push([val.id, val.max]);
-							lineGive.data.push([val.id, val.give]);
-							lineIncomplete.data.push([val.id, val.incomplete]);
-							lineOverload.data.push([val.id, val.overload]);
-
-							onePercent += (val.min + val.max);
-							summ_incomplete += val.incomplete;
-							summ_overload += val.overload;
-						});
-						onePercent = (onePercent/2)/100;
-						if(onePercent > 0){
-							if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
-							if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
-						};
-
-						manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
-					})(task.getDayStat());
+					manager.forms.task.printDayStat(task.getDayStat());
 				},
 				settingFormClear: function(){
 					this.notify.hide();
@@ -602,6 +557,53 @@
 							if(task.getListId() !=0 && !WA_ManagerStorage.getIPListById(task.getListId())) task.setListId(0);
 						});
 					});
+				},
+				printDayStat: function(stat){
+					var lineMin = {
+							name: "min",
+							data: []
+						},
+						lineMax = {
+							name: "max",
+							data: []
+						},
+						lineGive = {
+							name: "give",
+							data: []
+						},
+						lineIncomplete = {
+							name: "incomplete",
+							data: []
+						},
+						lineOverload = {
+							name: "overload",
+							data: []
+						},
+						onePercent = 0,
+						summ_incomplete = 0,
+						summ_overload = 0,
+						percentControl = 5;
+
+					stat.sort(function(a,b){return a.id - b.id;});
+
+					$.each(stat, function(key, val){
+						lineMin.data.push([val.id, val.min]);
+						lineMax.data.push([val.id, val.max]);
+						lineGive.data.push([val.id, val.give]);
+						lineIncomplete.data.push([val.id, val.incomplete]);
+						lineOverload.data.push([val.id, val.overload]);
+
+						onePercent += (val.min + val.max);
+						summ_incomplete += val.incomplete;
+						summ_overload += val.overload;
+					});
+					onePercent = (onePercent/2)/100;
+					if(onePercent > 0){
+						if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
+						if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
+					};
+
+					manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
 				}
 			},
 			geo: {
@@ -1355,54 +1357,7 @@
 				silent: true,
 				callback: function(stat){
 					if(folderId == parseInt($(folderIdInput).val()) && taskId == parseInt($(taskIdInput).val())){
-						//DayStat
-						(function(data){
-							var lineMin = {
-									name: "min",
-									data: []
-								},
-								lineMax = {
-									name: "max",
-									data: []
-								},
-								lineGive = {
-									name: "give",
-									data: []
-								},
-								lineIncomplete = {
-									name: "incomplete",
-									data: []
-								},
-								lineOverload = {
-									name: "overload",
-									data: []
-								},
-								onePercent = 0,
-								summ_incomplete = 0,
-								summ_overload = 0,
-								percentControl = 5;
-
-							data.sort(function(a,b){return a.id - b.id;});
-
-							$.each(data, function(key, val){
-								lineMin.data.push([val.id, val.min]);
-								lineMax.data.push([val.id, val.max]);
-								lineGive.data.push([val.id, val.give]);
-								lineIncomplete.data.push([val.id, val.incomplete]);
-								lineOverload.data.push([val.id, val.overload]);
-
-								onePercent += (val.min + val.max);
-								summ_incomplete += val.incomplete;
-								summ_overload += val.overload;
-							});
-							onePercent = (onePercent/2)/100;
-							if(onePercent > 0){
-								if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
-								if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
-							};
-
-							manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
-						})(stat);
+						manager.forms.task.printDayStat(stat);
 					};
 				}
 			});
@@ -4460,6 +4415,29 @@
 		});
 
 		return GET;
+	};
+	function dateDiff(date1, date2, diffType){
+		var diff = date1 - date2,
+			out = diff;
+		diffType = (diffType && diffType.length>0) ? diffType : "min"
+
+		switch(diffType){
+			case "sec":
+				out = getDiffSec(diff);
+				break;
+			case "min":
+				out = getDiffMin(getDiffSec(diff));
+				break
+		};
+
+		function getDiffSec(_diff){
+			return Math.round(_diff/1000);
+		};
+		function getDiffMin(_diff){
+			return Math.floor(_diff/60);
+		};
+
+		return out;
 	};
 
 	//set events on WA_ManagerStorage

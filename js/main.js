@@ -267,8 +267,38 @@
 	});
 	//task
 	$(document).on("click", "[wa_task]", function(e){
-		WA_ManagerUi.forms.task.loadSetting(WA_ManagerUi.utils.getParam(this, "folderId"), WA_ManagerUi.utils.getParam(this, "taskId"));
-		WA_ManagerUi.data.interval_updateTaskStat.reInit();
+		var folderId = parseInt(WA_ManagerUi.utils.getParam(this, "folderId")),
+			taskId = parseInt(WA_ManagerUi.utils.getParam(this, "taskId")),
+			taskObj = WA_ManagerStorage.getTaskById(folderId, taskId);
+
+		if(WA_ManagerUi.utils.dateDiff(new Date(), taskObj.getLastUpdateDayStat(), "min") >= 5){
+			WA_ManagerStorage.api_updateTaskStat({
+				folderId: folderId,
+				taskId: taskId,
+				silent: false,
+				callback: function(stat){
+					WA_ManagerUi.forms.task.loadSetting(folderId, taskId);
+					WA_ManagerUi.data.interval_updateTaskStat.reInit();
+				},
+				exception: {
+					FolderNotFound: function(){
+						WA_ManagerUi.forms.task.loadSetting(folderId, taskId);
+						WA_ManagerUi.data.interval_updateTaskStat.reInit();
+					},
+					TaskNotFound: function(){
+						WA_ManagerUi.forms.task.loadSetting(folderId, taskId);
+						WA_ManagerUi.data.interval_updateTaskStat.reInit();
+					}
+				},
+				onError: function(){
+					WA_ManagerUi.forms.task.loadSetting(folderId, taskId);
+					WA_ManagerUi.data.interval_updateTaskStat.reInit();
+				}
+			});
+		}else{
+			WA_ManagerUi.forms.task.loadSetting(folderId, taskId);
+			WA_ManagerUi.data.interval_updateTaskStat.reInit();
+		};
 	});
 	//ipList
 	$(document).on("click", "[wa_ipList]", function(e){
