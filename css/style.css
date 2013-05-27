@@ -860,25 +860,6 @@ input[type=checkbox] {
 	position: relative;
 }
 
-.add {
-	position: relative;
-	display: inline-block;
-	width: 30px;
-	height: 30px;
-	line-height: 30px;
-	background: url(../img/add.png) no-repeat 50% 50%;
-	opacity: .3;
-	cursor: pointer;
-}
-
-.add:hover, .delete:hover {
-	opacity: 1;
-}
-
-.add:active, .delete:active {
-	opacity: .6;
-}
-
 .delete {
 	display: inline-block;
 	width: 24px;
@@ -1017,31 +998,6 @@ input[readonly].geo {
 .account-set .closed {
 	font-style: italic;
 	color: #ccc;
-}
-
-.generate, .copy, .editing {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background: url(../img/renew.png) no-repeat 50% 50%;
-	opacity: .3;
-	cursor: pointer;
-}
-
-.editing {
-	background-image: url(../img/edit.png);
-}
-
-.copy {
-	background-image: url(../img/clipboard.png);
-}
-
-.generate:hover, .editing:hover, .copy:hover {
-	opacity: 1;
-}
-
-.generate:active, .editing:active, .copy:active {
-	opacity: .6;
 }
 
 .console-box {
@@ -1306,24 +1262,6 @@ embed:hover .copy {
 	-webkit-box-sizing: border-box;
 }
 
-.cost-move {
-	display: inline-block;
-	width:30px;
-	height:30px;
-	line-height:30px;
-	background: url(../img/cost-move.png) no-repeat 50% 50%;
-	opacity: .3;
-	cursor: pointer;
-}
-
-.cost-move:hover {
-	opacity:1;
-}
-
-.cost-move:active {
-	opacity: .6;
-}
-
 .small-text {
 	padding:5px;
 	font-size:.9em;
@@ -1392,4 +1330,43 @@ embed:hover .copy {
 
 .box-line .box .name:hover {
 	border-bottom: 0;
+}
+
+.title .btn-icon {
+	float:right;
+}
+
+.btn-icon {
+	position: relative;
+	display: inline-block;
+	margin:0;
+	width: 30px;
+	height: 30px;
+	background: url(../img/icons.png) no-repeat 0 0;
+	opacity: .7;
+	vertical-align:middle;
+	cursor: pointer;
+}
+
+.btn-icon:hover, .btn-icon.hover {
+	opacity: 1;
+}
+
+.btn-icon:active {
+	opacity: .6;
+}
+.btn-icon.cost-move {
+	background-position:-30px 0;
+}
+.btn-icon.editing {
+	background-position:0 -30px;
+}
+.btn-icon.generate {
+	background-position:-30px -30px;
+}
+.btn-icon.copy {
+	background-position: 0 -60px;
+}
+.btn-icon.cost-add {
+	background-position:-30px -60px;
 }

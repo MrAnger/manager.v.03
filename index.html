@@ -665,7 +665,7 @@
 <div class="manager">
 <div class="tasks-content" style="display: none">
 <div class="folders">
-    <div class="title"><span wa_lang="{form.folder.title}"></span><span wa_lang="{tooltip.addNewFolder|attr:title}" class="add"
+    <div class="title"><span wa_lang="{form.folder.title}"></span><span wa_lang="{tooltip.addNewFolder|attr:title}" class="btn-icon add"
                                                                         onclick="WA_ManagerUi.forms.folder_add.show();"></span>
     </div>
     <div class="content-height" height_minus="60">
@@ -696,7 +696,7 @@
     </div>
 </div>
 <div class="tasks">
-    <div class="title"><span wa_lang="{form.task.title}"></span><span wa_lang="{tooltip.addNewTask|attr:title}" id="btn_add_task" class="add"
+    <div class="title"><span wa_lang="{form.task.title}"></span><span wa_lang="{tooltip.addNewTask|attr:title}" id="btn_add_task" class="btn-icon add"
                                                                       onclick="WA_ManagerUi.forms.task_add.show();"></span>
     </div>
     <div class="content-height" height_minus="60">
@@ -1011,7 +1011,7 @@
 </div>
 <div class="iplists-content" style="display: none">
     <div class="iplists">
-        <div class="title"><span wa_lang="{form.ipList.title}"></span><span onclick="WA_ManagerUi.forms.ipList_add.show();" wa_lang="{tooltip.addNewIPList|attr:title}" class="add"></span></div>
+        <div class="title"><span wa_lang="{form.ipList.title}"></span><span onclick="WA_ManagerUi.forms.ipList_add.show();" wa_lang="{tooltip.addNewIPList|attr:title}" class="btn-icon add"></span></div>
         <div class="content-height" height_minus="60">
 		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
             <ul class="item-list content-scroll" style="top:0;">
@@ -1033,7 +1033,7 @@
         </div>
     </div>
     <div class="set-iplist">
-        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="add" onclick="WA_ManagerUi.forms.ipRange_add.show();"></span></div>
+        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="btn-icon add" onclick="WA_ManagerUi.forms.ipRange_add.show();"></span></div>
         <div class="setting-group" height_minus="60">
 		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
 	        <div class="content-scroll" style="top:0;">
@@ -1058,7 +1058,7 @@
         <table class="account-set" name="form_account">
             <tr name="balance">
                 <td class="name" name="text">Баланс</td>
-                <td class="option"><span wa_lang="{tooltip.byCredits|attr:title}" class="add" onclick="WA_ManagerUi.forms.pay.show();"></span><span wa_lang="{tooltip.transferCredits|attr:title}" class="cost-move" onclick="WA_ManagerUi.forms.sendCredits.show();"></span></td>
+                <td class="option"><span wa_lang="{tooltip.byCredits|attr:title}" class="btn-icon add" onclick="WA_ManagerUi.forms.pay.show();"></span><span wa_lang="{tooltip.transferCredits|attr:title}" class="btn-icon cost-move" onclick="WA_ManagerUi.forms.sendCredits.show();"></span></td>
                 <td class="value" name="value"></td>
             </tr>
             <tr>
@@ -1076,12 +1076,12 @@
             </tr>
             <tr name="password">
                 <td class="name" wa_lang="{form.account.password.text}"></td>
-                <td class="option"><span wa_lang="{tooltip.changeAccountPassword|attr:title}" class="editing" onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
+                <td class="option"><span wa_lang="{tooltip.changeAccountPassword|attr:title}" class="btn-icon editing" onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
                 <td class="value closed" wa_lang="{form.account.password.value_hidden}"></td>
             </tr>
             <tr name="readonlyKey">
                 <td class="name" name="text" wa_lang="{form.account.readonlyKey.text}"></td>
-                <td class="option"><span wa_lang="{tooltip.refreshReadonlyKey|attr:title}" class="generate" onclick="WA_ManagerUi.forms.account.resetReadonlyKey();"></span><span wa_lang="{tooltip.copyToClipboardReadonlyKey|attr:title}" id="btn_copy_readonlyKey" class="copy"></span></td>
+                <td class="option"><span wa_lang="{tooltip.refreshReadonlyKey|attr:title}" class="btn-icon generate" onclick="WA_ManagerUi.forms.account.resetReadonlyKey();"></span><span wa_lang="{tooltip.copyToClipboardReadonlyKey|attr:title}" id="btn_copy_readonlyKey" class="btn-icon copy"></span></td>
                 <td class="value" name="value"></td>
             </tr>
         </table>
