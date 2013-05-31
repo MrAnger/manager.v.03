@@ -1344,9 +1344,10 @@
 				folderIdInput = $(form_task_settings).find("[name=folderId]")[0],
 				taskIdInput = $(form_task_settings).find("[name=taskId]")[0],
 				folderId = parseInt(folderIdInput.value),
-				taskId = parseInt(taskIdInput.value);
+				taskId = parseInt(taskIdInput.value),
+				taskObj = WA_ManagerStorage.getTaskById(folderId, taskId);
 
-			WA_ManagerStorage.api_updateTaskStat({
+			if(taskObj.isEnabled()) WA_ManagerStorage.api_updateTaskStat({
 				folderId: folderId,
 				taskId: taskId,
 				silent: true,
