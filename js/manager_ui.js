@@ -593,6 +593,7 @@
 						summ_overload += val.overload;
 					});
 					onePercent = (onePercent/2)/100;
+                    manager.forms.task.notify.hide();
 					if(onePercent > 0){
 						if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
 						if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
