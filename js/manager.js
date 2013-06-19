@@ -397,6 +397,9 @@
 		var ipList = mStorage.getIPListById(listId);
 		$.each(ranges, function(key, range){ipList.addRange(range);});
 	};
+    mStorage.addIPList = function(ipList){
+        return mStorage.ipLists.addIPList(ipList);
+    };
 	mStorage.getFolderById = function(id){
 		return mStorage.folders.getFolderById(id);
 	};
@@ -607,7 +610,7 @@
 			targetIPList.addRange(newRange);
 		});
 
-		return targetIPList;
+		return mStorage.addIPList(targetIPList);
 	};
 	mStorage.copyTaskSettings = function(folderSourceId, taskSourceId, folderTargetId, arr_taskTargetId, copyParams){
 		var sourceTask = mStorage.getTaskById(folderSourceId, taskSourceId);
