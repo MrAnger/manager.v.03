@@ -315,7 +315,7 @@
 					//get server date
 					if(_data[OperationItem.Timestamp]){
 						output.serverDate = new Date(_data[OperationItem.Timestamp] * 1000);
-						output.serverDate.setHours(output.serverDate.getTimezoneOffset()/60)
+						output.serverDate.setHours(output.serverDate.getHours() + output.serverDate.getTimezoneOffset()/60);
 					};
 
 					//parse system constants
