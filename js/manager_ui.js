@@ -4513,7 +4513,7 @@
 		$(document).bind("DOMNodeInserted", TranslatePage);
 		//set api options
 		$.extend(true, WA_ManagerStorage.api.options, {
-			server: "http://node0.waspace-run.net:80/",
+			server: "http://api.waspace.net:80/",
 			/*timeout: 1000,*/
 			log: {
 				enable: true,
