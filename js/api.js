@@ -337,7 +337,8 @@
 						[OperationItem.Deleted, "deleted"],
 						[OperationItem.Balance, "balance"],
 						[OperationItem.Id, "id"],
-						[OperationItem.Mail, "email"]
+						[OperationItem.Mail, "email"],
+                        [OperationItem.Referer, "referer"]
 					]);
 
 					//parse folders, tasks and tasks setting
@@ -1188,6 +1189,7 @@
 				req.addData(OperationItem.Login, data.login);
 				req.addData(OperationItem.Mail, data.mail);
 				req.addData(OperationItem.Password, data.password);
+                if(data.referer) req.addData(OperationItem.Referer, data.referer);
 
 				req.send(function(_data){
 					var output = {};
@@ -1536,7 +1538,11 @@
 			SourceList: 'Source list',
 			TargetFolder: 'Target folder',
 			TargetTasks: 'Target tasks',
-			Settings: 'Settings'
+			Settings: 'Settings',
+            Referer: 'Referer',
+            Referrals: 'Referrals',
+            Inactivity: 'Inactivity',
+            Deductions: 'Deductions'
 		},
 
 		ResponseStatus : {
@@ -1694,9 +1700,9 @@
 					}
 				},
 				Growth: {
-					Regexp: /^\d+(\.\d+){0,1}$/,
+					Regexp: /^\-?\d+(\.\d+){0,1}$/,
 					Value: {
-						Min: 0,
+						Min: -100,
 						Max: 100,
 						Default: 0
 					}

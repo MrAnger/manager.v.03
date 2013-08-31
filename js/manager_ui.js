@@ -59,10 +59,15 @@
 					data = $.extend(true, {
 						callback: function(){}
 					}, data);
+                    var urlParams = parseUrl();
 
 					setTitle([manager.lng.pageTitle, manager.lng.form.reg.pageTitle]);
 
 					$("[name=reg] input[type=text], [name=reg] input[type=password]").val("");
+                    if(urlParams.ref && urlParams.ref.toString().length > 0){
+                        $("[name=reg] [name=reg_referer]").val(urlParams.ref);
+                        $("[name=reg] [name=reg_referer]").attr("disabled", "disabled");
+                    }else $("[name=reg] [name=reg_referer]").removeAttr("disabled");
 
 					$(".main .auth-no-success").show();
 					$("[name=reg]").show();
@@ -124,6 +129,7 @@
 					$(".main .auth-success .manager").children().hide();
 					//$(".main .auth-success .manager .not-content").hide();
 					manager.data.clip_btn_readoblyKey.hide();
+                    manager.data.clip_btn_referralUrl.hide();
 
 					switch(data.form){
 						case "task":
@@ -144,8 +150,14 @@
 							$(".main .auth-success .account-content").show();
 							manager.data.clip_btn_readoblyKey.show();
 							manager.data.clip_btn_readoblyKey.reposition();
+                            manager.data.clip_btn_referralUrl.show();
+                            manager.data.clip_btn_referralUrl.reposition();
 							setTitle([manager.lng.pageTitle, manager.lng.form.account.pageTitle]);
 							break;
+                        case "referrals":
+                            $(".main .auth-success .referals-content").show();
+                            setTitle([manager.lng.pageTitle, manager.lng.form.referrals.pageTitle]);
+                            break;
 						default:
 							manager.forms.manager.show($.extend(true, data, {form: "task"}));
 					};
@@ -841,6 +853,7 @@
 					$("[name=form_account] [name=login] [name=value]").html(WA_ManagerStorage.getUserLogin());
 					$("[name=form_account] [name=email] [name=value]").html(WA_ManagerStorage.getUserEmail());
 					$("[name=form_account] [name=readonlyKey] [name=value]").html(WA_ManagerStorage.getUserReadonlyKey());
+                    $("[name=form_account] [name=referralUrl] [name=value]").html(WA_ManagerStorage.getUserReferralUrl());
 				},
 				resetReadonlyKey: function(){
 					WA_ManagerStorage.api_resetReadonlyKey({
@@ -854,6 +867,7 @@
 					$("[name=form_account] [name=login] [name=value]").html("");
 					$("[name=form_account] [name=email] [name=value]").html("");
 					$("[name=form_account] [name=readonlyKey] [name=value]").html("");
+                    $("[name=form_account] [name=referralUrl] [name=value]").html("");
 				}
 			},
 			pay: {
@@ -1156,7 +1170,86 @@
 				hide: function(){
 					$("#msg_accountActivation .add-box .close").click();
 				}
-			}
+			},
+            referrals: {
+                addHtml: function(id){
+                    var layout = $("[wa_ipList][default]"),
+                        parent = $(layout).parent(),
+                        html = $(layout).clone().removeAttr("default").appendTo(parent);
+
+                    //add param to html
+                    setParam(html, "id", id);
+
+                    this.setName(html, WA_ManagerStorage.getIPListById(id).getName());
+                    this.setStatus(html, WA_ManagerStorage.isUsedIPList(id));
+
+                    this.toggleNotContent();
+                },
+                setName: function(html, val){
+                    $(html).find("[name=view_name]").html(val);
+                },
+                setStatus: function(html, status){
+                    $(html).find("[name=view_status]").removeClass("on off").addClass((status) ? "on" : "off").html((status) ? manager.lng.form.ipList.used : manager.lng.form.ipList.not_used);
+                },
+                getIPListsHtml: function(){
+                    var out = [];
+
+                    $("[wa_ipList]:not([default])").each(function(key, ipList){out.push(ipList)});
+
+                    return out;
+                },
+                getActiveHtml: function(){
+                    return $(".active[wa_ipList]:not([default])")[0];
+                },
+                getHtmlById: function(id){
+                    var out = null;
+
+                    $.each(this.getIPListsHtml(), function(key, html){
+                        if(getParam(html, "id") == id) out = html;
+                    });
+
+                    return out;
+                },
+                toggleNotContent: function(){
+                    var not_content = $(".iplists .not-content"),
+                        not_content_ipRanges = $(".set-iplist .not-content"),
+                        btn_add_range = $("#btn_add_ipRange"),
+                        btn_save_ranges = $("#btn_save_ipRanges");
+
+                    if(manager.forms.ipList.getIPListsHtml().length == 0){
+                        $(not_content).show();
+                        $(not_content_ipRanges).show();
+                        $(btn_add_range).hide();
+                        $(btn_save_ranges).hide();
+                    }else{
+                        $(not_content).hide();
+                        //$(not_content_ipRanges).hide();
+                        $(btn_add_range).show();
+                    };
+                },
+                load: function(){
+                    //delete all ipLists
+                    $(this.getIPListsHtml()).remove();
+                    //add to html
+                    $.each(WA_ManagerStorage.getIPListList(), function(key, ipList){
+                        manager.forms.ipList.addHtml(ipList.getId());
+                    });
+                    this.toggleNotContent();
+                    $(this.getIPListsHtml()).eq(0).click();
+                },
+                clear: function(){
+                    //delete all ipLists
+                    $(this.getIPListsHtml()).remove();
+                    $(".iplists .not-content").hide();
+                },
+                updateStatusAll: function(){
+                    var used = WA_ManagerStorage.getUsedIPList();
+                    $.each(this.getIPListsHtml(), function(key, html){
+                        if(used.indexOf(parseInt(getParam(html, "id"))) == -1) manager.forms.ipList.setStatus(html, false);
+                        else  manager.forms.ipList.setStatus(html, true);
+                    });
+                }
+            }
 		},
 		logOut: function(){
 			WA_ManagerStorage.logOut();
@@ -1454,7 +1547,8 @@
 		var form = this, inputs = {
 			mail: this["reg_mail"],
 			password: this["reg_password"],
-			login: this["reg_login"]
+			login: this["reg_login"],
+            referer: this["reg_referer"]
 		};
 
 		//check input data
@@ -1467,11 +1561,15 @@
 		}else if(!CheckType(inputs.password.value, TYPE.PASSWORD)){
 			NoticeShow(manager.lng.form.reg.password.error, "error");
 			$(inputs.password).focus();
-		}else{
+		}else if(!CheckType(inputs.referer.value, TYPE.LOGIN, true)){
+            NoticeShow(manager.lng.form.reg.referer.error, "error");
+            $(inputs.referer).focus();
+        }else{
 			WA_ManagerStorage.api.methods.register({
 				mail: inputs.mail.value,
 				password: inputs.password.value,
 				login: inputs.login.value,
+                referer: inputs.referer.value,
 				exception: {
 					MailExists: function(){
 						NoticeShow(manager.lng.exception.query.reg.MailExists, "error");
@@ -4429,12 +4527,12 @@
 		var url = document.location.search;
 		if(url.indexOf('?') != -1) url = url.substr(url.indexOf('?') + 1);
 
-		var arr = url.split('&');
+		var arr = url.split("&amp;").join("&").split('&');
 
 		$.each(arr, function(key, value){
 			var temp = value.split('=');
 
-			GET[temp[0]] = temp[1];
+			GET[temp[0]] = decodeURI(temp[1]);
 		});
 
 		return GET;

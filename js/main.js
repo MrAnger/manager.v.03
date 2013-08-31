@@ -1,6 +1,6 @@
 (function($){
 	var clip_console = null,
-		clip_btn_readonlyKey = null,
+		clip_btn_referralUrl = null,
 		scrollbars = [],
 		scrollbarIndex = -1;
 
@@ -216,7 +216,7 @@
 	});
 	//button copy readonlyKey
 	$(document).ready(function(e){
-		var clip = WA_ManagerUi.data.clip_btn_readoblyKey = clip_btn_readonlyKey = new ZeroClipboard.Client(),
+		var clip = WA_ManagerUi.data.clip_btn_readoblyKey = clip_btn_referralUrl = new ZeroClipboard.Client(),
 			clipHtml = null,
 			cy4ki = $(".main .auth-success, .main .manager .account-content");
 		$(cy4ki).show();
@@ -236,6 +236,28 @@
 			};
 		});
 	});
+    //button copy referralUrl
+    $(document).ready(function(e){
+        var clip = WA_ManagerUi.data.clip_btn_referralUrl = clip_btn_referralUrl = new ZeroClipboard.Client(),
+            clipHtml = null,
+            cy4ki = $(".main .auth-success, .main .manager .account-content");
+        $(cy4ki).show();
+        clip.glue("btn_copy_referralUrl");
+        $(cy4ki).hide();
+        clipHtml = $("#"+$(clip.getHTML()).attr('id')).parent()[0];
+        clip.addEventListener('onMouseUp', function(client){
+            clip.setText($("[name=form_account] [name=referralUrl] [name=value]").html());
+        });
+        clip.addEventListener('onComplete', function(client){
+            WA_ManagerUi.utils.noticeShow(WA_ManagerUi.lng.form.account.referralUrl.copy_success, "success");
+        });
+        clip.hide();
+        $(window).resize(function(e){
+            if($(".main .manager .account-content").css("display") != "none"){
+                clip.reposition();
+            };
+        });
+    });
 	//top  menu
 	$(".top-menu .item").click(function(e){
 		$(this).parents(".top-menu").find(".item").removeClass("active");

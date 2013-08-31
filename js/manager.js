@@ -53,7 +53,9 @@
 		login: "",
 		balance: 0,
 		email: "",
-		readonlyKey: ""
+		readonlyKey: "",
+        referralUrl: "",
+        referer: ""
 	};
 
 	mStorage.folders = null;
@@ -61,6 +63,8 @@
 	mStorage.ipLists = null;
 
 	mStorage.geoZones = null;
+
+    mStorage.referrals = null;
 
 	//METHODS SYSTEM DATA
 	mStorage.getDateRun = function(){
@@ -95,6 +99,12 @@
 	mStorage.getUserReadonlyKey = function(){
 		return mStorage.userData.readonlyKey;
 	};
+    mStorage.getUserReferralUrl = function(){
+        return mStorage.userData.referralUrl;
+    };
+    mStorage.getUserReferer = function(){
+        return mStorage.userData.referer;
+    };
 	mStorage.setDateServer = function(date){
 		return (mStorage.systemData.date.server = date);
 	};
@@ -113,6 +123,12 @@
 	mStorage.setUserReadonlyKey = function(key){
 		return (mStorage.userData.readonlyKey = key);
 	};
+    mStorage.setUserReferralUrl = function(ref){
+        return (mStorage.userData.referralUrl = "http://"+document.location.hostname+document.location.pathname+"?form=reg&ref="+encodeURI(ref));
+    };
+    mStorage.setUserReferer = function(ref){
+        return (mStorage.userData.refefer = ref);
+    };
 
 	//METHODS SYSTEM CONST
 	mStorage.getConstTaskMinCost = function(){
@@ -281,7 +297,11 @@
 						case "email":
 							mStorage.setUserEmail(val);
 							break;
+                        case "referer":
+                            mStorage.setUserEmail(val);
+                            break;
 					};
+                    mStorage.setUserReferralUrl(mStorage.getUserLogin());
 				});
 
 				//parse geo zones
@@ -1935,4 +1955,60 @@
 			data = {};
 		};
 	};
+    function ReferralContainer(){
+        var SelfObj = this,
+            data = {};
+
+        this.getReferralByLogin = function(login){
+            return data[login];
+        };
+        this.getReferralList = function(){
+            var out = [];
+
+            $.each(data, function(key, referral){
+                out.push(referral);
+            });
+
+            return out;
+        };
+        this.addReferral = function(referral){
+            return (data[referral.getLogin()] = referral);
+        };
+        this.removeReferralByLogin = function(login){
+            return (delete data[login]);
+        };
+        this.removeReferral = function(referral){
+            return (delete data[referral.getLogin()]);
+        };
+        this.clear = function(){
+            data = {};
+        };
+    };
+    function Referral(){
+        var SelfObj = this,
+            data = {
+                login: 0,
+                inactivity: 0,
+                deductions: 0
+            };
+
+        this.getLogin = function(){
+            return data.login;
+        };
+        this.getInactivity = function(){
+            return data.inactivity;
+        };
+        this.getDeductions = function(){
+            return data.deductions;
+        };
+        this.setLogin = function(login){
+            return (data.login = login);
+        };
+        this.setInactivity = function(inactivity){
+            return (data.inactivity = inactivity);
+        };
+        this.setDeductions = function(deductions){
+            return (data.deductions = deductions);
+        };
+    };
 })(jQuery);

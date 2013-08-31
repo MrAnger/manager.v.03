@@ -528,7 +528,8 @@
             <span class="item"
                   wa_lang="{menu.top-menu.iplist}"
                   onclick="WA_ManagerUi.forms.manager.show({form: 'iplist'});"></span>
-            <span class="item">Рефералы</span>
+            <span class="item" wa_lang="{menu.top-menu.referrals}"
+                  onclick="WA_ManagerUi.forms.manager.show({form: 'referrals'});"></span>
         </div>
         <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span
                 wa_lang="{tooltip.goAccountPage|attr:title}" class="link login" name="login"
@@ -613,6 +614,13 @@
                         <input name="reg_password" class="password" type="password" value placeholder autocomplete="off"
                                wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
                             class="show-box"></span>
+                    </div>
+                </div>
+                <div class="label-block">
+                    <div class="label-text" wa_lang="{form.reg.referer.text}"></div>
+                    <div class="text-line">
+                        <input name="reg_referer" class="password" type="text" value placeholder autocomplete="off"
+                               wa_lang="{form.reg.referer.placeholder|attr:placeholder}"></span>
                     </div>
                 </div>
                 <div class="agreement"
@@ -1151,10 +1159,10 @@
                         class="btn-icon copy"></span></td>
                 <td class="value" name="value"></td>
             </tr>
-            <tr>
-                <td class="name">Рефссылка</td>
-                <td class="option"><span class="btn-icon copy"></span></td>
-                <td class="value">mv3.waspace.net/?form=reg&ref=creator</td>
+            <tr name="referralUrl">
+                <td class="name" wa_lang="{form.account.referralUrl.text}"></td>
+                <td class="option"><span class="btn-icon copy" wa_lang="{tooltip.copyToClipboardReferralUrl|attr:title}" id="btn_copy_referralUrl"></span></td>
+                <td class="value" name="value"></td>
             </tr>
         </table>
     </div>
@@ -1167,165 +1175,35 @@
         <table class="account-set referer">
             <thead>
             <tr>
-                <td class="name">Ник реферeра</td>
-                <td class="income">Доход реферера</td>
+                <td class="name" wa_lang="{form.referrals.nickReferer}"></td>
+                <!--<td class="income">Доход реферера</td>-->
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td class="name">SYSTEM</td>
-                <td class="income">0</td>
+                <td class="name" name="nickRefrer"></td>
+                <!--<td class="income">0</td>-->
             </tr>
             </tbody>
         </table>
         <table class="account-set referals">
             <thead>
             <tr>
-                <td class="name">Ник реферала</td>
-                <td class="inactivity">Неактивность</td>
-                <td class="income">Ваш доход</td>
+                <td class="name" wa_lang="{form.referrals.nickReferral}"></td>
+                <td class="inactivity" wa_lang="{form.referrals.inActivity}"></td>
+                <td class="income" wa_lang="{form.referrals.income}"></td>
             </tr>
             </thead>
             <tfoot>
             <tr>
-                <td class="name">Итого</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
+                <td class="name"wa_lang="{form.referrals.total}"></td>
+                <td class="inactivity"></td>
+                <td class="income" name="income_total">0</td>
             </tr>
             </tfoot>
             <tbody>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
-            </tr>
-            <tr>
-                <td class="name">Creator</td>
+            <tr default referral>
+                <td class="name"></td>
                 <td class="inactivity">0</td>
                 <td class="income">0</td>
             </tr>

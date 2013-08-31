@@ -4,7 +4,8 @@ WA_ManagerUi.lng = {
 			"task": "Задания",
 			"iplist": "IP-списки",
 			"youAuth": "Вы авторизованы, ",
-			"exit": "Выход"
+			"exit": "Выход",
+            "referrals": "Рефералы"
 		},
 		"edit-menu":{
 			"rename": "Переименовать",
@@ -45,6 +46,7 @@ WA_ManagerUi.lng = {
 		"changeAccountStatus": "Восстановить аккаунт",
 		"copyToClipboardReadonlyKey": "Скопировать в буфер обмена гостевой ключ",
 		"copyToClipboardConsoleLog": "Скопировать в буфер обмена лог консоли",
+        "copyToClipboardReferralUrl": "Скопировать в буфер обмена реферральную ссылку",
 		"removeIPRange" : "Удалить IP диапазон"
 	},
 	"loader":{
@@ -95,6 +97,11 @@ WA_ManagerUi.lng = {
 				"placeholder": "Пароль",
 				"error": "Невведен пароль или введеный пароль невалиден."
 			},
+            "referer":{
+                "text": "Реферер",
+                "placeholder": "Реферер",
+                "error": "Невведен реферер или введеный реферер невалиден."
+            },
 			"agreement":{
 				"string1": "Нажимая кнопку",
 				"string2": "Вы соглашаетесь с",
@@ -435,7 +442,11 @@ WA_ManagerUi.lng = {
 				"text": "Статус аккаунта",
 				"enabled": "Включен",
 				"disabled": "Выключен"
-			}
+			},
+            "referralUrl": {
+                "text": "Реферальная ссылка",
+                "copy_success": "Реферальная ссылка успешно скопирован в буфер обмена."
+            }
 		},
 		"pay": {
 			"title": "Пополнение баланса",
@@ -539,7 +550,16 @@ WA_ManagerUi.lng = {
 				"error": "Не введен код подтверждения или код подтверждения невалиден.<br>Минимальная длина кода: %MIN%, максимальная: %MAX%."
 			},
 			"success": "Аккаунт успешно активирован."
-		}
+		},
+        "referrals": {
+            "pageTitle": "Рефералы",
+            "nickReferer": "Ник реферeра",
+            "profitReferer": "Доход реферера",
+            "nickReferral": "Ник реферала",
+            "inactivity": "Неактивность",
+            "income": "Ваш доход",
+            "total": "Итого"
+        }
 	},
 	"language":{
 		"ru": "Русский",
