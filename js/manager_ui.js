@@ -1172,82 +1172,72 @@
 				}
 			},
             referrals: {
-                addHtml: function(id){
-                    var layout = $("[wa_ipList][default]"),
+                setRefererNick: function(nick){
+                    if(nick && nick.toString().length > 0){
+                        $("[name=refererContainer]").show();
+                        $("[name=nickReferer]").html(nick);
+                    }else{
+                        $("[name=refererContainer]").hide();
+                    };
+                },
+                addHtml: function(login){
+                    var layout = $("[wa_referral][default]"),
                         parent = $(layout).parent(),
                         html = $(layout).clone().removeAttr("default").appendTo(parent);
 
-                    //add param to html
-                    setParam(html, "id", id);
-
-                    this.setName(html, WA_ManagerStorage.getIPListById(id).getName());
-                    this.setStatus(html, WA_ManagerStorage.isUsedIPList(id));
+                    this.setLogin(html, login);
+                    this.setInactivity(html, WA_ManagerStorage.referrals.getReferralByLogin(login).getInactivity());
+                    this.setDeductions(html, WA_ManagerStorage.referrals.getReferralByLogin(login).getDeductions());
 
                     this.toggleNotContent();
                 },
-                setName: function(html, val){
-                    $(html).find("[name=view_name]").html(val);
+                setLogin: function(html, val){
+                    $(html).find("[name=view_login]").html(val);
                 },
-                setStatus: function(html, status){
-                    $(html).find("[name=view_status]").removeClass("on off").addClass((status) ? "on" : "off").html((status) ? manager.lng.form.ipList.used : manager.lng.form.ipList.not_used);
+                setInactivity: function(html, val){
+                    $(html).find("[name=view_inactivity]").html(DataFormat.int(val));
                 },
-                getIPListsHtml: function(){
+                setDeductions: function(html, val){
+                    $(html).find("[name=view_income]").html(DataFormat.int(parseInt(val)));
+                },
+                getReferralsHtml: function(){
                     var out = [];
 
-                    $("[wa_ipList]:not([default])").each(function(key, ipList){out.push(ipList)});
+                    $("[wa_referral]:not([default])").each(function(key, referral){out.push(referral);});
 
                     return out;
                 },
-                getActiveHtml: function(){
-                    return $(".active[wa_ipList]:not([default])")[0];
-                },
-                getHtmlById: function(id){
+                getHtmlByLogin: function(login){
                     var out = null;
 
-                    $.each(this.getIPListsHtml(), function(key, html){
-                        if(getParam(html, "id") == id) out = html;
+                    $.each(this.getReferralsHtml(), function(key, html){
+                        if(getParam(html, "view_login") == login) out = html;
                     });
 
                     return out;
                 },
                 toggleNotContent: function(){
-                    var not_content = $(".iplists .not-content"),
-                        not_content_ipRanges = $(".set-iplist .not-content"),
-                        btn_add_range = $("#btn_add_ipRange"),
-                        btn_save_ranges = $("#btn_save_ipRanges");
+                    var not_content = $(".referals-content .not-content");
 
-                    if(manager.forms.ipList.getIPListsHtml().length == 0){
-                        $(not_content).show();
-                        $(not_content_ipRanges).show();
-                        $(btn_add_range).hide();
-                        $(btn_save_ranges).hide();
-                    }else{
-                        $(not_content).hide();
-                        //$(not_content_ipRanges).hide();
-                        $(btn_add_range).show();
-                    };
+                    if(manager.forms.referrals.getReferralsHtml().length == 0) $(not_content).show();
+                    else $(not_content).hide();
                 },
                 load: function(){
                     //delete all ipLists
-                    $(this.getIPListsHtml()).remove();
+                    $(this.getReferralsHtml()).remove();
+                    //set referrer nick
+                    this.setRefererNick(WA_ManagerStorage.getUserReferer());
                     //add to html
-                    $.each(WA_ManagerStorage.getIPListList(), function(key, ipList){
-                        manager.forms.ipList.addHtml(ipList.getId());
+                    $.each(WA_ManagerStorage.getReferralList(), function(key, referral){
+                        manager.forms.referrals.addHtml(referral.getLogin());
                     });
+                    $("[name=referral_income_total]").html(DataFormat.int(parseInt(WA_ManagerStorage.referrals.getTotalDeduction())));
                     this.toggleNotContent();
-                    $(this.getIPListsHtml()).eq(0).click();
                 },
                 clear: function(){
                     //delete all ipLists
-                    $(this.getIPListsHtml()).remove();
-                    $(".iplists .not-content").hide();
-                },
-                updateStatusAll: function(){
-                    var used = WA_ManagerStorage.getUsedIPList();
-                    $.each(this.getIPListsHtml(), function(key, html){
-                        if(used.indexOf(parseInt(getParam(html, "id"))) == -1) manager.forms.ipList.setStatus(html, false);
-                        else  manager.forms.ipList.setStatus(html, true);
-                    });
+                    $(this.getReferralsHtml()).remove();
+                    $(".referals-content .not-content").hide();
                 }
             }
 		},
@@ -4582,6 +4572,8 @@
 		manager.forms.ipList.load();
 		//load account info
 		manager.forms.account.load();
+        //load referrals
+        manager.forms.referrals.load();
 	}
 	WA_ManagerStorage.events.onLogin.push(initDataManager);
 	WA_ManagerStorage.events.onLogOut.push(function(){

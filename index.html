@@ -1172,10 +1172,10 @@
         <div class="scroller" style="top: 0px; height: 100%;"></div>
     </div>
     <div class="content-scroll" style="top:0;">
-        <table class="account-set referer" style="">
+        <table class="account-set referer" name="refererContainer" style="">
             <tr>
                 <td class="name" wa_lang="{form.referrals.nickReferer}"></td>
-                <td class="value" name="nickRefrer"></td>
+                <td class="value" name="nickReferer"></td>
             </tr>
         </table>
         <table class="account-set referals">
@@ -1188,18 +1188,18 @@
             </thead>
             <tfoot>
             <tr class="not-content" style="">
-                <td colspan="3">В данном аккаунте еще нет рефералов...</td>
+                <td colspan="3" wa_lang="{form.referrals.not_have_referrals}"></td>
             </tr>
             <tr>
                 <td class="name"wa_lang="{form.referrals.total}"></td>
-                <td colspan="2" class="income" name="income_total">0</td>
+                <td colspan="2" class="income" name="referral_income_total"></td>
             </tr>
             </tfoot>
             <tbody>
-            <tr default referral>
-                <td class="name"></td>
-                <td class="inactivity">0</td>
-                <td class="income">0</td>
+            <tr default wa_referral>
+                <td class="name" name="view_login"></td>
+                <td class="inactivity" name="view_inactivity"></td>
+                <td class="income" name="view_income"></td>
             </tr>
             </tbody>
         </table>

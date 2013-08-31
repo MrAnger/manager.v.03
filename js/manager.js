@@ -127,7 +127,7 @@
         return (mStorage.userData.referralUrl = "http://"+document.location.hostname+document.location.pathname+"?form=reg&ref="+encodeURI(ref));
     };
     mStorage.setUserReferer = function(ref){
-        return (mStorage.userData.refefer = ref);
+        return (mStorage.userData.referer = ref);
     };
 
 	//METHODS SYSTEM CONST
@@ -298,7 +298,7 @@
 							mStorage.setUserEmail(val);
 							break;
                         case "referer":
-                            mStorage.setUserEmail(val);
+                            mStorage.setUserReferer(val);
                             break;
 					};
                     mStorage.setUserReferralUrl(mStorage.getUserLogin());
@@ -381,6 +381,16 @@
 					mStorage.folders.addFolder(folderObj);
 				});
 
+                //parse referrals
+                $.each(data.referrals, function(key, ref){
+                    var referral = new Referral();
+                    referral.setLogin(ref.login);
+                    referral.setInactivity(ref.inactivity);
+                    referral.setDeductions(ref.deductions);
+
+                    mStorage.referrals.addReferral(referral);
+                });
+
 				mStorage.dataReceived = true;
 
 				//run callback
@@ -407,6 +417,8 @@
 		mStorage.ipLists.clear();
 		//clear geo zones
 		mStorage.geoZones.clear();
+        //clear referrals
+        mStorage.referrals.clear();
 
 		mStorage.executeEvents(mStorage.events.onClearData);
 	};
@@ -437,7 +449,10 @@
 	};
 	mStorage.getIPListById = function(listId){
 		return mStorage.ipLists.getIPListById(listId);
-	}
+	};
+    mStorage.getReferralList = function(){
+        return mStorage.referrals.getReferralList();
+    };
 	mStorage.setTasksParameters = function(folderId, tasksIds, params){
 		var tasks = [];
 
@@ -1319,6 +1334,8 @@
 		mStorage.ipLists = new IPListContainer();
 		//create geoZone container
 		mStorage.geoZones = new GeoZoneContainer();
+        //create referrals container
+        mStorage.referrals = new ReferralContainer();
 		//check auth token and read data from server
 		if(options.checkDataStorage){
 			if(DataStorage.get(CONST_STORAGE.token)){
@@ -1970,6 +1987,15 @@
             });
 
             return out;
+        };
+        this.getTotalDeduction = function(){
+            var total = 0;
+
+            $.each(SelfObj.getReferralList(), function(key, referral){
+                total += referral.getDeductions();
+            });
+
+            return total;
         };
         this.addReferral = function(referral){
             return (data[referral.getLogin()] = referral);

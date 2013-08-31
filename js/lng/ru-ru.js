@@ -558,7 +558,8 @@ WA_ManagerUi.lng = {
             "nickReferral": "Ник реферала",
             "inActivity": "Неактивность",
             "income": "Ваш доход",
-            "total": "Итого"
+            "total": "Итого",
+            "not_have_referrals": "В данном аккаунте еще нет рефералов..."
         }
 	},
 	"language":{

@@ -310,7 +310,8 @@
 						generalInfo: {},
 						folders: [],
 						ipLists: [],
-						geoZones: []
+						geoZones: [],
+                        referrals: []
 					};
 					//get server date
 					if(_data[OperationItem.Timestamp]){
@@ -470,7 +471,7 @@
 						//add folderObj to output
 						output.folders.push(folderObj);
 					});
-					output.folders.sort(function(a,b){return a.id- b.id;});
+					output.folders.sort(function(a,b){return a.id - b.id;});
 
 					//parse ipLists
 					if(_data[OperationItem.IPLists]) $.each(_data[OperationItem.IPLists], function(key, ipList){
@@ -500,7 +501,7 @@
 						//add ipListObj to output
 						output.ipLists.push(ipListObj)
 					});
-					output.ipLists.sort(function(a,b){return a.id- b.id;});
+					output.ipLists.sort(function(a,b){return a.id - b.id;});
 
 					//parse geo zones
 					if(_data[OperationItem.GeoZones]) $.each(_data[OperationItem.GeoZones], function(key, geoZone){
@@ -513,7 +514,19 @@
 						//add geoZoneObj to output
 						output.geoZones.push(geoZoneObj);
 					});
-					output.geoZones.sort(function(a,b){return a.id- b.id;});
+					output.geoZones.sort(function(a,b){return a.id - b.id;});
+
+                    //parse referrals
+                    $.each(_data[OperationItem.Referrals], function(key, referral){
+                        output.referrals.push(paramTransfer({}, referral, [
+                            [OperationItem.Login, "login"],
+                            [OperationItem.Inactivity, "inactivity"],
+                            [OperationItem.Deductions, "deductions"]
+                        ]));
+                    });
+                    output.referrals.sort(function(a, b) {
+                        return (a.login.toUpperCase() < b.login.toUpperCase()) ? -1 : (a.login.toUpperCase() > b.login.toUpperCase()) ? 1 : 0;
+                    })
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
