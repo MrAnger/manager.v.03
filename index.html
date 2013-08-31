@@ -1162,7 +1162,7 @@
             <tr name="referralUrl">
                 <td class="name" wa_lang="{form.account.referralUrl.text}"></td>
                 <td class="option"><span class="btn-icon copy" wa_lang="{tooltip.copyToClipboardReferralUrl|attr:title}" id="btn_copy_referralUrl"></span></td>
-                <td class="value" name="value"></td>
+                <td class="value"><span class="url" name="value"></span></td>
             </tr>
         </table>
     </div>
@@ -1172,19 +1172,11 @@
         <div class="scroller" style="top: 0px; height: 100%;"></div>
     </div>
     <div class="content-scroll" style="top:0;">
-        <table class="account-set referer">
-            <thead>
+        <table class="account-set referer" style="">
             <tr>
                 <td class="name" wa_lang="{form.referrals.nickReferer}"></td>
-                <!--<td class="income">Доход реферера</td>-->
+                <td class="value" name="nickRefrer"></td>
             </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="name" name="nickRefrer"></td>
-                <!--<td class="income">0</td>-->
-            </tr>
-            </tbody>
         </table>
         <table class="account-set referals">
             <thead>
@@ -1195,10 +1187,12 @@
             </tr>
             </thead>
             <tfoot>
+            <tr class="not-content" style="">
+                <td colspan="3">В данном аккаунте еще нет рефералов...</td>
+            </tr>
             <tr>
                 <td class="name"wa_lang="{form.referrals.total}"></td>
-                <td class="inactivity"></td>
-                <td class="income" name="income_total">0</td>
+                <td colspan="2" class="income" name="income_total">0</td>
             </tr>
             </tfoot>
             <tbody>

@@ -556,7 +556,7 @@ WA_ManagerUi.lng = {
             "nickReferer": "Ник реферeра",
             "profitReferer": "Доход реферера",
             "nickReferral": "Ник реферала",
-            "inactivity": "Неактивность",
+            "inActivity": "Неактивность",
             "income": "Ваш доход",
             "total": "Итого"
         }

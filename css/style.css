@@ -1003,6 +1003,10 @@ input[readonly].geo {
 	font-weight: normal;
 }
 
+.account-set.referer .value {
+	width: 50%;
+}
+
 .account-set.referals thead td.name,
 .account-set.referals thead td,
 .account-set.referals tfoot .name {
@@ -1016,6 +1020,14 @@ input[readonly].geo {
 .account-set.referer td.income {
 	text-align: right;
 	width: 40%;
+}
+
+.account-set .value .url {
+	display: inline-block;
+	width: 250px;
+	font-size: .9em;
+	overflow: hidden;
+	text-decoration: underline;
 }
 
 .console-box {
