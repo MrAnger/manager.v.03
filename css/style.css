@@ -230,7 +230,6 @@ a:hover, .link:hover {
 
 .top-menu .item.active {
 	color: #fff;
-	font-weight: bold;
 	background: #ff9933;
 }
 
@@ -534,7 +533,7 @@ input[type=checkbox] {
 	font-size: .85em;
 }
 
-.tasks-content, .iplists-content {
+.tasks-content, .iplists-content, .referals-content {
 	min-width: 1000px;
 	overflow: hidden;
 }
@@ -998,6 +997,25 @@ input[readonly].geo {
 .account-set .closed {
 	font-style: italic;
 	color: #ccc;
+}
+
+.account-set.referals .name {
+	font-weight: normal;
+}
+
+.account-set.referals thead td.name,
+.account-set.referals thead td,
+.account-set.referals tfoot .name {
+	font-weight: bold;
+}
+.account-set.referals td.inactivity,
+.account-set.referals td.income {
+	text-align: right;
+	width: 25%;
+}
+.account-set.referer td.income {
+	text-align: right;
+	width: 40%;
 }
 
 .console-box {

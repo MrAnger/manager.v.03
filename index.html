@@ -9,38 +9,38 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="js/lib/jquery.json-2.3.js"></script>
-	<script type="text/javascript" src="js/lib/mdetect.js"></script>
-	<script type="text/javascript" src="js/flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="js/lib/mdetect.js"></script>
+    <script type="text/javascript" src="js/flot/jquery.flot.js"></script>
     <script type="text/javascript" src="js/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
-	<script type="text/javascript" src="js/manager.js"></script>
-	<script type="text/javascript" src="js/manager_ui.js"></script>
+    <script type="text/javascript" src="js/manager.js"></script>
+    <script type="text/javascript" src="js/manager_ui.js"></script>
     <script type="text/javascript">
-	    //check mobile device
-	    var checkes = [
-		    DetectAndroid(),
-			DetectArchos(),
-			DetectBlackBerry(),
-			DetectIos(),
-			DetectIpad(),
-			DetectIphone(),
-			DetectIpod(),
-			DetectOperaAndroidPhone(),
-			DetectOperaAndroidTablet(),
-			DetectOperaMobile(),
-			DetectS60OssBrowser(),
-			DetectSmartphone(),
-			DetectSymbianOS(),
-			DetectTierIphone(),
-			DetectTierOtherPhones(),
-			DetectTierTablet(),
-			DetectWindowsMobile(),
-			DetectWindowsPhone7(),
-			DetectTablet()
-	    ];
-	    $.each(checkes, function(key, val){
-		    if(val) window.location.href = "http://mobile.mv3.waspace.net";
-	    });
+        //check mobile device
+        var checkes = [
+            DetectAndroid(),
+            DetectArchos(),
+            DetectBlackBerry(),
+            DetectIos(),
+            DetectIpad(),
+            DetectIphone(),
+            DetectIpod(),
+            DetectOperaAndroidPhone(),
+            DetectOperaAndroidTablet(),
+            DetectOperaMobile(),
+            DetectS60OssBrowser(),
+            DetectSmartphone(),
+            DetectSymbianOS(),
+            DetectTierIphone(),
+            DetectTierOtherPhones(),
+            DetectTierTablet(),
+            DetectWindowsMobile(),
+            DetectWindowsPhone7(),
+            DetectTablet()
+        ];
+        $.each(checkes, function (key, val) {
+            if (val) window.location.href = "http://mobile.mv3.waspace.net";
+        });
 
         //set zeroClipboard
         ZeroClipboard.setMoviePath('js/zeroclipboard/ZeroClipboard10.swf');
@@ -56,7 +56,8 @@
         <div class="console-send" style="">
             <div class="option">
                 <span class="save"></span>
-                <span wa_lang="{tooltip.copyToClipboardConsoleLog|attr:title}" id="console_button_copy" class="copy"></span>
+                <span wa_lang="{tooltip.copyToClipboardConsoleLog|attr:title}" id="console_button_copy"
+                      class="copy"></span>
                 <span class="save"></span>
             </div>
             <form name="console_query" onsubmit="return false;">
@@ -71,31 +72,31 @@
     </div>
 </div>
 <div id="msg_accountActivation" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="account_activation" onsubmit="return false;">
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.account_activation.email.text}"></div>
-						<div class="text-line">
-							<input name="email" type="text" value placeholder autocomplete="false"
-							       wa_lang="{form.account_activation.email.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.account_activation.code.text}"></div>
-						<div class="text-line">
-							<input name="code" type="text" value placeholder autocomplete="false"
-							       wa_lang="{form.account_activation.code.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.confirm}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="account_activation" onsubmit="return false;">
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.account_activation.email.text}"></div>
+                        <div class="text-line">
+                            <input name="email" type="text" value placeholder autocomplete="false"
+                                   wa_lang="{form.account_activation.email.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.account_activation.code.text}"></div>
+                        <div class="text-line">
+                            <input name="code" type="text" value placeholder autocomplete="false"
+                                   wa_lang="{form.account_activation.code.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.confirm}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_addFolder" class="add-box-wrap" style="display: none">
     <div class="add-box">
@@ -182,22 +183,26 @@
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.send_credits.recipient.text}"></div>
                         <div class="text-line">
-                            <input name="recipient" type="text" placeholder wa_lang="{form.send_credits.recipient.placeholder|attr:placeholder}">
+                            <input name="recipient" type="text" placeholder
+                                   wa_lang="{form.send_credits.recipient.placeholder|attr:placeholder}">
                         </div>
                     </div>
-					<div class="label-block">
+                    <div class="label-block">
                         <div class="label-text" wa_lang="{form.send_credits.credits.text}"></div>
                         <div class="text-line">
-                            <input name="credits" type="text" placeholder wa_lang="{form.send_credits.credits.placeholder|attr:placeholder}">
+                            <input name="credits" type="text" placeholder
+                                   wa_lang="{form.send_credits.credits.placeholder|attr:placeholder}">
                         </div>
                     </div>
-	                <div class="small-text"><span wa_lang="{form.send_credits.with_commission}"></span><span name="summ">1</span></div>
-	                <div class="label-block">
-		                <div class="label-text" wa_lang="{form.send_credits.code.text}"></div>
-		                <div class="text-line">
-			                <input name="code" type="text" placeholder wa_lang="{form.send_credits.code.placeholder|attr:placeholder}">
-		                </div>
-	                </div>
+                    <div class="small-text"><span wa_lang="{form.send_credits.with_commission}"></span><span
+                            name="summ">1</span></div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.send_credits.code.text}"></div>
+                        <div class="text-line">
+                            <input name="code" type="text" placeholder
+                                   wa_lang="{form.send_credits.code.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
                     <button type="submit" class="btn" wa_lang="{button.transfer}"></button>
                 </form>
             </div>
@@ -229,284 +234,286 @@
     </div>
 </div>
 <div id="confirm_deleteTask" class="confirm-box" autoclose style="display: none">
-	<input name="folderId" type="hidden">
-	<input name="taskId" type="hidden">
+    <input name="folderId" type="hidden">
+    <input name="taskId" type="hidden">
 
-	<div class="confirm-content">
-		<div class="content">
-			<div class="close"></div>
-			<div class="title" name="title" wa_lang="{form.task_delete.title}"></div>
-			<div class="text" name="text" wa_lang="{form.task_delete.text}"></div>
-			<div class="buttons">
-				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
-				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
-			</div>
-		</div>
-	</div>
+    <div class="confirm-content">
+        <div class="content">
+            <div class="close"></div>
+            <div class="title" name="title" wa_lang="{form.task_delete.title}"></div>
+            <div class="text" name="text" wa_lang="{form.task_delete.text}"></div>
+            <div class="buttons">
+                <button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+                <button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="msg_moveTask" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="task_move" onsubmit="return false;">
-					<input name="folderId" type="hidden">
-					<input name="taskId" type="hidden">
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="task_move" onsubmit="return false;">
+                    <input name="folderId" type="hidden">
+                    <input name="taskId" type="hidden">
 
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.task_move.category}"></div>
-						<div class="text-line">
-							<select name="selectBox_folder" size="8"></select>
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.move}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.task_move.category}"></div>
+                        <div class="text-line">
+                            <select name="selectBox_folder" size="8"></select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.move}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_cloneTask" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="task_clone" onsubmit="return false;">
-					<input name="folderId" type="hidden">
-					<input name="taskId" type="hidden">
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="task_clone" onsubmit="return false;">
+                    <input name="folderId" type="hidden">
+                    <input name="taskId" type="hidden">
 
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.task_clone.name.text}"></div>
-						<div class="text-line">
-							<input name="task_name" type="text" value placeholder
-							       wa_lang="{form.task_clone.name.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.task_clone.category}"></div>
-						<div class="text-line">
-							<select name="selectBox_folder" size="8"></select>
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.duplicate}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.task_clone.name.text}"></div>
+                        <div class="text-line">
+                            <input name="task_name" type="text" value placeholder
+                                   wa_lang="{form.task_clone.name.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.task_clone.category}"></div>
+                        <div class="text-line">
+                            <select name="selectBox_folder" size="8"></select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.duplicate}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_copyTaskSettings" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="task_copy_settings" onsubmit="return false;">
-					<input type="hidden" name="folderId">
-					<input type="hidden" name="taskId">
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="task_copy_settings" onsubmit="return false;">
+                    <input type="hidden" name="folderId">
+                    <input type="hidden" name="taskId">
 
-					<div class="label-block">
-						<div class="label-text" name="helper_text"></div>
-						<div class="box-line">
-							<div class="box-table">
-								<div class="box">
-									<div class="label-text" wa_lang="{form.task_copy_settings.select_folder}"></div>
-									<select name="selectBox_folderId" size="5"></select>
-								</div>
-								<div class="box">
-									<div class="label-text" wa_lang="{form.task_copy_settings.select_task}"></div>
-									<select name="selectBox_taskId" size="5"></select>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.task_copy_settings.select_settings}"></div>
-						<div class="box-line" name="settings">
-							<div class="box-table">
-								<label class="box" >
-									<input id="checkbox_allTaskParameters" type="checkbox">
-									<span class="boxname select-all" wa_lang="{form.task_copy_settings.select_all}"></span>
-								</label>
-							</div>
-							<div class="box-table" name="two_settings" default>
-								<label class="box" name="setting">
-									<input type="checkbox">
-									<span class="boxname" name="name"></span>
-								</label>
-								<label class="box" name="setting">
-									<input type="checkbox">
-									<span class="boxname" name="name"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.copy}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+                    <div class="label-block">
+                        <div class="label-text" name="helper_text"></div>
+                        <div class="box-line">
+                            <div class="box-table">
+                                <div class="box">
+                                    <div class="label-text" wa_lang="{form.task_copy_settings.select_folder}"></div>
+                                    <select name="selectBox_folderId" size="5"></select>
+                                </div>
+                                <div class="box">
+                                    <div class="label-text" wa_lang="{form.task_copy_settings.select_task}"></div>
+                                    <select name="selectBox_taskId" size="5"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.task_copy_settings.select_settings}"></div>
+                        <div class="box-line" name="settings">
+                            <div class="box-table">
+                                <label class="box">
+                                    <input id="checkbox_allTaskParameters" type="checkbox">
+                                    <span class="boxname select-all"
+                                          wa_lang="{form.task_copy_settings.select_all}"></span>
+                                </label>
+                            </div>
+                            <div class="box-table" name="two_settings" default>
+                                <label class="box" name="setting">
+                                    <input type="checkbox">
+                                    <span class="boxname" name="name"></span>
+                                </label>
+                                <label class="box" name="setting">
+                                    <input type="checkbox">
+                                    <span class="boxname" name="name"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.copy}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_pay" class="confirm-box" style="display: none">
-	<div class="confirm-content">
-		<div class="content">
-			<div class="close"></div>
-			<div class="title" name="title" wa_lang="{form.pay.title}"></div>
-			<div class="text" name="text" wa_lang="{form.pay.text}"></div>
-			<div class="label-block">
-				<div class="label-text" wa_lang="{form.pay.credits.text}"></div>
-				<div class="text-line">
-					<input name="credits" type="text" placeholder wa_lang="{form.pay.credits.placeholder}">
-				</div>
-				<div class="small-text"><span>WMR: </span><span name="summ">1</span></div>
-			</div>
-			<div class="buttons">
-				<button name="yes" type="submit" class="btn" wa_lang="{button.pay}"></button>
-			</div>
-		</div>
-	</div>
+    <div class="confirm-content">
+        <div class="content">
+            <div class="close"></div>
+            <div class="title" name="title" wa_lang="{form.pay.title}"></div>
+            <div class="text" name="text" wa_lang="{form.pay.text}"></div>
+            <div class="label-block">
+                <div class="label-text" wa_lang="{form.pay.credits.text}"></div>
+                <div class="text-line">
+                    <input name="credits" type="text" placeholder wa_lang="{form.pay.credits.placeholder}">
+                </div>
+                <div class="small-text"><span>WMR: </span><span name="summ">1</span></div>
+            </div>
+            <div class="buttons">
+                <button name="yes" type="submit" class="btn" wa_lang="{button.pay}"></button>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="msg_setAccountPassword" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="setAccountPassword" wa_step="0" onsubmit="return false;">
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.setAccountPassword.password.text}"></div>
-						<div class="text-line">
-							<input name="password" type="password" value placeholder autocomplete="off"
-							       wa_lang="{form.setAccountPassword.password.placeholder|attr:placeholder}"><span
-								class="show-box"></span>
-						</div>
-					</div>
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.setAccountPassword.code.text}"></div>
-						<div class="text-line">
-							<input name="code" type="text" value placeholder autocomplete="off"
-							       wa_lang="{form.setAccountPassword.code.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.send}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="setAccountPassword" wa_step="0" onsubmit="return false;">
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.setAccountPassword.password.text}"></div>
+                        <div class="text-line">
+                            <input name="password" type="password" value placeholder autocomplete="off"
+                                   wa_lang="{form.setAccountPassword.password.placeholder|attr:placeholder}"><span
+                                class="show-box"></span>
+                        </div>
+                    </div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.setAccountPassword.code.text}"></div>
+                        <div class="text-line">
+                            <input name="code" type="text" value placeholder autocomplete="off"
+                                   wa_lang="{form.setAccountPassword.code.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.send}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_addIPList" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="ipList_add" onsubmit="return false;">
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.ipList_add.ipList_name.text}"></div>
-						<div class="text-line">
-							<input name="ipList_name" type="text" value placeholder
-							       wa_lang="{form.ipList_add.ipList_name.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.add}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="ipList_add" onsubmit="return false;">
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.ipList_add.ipList_name.text}"></div>
+                        <div class="text-line">
+                            <input name="ipList_name" type="text" value placeholder
+                                   wa_lang="{form.ipList_add.ipList_name.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.add}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_cloneIPList" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="ipList_clone" onsubmit="return false;">
-					<input type="hidden" name="ipList_id">
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="ipList_clone" onsubmit="return false;">
+                    <input type="hidden" name="ipList_id">
 
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.ipList_clone.ipList_name.text}"></div>
-						<div class="text-line">
-							<input name="ipList_name" type="text" value placeholder
-							       wa_lang="{form.ipList_clone.ipList_name.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.duplicate}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.ipList_clone.ipList_name.text}"></div>
+                        <div class="text-line">
+                            <input name="ipList_name" type="text" value placeholder
+                                   wa_lang="{form.ipList_clone.ipList_name.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.duplicate}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="msg_renameIPList" class="add-box-wrap" style="display: none">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="ipList_rename" onsubmit="return false;">
-					<input name="ipList_id" type="hidden">
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="ipList_rename" onsubmit="return false;">
+                    <input name="ipList_id" type="hidden">
 
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.ipList_rename.ipList_name.text}"></div>
-						<div class="text-line">
-							<input name="ipList_name" type="text" value placeholder
-							       wa_lang="{form.ipList_rename.ipList_name.placeholder|attr:placeholder}">
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.rename}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.ipList_rename.ipList_name.text}"></div>
+                        <div class="text-line">
+                            <input name="ipList_name" type="text" value placeholder
+                                   wa_lang="{form.ipList_rename.ipList_name.placeholder|attr:placeholder}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.rename}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="confirm_deleteIPList" class="confirm-box" autoclose style="display: none">
-	<input name="id" type="hidden">
+    <input name="id" type="hidden">
 
-	<div class="confirm-content">
-		<div class="content">
-			<div class="close"></div>
-			<div class="title" name="title" wa_lang="{form.ipList_delete.title}"></div>
-			<div class="text" name="text" wa_lang="{form.ipList_delete.text}"></div>
-			<div class="buttons">
-				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
-				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
-			</div>
-		</div>
-	</div>
+    <div class="confirm-content">
+        <div class="content">
+            <div class="close"></div>
+            <div class="title" name="title" wa_lang="{form.ipList_delete.title}"></div>
+            <div class="text" name="text" wa_lang="{form.ipList_delete.text}"></div>
+            <div class="buttons">
+                <button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+                <button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="msg_addIPRange" class="add-box-wrap" style="display: none;">
-	<div class="add-box">
-		<div class="add-box-content">
-			<div class="close"></div>
-			<div class="content">
-				<form name="ipRange_add" onsubmit="return false;">
-					<div class="label-block">
-						<div class="label-text" wa_lang="{form.ipRange_add.ipRange.text}"></div>
-						<div class="text-line">
-							<textarea name="ipRange" placeholder wrap="off" wa_lang="{form.ipRange_add.ipRange.placeholder|attr:placeholder}"></textarea>
-						</div>
-					</div>
-					<button type="submit" class="btn" wa_lang="{button.add}"></button>
-				</form>
-			</div>
-			<div class="footer"></div>
-		</div>
-	</div>
+    <div class="add-box">
+        <div class="add-box-content">
+            <div class="close"></div>
+            <div class="content">
+                <form name="ipRange_add" onsubmit="return false;">
+                    <div class="label-block">
+                        <div class="label-text" wa_lang="{form.ipRange_add.ipRange.text}"></div>
+                        <div class="text-line">
+                            <textarea name="ipRange" placeholder wrap="off"
+                                      wa_lang="{form.ipRange_add.ipRange.placeholder|attr:placeholder}"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" wa_lang="{button.add}"></button>
+                </form>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div>
 </div>
 <div id="confirm_deleteIPRange" class="confirm-box" autoclose style="display: none">
-	<input name="ipListId" type="hidden">
-	<input name="ipRangeId" type="hidden">
+    <input name="ipListId" type="hidden">
+    <input name="ipRangeId" type="hidden">
 
-	<div class="confirm-content">
-		<div class="content">
-			<div class="close"></div>
-			<div class="title" name="title" wa_lang="{form.ipRange_delete.title}"></div>
-			<div class="text" name="text" wa_lang="{form.ipRange_delete.text}"></div>
-			<div class="buttons">
-				<button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
-				<button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
-			</div>
-		</div>
-	</div>
+    <div class="confirm-content">
+        <div class="content">
+            <div class="close"></div>
+            <div class="title" name="title" wa_lang="{form.ipRange_delete.title}"></div>
+            <div class="text" name="text" wa_lang="{form.ipRange_delete.text}"></div>
+            <div class="buttons">
+                <button name="yes" type="submit" class="btn" wa_lang="{button.yes}"></button>
+                <button name="no" type="submit" class="btn cancel" wa_lang="{button.no}"></button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="loader" style="display: none;">
     <div class="loader-content">
@@ -517,12 +524,15 @@
     <div class="auth-success" style="display: none">
         <div class="top-menu">
             <span class="item active" wa_lang="{menu.top-menu.task}"
-                  onclick="WA_ManagerUi.forms.manager.show({form: 'task'});"></span> <span class="item"
-                                                                                          wa_lang="{menu.top-menu.iplist}"
-                                                                                          onclick="WA_ManagerUi.forms.manager.show({form: 'iplist'});"></span>
+                  onclick="WA_ManagerUi.forms.manager.show({form: 'task'});"></span>
+            <span class="item"
+                  wa_lang="{menu.top-menu.iplist}"
+                  onclick="WA_ManagerUi.forms.manager.show({form: 'iplist'});"></span>
+            <span class="item">Рефералы</span>
         </div>
-        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span wa_lang="{tooltip.goAccountPage|attr:title}" class="link login" name="login"
-                                                                                  onclick="WA_ManagerUi.forms.manager.show({form: 'account'});">User Login</span>
+        <div class="account"><span wa_lang="{menu.top-menu.youAuth}"></span><span
+                wa_lang="{tooltip.goAccountPage|attr:title}" class="link login" name="login"
+                onclick="WA_ManagerUi.forms.manager.show({form: 'account'});">User Login</span>
             |
             <span class="link exit" onclick="WA_ManagerUi.logOut();" wa_lang="{menu.top-menu.exit}"></span></div>
     </div>
@@ -652,7 +662,9 @@
                     </div>
                 </div>
                 <button type="submit" class="btn" wa_lang="{form.forgot.restore}"></button>
-				<button type="button" class="btn cancel" onclick="WA_ManagerUi.forms.forgot.hide(); WA_ManagerUi.forms.auth.show();" wa_lang="{button.cancel}"></button>
+                <button type="button" class="btn cancel"
+                        onclick="WA_ManagerUi.forms.forgot.hide(); WA_ManagerUi.forms.auth.show();"
+                        wa_lang="{button.cancel}"></button>
             </div>
             <div class="sign-other">
                 <div class="other-text" wa_lang="{form.forgot.other.string1}"></div>
@@ -665,11 +677,14 @@
 <div class="manager">
 <div class="tasks-content" style="display: none">
 <div class="folders">
-    <div class="title"><span wa_lang="{form.folder.title}"></span><span wa_lang="{tooltip.addNewFolder|attr:title}" class="btn-icon add"
+    <div class="title"><span wa_lang="{form.folder.title}"></span><span wa_lang="{tooltip.addNewFolder|attr:title}"
+                                                                        class="btn-icon add"
                                                                         onclick="WA_ManagerUi.forms.folder_add.show();"></span>
     </div>
     <div class="content-height" height_minus="60">
-	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
+        <div class="scrollbar">
+            <div class="scroller" style="top:0;"></div>
+        </div>
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_folder default>
                 <span class="name">
@@ -696,11 +711,14 @@
     </div>
 </div>
 <div class="tasks">
-    <div class="title"><span wa_lang="{form.task.title}"></span><span wa_lang="{tooltip.addNewTask|attr:title}" id="btn_add_task" class="btn-icon add"
+    <div class="title"><span wa_lang="{form.task.title}"></span><span wa_lang="{tooltip.addNewTask|attr:title}"
+                                                                      id="btn_add_task" class="btn-icon add"
                                                                       onclick="WA_ManagerUi.forms.task_add.show();"></span>
     </div>
     <div class="content-height" height_minus="60">
-	<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
+        <div class="scrollbar">
+            <div class="scroller" style="top:0;"></div>
+        </div>
         <ul class="item-list content-scroll" style="top:0;">
             <li wa_task default>
                 <span class="name">
@@ -714,54 +732,65 @@
                 </span>
                 <span class="edit">
                     <span class="edit-list">
-                        <span class="item move" wa_lang="{menu.edit-menu.move}" onclick="WA_ManagerUi.forms.task_move.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
-                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" onclick="WA_ManagerUi.forms.task_clone.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
-                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}" onclick="showFormTaskCopySettings(this, true);"></span>
-                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}" onclick="showFormTaskCopySettings(this, false);"></span>
-                        <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="WA_ManagerUi.forms.task_remove.show(this);"></span>
+                        <span class="item move" wa_lang="{menu.edit-menu.move}"
+                              onclick="WA_ManagerUi.forms.task_move.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
+                        <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"
+                              onclick="WA_ManagerUi.forms.task_clone.show({folderId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'folderId'), taskId: WA_ManagerUi.utils.getParam($(this).parents('[wa_task]'), 'taskId')});"></span>
+                        <span class="item set-in" wa_lang="{menu.edit-menu.setting-in}"
+                              onclick="showFormTaskCopySettings(this, true);"></span>
+                        <span class="item set-of" wa_lang="{menu.edit-menu.setting-out}"
+                              onclick="showFormTaskCopySettings(this, false);"></span>
+                        <span class="item delete" wa_lang="{menu.edit-menu.delete}"
+                              onclick="WA_ManagerUi.forms.task_remove.show(this);"></span>
                     </span>
                 </span>
             </li>
         </ul>
         <div class="not-content" style="display: none;" wa_lang="{form.task.not_have_task}"></div>
     </div>
-	<script type="text/javascript">
-		function showFormTaskCopySettings(el, copy_in){
-			var folderId = WA_ManagerUi.utils.getParam($(el).parents('[wa_task]'), 'folderId'),
-				taskId = WA_ManagerUi.utils.getParam($(el).parents('[wa_task]'), 'taskId');
+    <script type="text/javascript">
+        function showFormTaskCopySettings(el, copy_in) {
+            var folderId = WA_ManagerUi.utils.getParam($(el).parents('[wa_task]'), 'folderId'),
+                    taskId = WA_ManagerUi.utils.getParam($(el).parents('[wa_task]'), 'taskId');
 
-			if(copy_in){
-				WA_ManagerUi.forms.task_copy_settings.show({
-					sourceFolderId: folderId,
-					sourceTaskId: taskId,
-					copy_in: true
-				});
-			}else{
-				WA_ManagerUi.forms.task_copy_settings.show({
-					targetFolderId: folderId,
-					targetTaskId: taskId,
-					copy_out: true
-				});
-			};
-		};
-	</script>
+            if (copy_in) {
+                WA_ManagerUi.forms.task_copy_settings.show({
+                    sourceFolderId: folderId,
+                    sourceTaskId: taskId,
+                    copy_in: true
+                });
+            } else {
+                WA_ManagerUi.forms.task_copy_settings.show({
+                    targetFolderId: folderId,
+                    targetTaskId: taskId,
+                    copy_out: true
+                });
+            }
+            ;
+        }
+        ;
+    </script>
 </div>
 <div class="set-task" name="holder-task-setting">
 <div class="not-settings-content" name="not-setting">
-<!--<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>-->
-	<div class="subcontent" name="add-category" style="display: none;">
-		<div class="text" wa_lang="{form.not_content.category.text}"></div>
-		<button type="button" class="btn big" onclick="WA_ManagerUi.forms.folder_add.show();" wa_lang="{form.not_content.category.button}"></button>
-	</div>
-	<div class="subcontent" name="add-task" style="display: none;">
-	<div class="text" wa_lang="{form.not_content.task.text}"></div>
-	<button type="button" class="btn big" onclick="WA_ManagerUi.forms.task_add.show();" wa_lang="{form.not_content.task.button}"></button></div>
+    <!--<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>-->
+    <div class="subcontent" name="add-category" style="display: none;">
+        <div class="text" wa_lang="{form.not_content.category.text}"></div>
+        <button type="button" class="btn big" onclick="WA_ManagerUi.forms.folder_add.show();"
+                wa_lang="{form.not_content.category.button}"></button>
+    </div>
+    <div class="subcontent" name="add-task" style="display: none;">
+        <div class="text" wa_lang="{form.not_content.task.text}"></div>
+        <button type="button" class="btn big" onclick="WA_ManagerUi.forms.task_add.show();"
+                wa_lang="{form.not_content.task.button}"></button>
+    </div>
 </div>
 <div class="title">
     <div class="task-info">
         <div class="condition">
             <span class="name" wa_lang="{form.task_setting.status}"></span>
-                <span wa_lang="{tooltip.changeTaskStatus|attr:title}" class="switch-box" id="task-status" onchange="WA_ManagerUi.forms.task.setStatusFromSettingForm">
+                <span wa_lang="{tooltip.changeTaskStatus|attr:title}" class="switch-box" id="task-status"
+                      onchange="WA_ManagerUi.forms.task.setStatusFromSettingForm">
                     <span class="switcher"></span>
                 </span>
         </div>
@@ -780,19 +809,22 @@
 </ul>
 <div class="tab-box-content">
 <div class="setting-group" height_minus="90">
-<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
+<div class="scrollbar">
+    <div class="scroller" style="top:0;"></div>
+</div>
 <div class="content-scroll" style="top:0;">
 <div id="task_setting_notify_overload" class="set-info-box" style="/*display: none;*/">
-	<div class="icon"></div>
-	<div class="text" wa_lang="{form.task_setting.notify.overload}"></div>
+    <div class="icon"></div>
+    <div class="text" wa_lang="{form.task_setting.notify.overload}"></div>
 </div>
 <div id="task_setting_notify_incomplete" class="set-info-box" style="/*display: none;*/">
-	<div class="icon"></div>
-	<div class="text" wa_lang="{form.task_setting.notify.incomplete}"></div>
+    <div class="icon"></div>
+    <div class="text" wa_lang="{form.task_setting.notify.incomplete}"></div>
 </div>
 <form name="task-setting" onsubmit="return false;">
 <input type="hidden" name="folderId" value="0">
 <input type="hidden" name="taskId" value="0">
+
 <div name="general">
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.name.text}"></div>
@@ -845,7 +877,7 @@
                     wa_lang="{form.task_setting.ignoreGU}"></span></label></div>
         </div>
     </div>
-<button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
+    <button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
 </div>
 <div name="audit">
     <div class="label-block">
@@ -908,80 +940,86 @@
             </div>
         </div>
     </div>
-<button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
+    <button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
 </div>
 <div name="targeting">
-<div class="tab-content">
-    <div class="set-item">
-        <div class="name">
-            <div class="spoiler active" wa_lang="{form.task_setting.dayTargeting.text}"></div>
-        </div>
-        <div class="spoiler-box-content">
-            <div class="spoiler-info" wa_lang="{form.task_setting.dayTargeting.info}"></div>
-            <div class="graph-view-set">
-                <label id="dayTargeting_cb_min"><input disabled type="checkbox" checked><span class="graph-set min" wa_lang="{form.task_setting.dayTargeting.min}"></span>(<span class="graph-value" name="value">0</span>)</label>
-                <label id="dayTargeting_cb_max"><input disabled type="checkbox" checked><span class="graph-set max" wa_lang="{form.task_setting.dayTargeting.max}"></span>(<span class="graph-value" name="value">0</span>)</label>
+    <div class="tab-content">
+        <div class="set-item">
+            <div class="name">
+                <div class="spoiler active" wa_lang="{form.task_setting.dayTargeting.text}"></div>
             </div>
-            <div class="graph-box" id="graph_dayTargeting"></div>
-        </div>
-    </div>
-    <div class="set-item">
-        <div class="name">
-            <div class="spoiler" wa_lang="{form.task_setting.weekTargeting.text}"></div>
-        </div>
-        <div class="spoiler-box-content">
-	        <div class="spoiler-info" wa_lang="{form.task_setting.weekTargeting.info}"></div>
-            <div class="graph-box" id="graph_weekTargeting"></div>
-        </div>
-    </div>
-	<div class="set-item">
-		<div class="name">
-			<div class="spoiler" wa_lang="{form.task_setting.timeDistribution.text}"></div>
-		</div>
-		<div class="spoiler-box-content">
-			<div class="spoiler-info" wa_lang="{form.task_setting.timeDistribution.info}"></div>
-			<div class="graph-box" id="graph_timeDistribution"></div>
-		</div>
-	</div>
-    <div class="set-item">
-        <div class="name">
-            <div class="spoiler" wa_lang="{form.task_setting.geoTargeting.text}"></div>
-        </div>
-        <div class="spoiler-box-content">
-            <div class="geo-box">
-                <div class="label-text" wa_lang="{form.task_setting.geoTargeting.searchCountry.text}"></div>
-                <div class="text-line">
-                    <input name="searchCountry" type="text" value placeholder  wa_lang="{form.task_setting.geoTargeting.searchCountry.placeholder|attr:placeholder}">
+            <div class="spoiler-box-content">
+                <div class="spoiler-info" wa_lang="{form.task_setting.dayTargeting.info}"></div>
+                <div class="graph-view-set">
+                    <label id="dayTargeting_cb_min"><input disabled type="checkbox" checked><span class="graph-set min"
+                                                                                                  wa_lang="{form.task_setting.dayTargeting.min}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
+                    <label id="dayTargeting_cb_max"><input disabled type="checkbox" checked><span class="graph-set max"
+                                                                                                  wa_lang="{form.task_setting.dayTargeting.max}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
                 </div>
-                <div class="label-text" wa_lang="{form.task_setting.geoTargeting.countryList}"></div>
-                <div class="text-line">
-                    <select name="selectBox_country" size="8"></select>
-                </div>
-                <div class="label-text" wa_lang="{form.task_setting.geoTargeting.selectedCountries}"></div>
-                <div class="geo-selected">
-                    <div class="country" wa_geo_country default>
-                        <div class="set-name" name="view_countryName"></div>
-                        <div class="mark-box">
-                            <div class="mark set">
-                                <span class="option-name" wa_lang="{form.task_setting.geoTargeting.set}"></span>
-	                            <input name="view_target" type="text" value="0" class="geo"><span>%</span>
+                <div class="graph-box" id="graph_dayTargeting"></div>
+            </div>
+        </div>
+        <div class="set-item">
+            <div class="name">
+                <div class="spoiler" wa_lang="{form.task_setting.weekTargeting.text}"></div>
+            </div>
+            <div class="spoiler-box-content">
+                <div class="spoiler-info" wa_lang="{form.task_setting.weekTargeting.info}"></div>
+                <div class="graph-box" id="graph_weekTargeting"></div>
+            </div>
+        </div>
+        <div class="set-item">
+            <div class="name">
+                <div class="spoiler" wa_lang="{form.task_setting.timeDistribution.text}"></div>
+            </div>
+            <div class="spoiler-box-content">
+                <div class="spoiler-info" wa_lang="{form.task_setting.timeDistribution.info}"></div>
+                <div class="graph-box" id="graph_timeDistribution"></div>
+            </div>
+        </div>
+        <div class="set-item">
+            <div class="name">
+                <div class="spoiler" wa_lang="{form.task_setting.geoTargeting.text}"></div>
+            </div>
+            <div class="spoiler-box-content">
+                <div class="geo-box">
+                    <div class="label-text" wa_lang="{form.task_setting.geoTargeting.searchCountry.text}"></div>
+                    <div class="text-line">
+                        <input name="searchCountry" type="text" value placeholder
+                               wa_lang="{form.task_setting.geoTargeting.searchCountry.placeholder|attr:placeholder}">
+                    </div>
+                    <div class="label-text" wa_lang="{form.task_setting.geoTargeting.countryList}"></div>
+                    <div class="text-line">
+                        <select name="selectBox_country" size="8"></select>
+                    </div>
+                    <div class="label-text" wa_lang="{form.task_setting.geoTargeting.selectedCountries}"></div>
+                    <div class="geo-selected">
+                        <div class="country" wa_geo_country default>
+                            <div class="set-name" name="view_countryName"></div>
+                            <div class="mark-box">
+                                <div class="mark set">
+                                    <span class="option-name" wa_lang="{form.task_setting.geoTargeting.set}"></span>
+                                    <input name="view_target" type="text" value="0" class="geo"><span>%</span>
 
-                                <div name="view_target_range" class="mark-range" style="width: 0%"></div>
+                                    <div name="view_target_range" class="mark-range" style="width: 0%"></div>
+                                </div>
+                                <div class="mark value">
+                                    <span class="option-name" wa_lang="{form.task_setting.geoTargeting.give}"></span>
+                                    <input name="view_recd" type="text" value="0" class="geo" readonly><span>%</span>
+
+                                    <div name="view_recd_range" class="mark-range" style="width: 0%"></div>
+                                </div>
                             </div>
-                            <div class="mark value">
-                                <span class="option-name" wa_lang="{form.task_setting.geoTargeting.give}"></span>
-	                            <input name="view_recd" type="text" value="0" class="geo" readonly><span>%</span>
-                                <div name="view_recd_range" class="mark-range" style="width: 0%"></div>
-                            </div>
+                            <span class="delete" name="delete"></span>
                         </div>
-                        <span class="delete" name="delete"></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-	<button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
+    <button type="submit" class="btn" wa_lang="{form.task_setting.send}"></button>
 </div>
 <div name="statistics">
     <div class="tab-content">
@@ -990,13 +1028,23 @@
                 <div class="spoiler active" wa_lang="{form.task_setting.dayStat.text}"></div>
             </div>
             <div class="spoiler-box-content">
-	            <div class="graph-view-set">
-		            <label id="dayStat_cb_min"><input type="checkbox" checked><span class="graph-set min" wa_lang="{form.task_setting.dayStat.min}"></span>(<span class="graph-value" name="value">0</span>)</label>
-		            <label id="dayStat_cb_max"><input type="checkbox" checked><span class="graph-set max" wa_lang="{form.task_setting.dayStat.max}"></span>(<span class="graph-value" name="value">0</span>)</label>
-		            <label id="dayStat_cb_give"><input type="checkbox" checked><span class="graph-set give" wa_lang="{form.task_setting.dayStat.give}"></span>(<span class="graph-value" name="value">0</span>)</label>
-		            <label id="dayStat_cb_incomplete"><input type="checkbox" checked><span class="graph-set incomplete" wa_lang="{form.task_setting.dayStat.incomplete}"></span>(<span class="graph-value" name="value">0</span>)</label>
-		            <label id="dayStat_cb_overload"><input type="checkbox" checked><span class="graph-set overload" wa_lang="{form.task_setting.dayStat.overload}"></span>(<span class="graph-value" name="value">0</span>)</label>
-	            </div>
+                <div class="graph-view-set">
+                    <label id="dayStat_cb_min"><input type="checkbox" checked><span class="graph-set min"
+                                                                                    wa_lang="{form.task_setting.dayStat.min}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
+                    <label id="dayStat_cb_max"><input type="checkbox" checked><span class="graph-set max"
+                                                                                    wa_lang="{form.task_setting.dayStat.max}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
+                    <label id="dayStat_cb_give"><input type="checkbox" checked><span class="graph-set give"
+                                                                                     wa_lang="{form.task_setting.dayStat.give}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
+                    <label id="dayStat_cb_incomplete"><input type="checkbox" checked><span class="graph-set incomplete"
+                                                                                           wa_lang="{form.task_setting.dayStat.incomplete}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
+                    <label id="dayStat_cb_overload"><input type="checkbox" checked><span class="graph-set overload"
+                                                                                         wa_lang="{form.task_setting.dayStat.overload}"></span>(<span
+                            class="graph-value" name="value">0</span>)</label>
+                </div>
                 <div class="graph-box" id="graph_dayStat"></div>
             </div>
         </div>
@@ -1011,9 +1059,13 @@
 </div>
 <div class="iplists-content" style="display: none">
     <div class="iplists">
-        <div class="title"><span wa_lang="{form.ipList.title}"></span><span onclick="WA_ManagerUi.forms.ipList_add.show();" wa_lang="{tooltip.addNewIPList|attr:title}" class="btn-icon add"></span></div>
+        <div class="title"><span wa_lang="{form.ipList.title}"></span><span
+                onclick="WA_ManagerUi.forms.ipList_add.show();" wa_lang="{tooltip.addNewIPList|attr:title}"
+                class="btn-icon add"></span></div>
         <div class="content-height" height_minus="60">
-		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
+            <div class="scrollbar">
+                <div class="scroller" style="top:0;"></div>
+            </div>
             <ul class="item-list content-scroll" style="top:0;">
                 <li wa_ipList default>
                     <span class="name" name="view_name"></span>
@@ -1022,9 +1074,12 @@
                     </span>
                     <span class="edit">
                         <span class="edit-list">
-	                        <span class="item rename" wa_lang="{menu.edit-menu.rename}" onclick="WA_ManagerUi.forms.ipList_rename.show(this);"></span>
-                            <span class="item copy" wa_lang="{menu.edit-menu.duplicate}" onclick="WA_ManagerUi.forms.ipList_clone.show(this);"></span>
-                            <span class="item delete" wa_lang="{menu.edit-menu.delete}" onclick="WA_ManagerUi.forms.ipList_remove.show(this);"></span>
+	                        <span class="item rename" wa_lang="{menu.edit-menu.rename}"
+                                  onclick="WA_ManagerUi.forms.ipList_rename.show(this);"></span>
+                            <span class="item copy" wa_lang="{menu.edit-menu.duplicate}"
+                                  onclick="WA_ManagerUi.forms.ipList_clone.show(this);"></span>
+                            <span class="item delete" wa_lang="{menu.edit-menu.delete}"
+                                  onclick="WA_ManagerUi.forms.ipList_remove.show(this);"></span>
                         </span>
                     </span>
                 </li>
@@ -1033,22 +1088,27 @@
         </div>
     </div>
     <div class="set-iplist">
-        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="btn-icon add" onclick="WA_ManagerUi.forms.ipRange_add.show();"></span></div>
+        <div class="title"><span wa_lang="{form.ipRange.title}"></span><span
+                wa_lang="{tooltip.addNewIPRange|attr:title}" id="btn_add_ipRange" class="btn-icon add"
+                onclick="WA_ManagerUi.forms.ipRange_add.show();"></span></div>
         <div class="setting-group" height_minus="60">
-		<div class="scrollbar"><div class="scroller" style="top:0;"></div></div>
-	        <div class="content-scroll" style="top:0;">
-		        <form name="ip_ranges" onsubmit="return false;">
-			        <table>
-				        <tr wa_ipRange default>
-					        <td>
-						        <input name="value" type="text" value class="ip">
-					        </td>
-					        <td><span wa_lang="{tooltip.removeIPRange|attr:title}" class="delete" name="delete" onclick="WA_ManagerUi.forms.ipRange_remove.show(this);"></span></td>
-				        </tr>
-			        </table>
-			        <button id="btn_save_ipRanges" type="submit" class="btn" wa_lang="{button.save}"></button>
-		        </form>
-	        </div>
+            <div class="scrollbar">
+                <div class="scroller" style="top:0;"></div>
+            </div>
+            <div class="content-scroll" style="top:0;">
+                <form name="ip_ranges" onsubmit="return false;">
+                    <table>
+                        <tr wa_ipRange default>
+                            <td>
+                                <input name="value" type="text" value class="ip">
+                            </td>
+                            <td><span wa_lang="{tooltip.removeIPRange|attr:title}" class="delete" name="delete"
+                                      onclick="WA_ManagerUi.forms.ipRange_remove.show(this);"></span></td>
+                        </tr>
+                    </table>
+                    <button id="btn_save_ipRanges" type="submit" class="btn" wa_lang="{button.save}"></button>
+                </form>
+            </div>
             <div class="not-content" wa_lang="{form.ipRange.not_have_ipRange}" style="display:none;"></div>
         </div>
     </div>
@@ -1058,7 +1118,10 @@
         <table class="account-set" name="form_account">
             <tr name="balance">
                 <td class="name" name="text">Баланс</td>
-                <td class="option"><span wa_lang="{tooltip.byCredits|attr:title}" class="btn-icon add" onclick="WA_ManagerUi.forms.pay.show();"></span><span wa_lang="{tooltip.transferCredits|attr:title}" class="btn-icon cost-move" onclick="WA_ManagerUi.forms.sendCredits.show();"></span></td>
+                <td class="option"><span wa_lang="{tooltip.byCredits|attr:title}" class="btn-icon add"
+                                         onclick="WA_ManagerUi.forms.pay.show();"></span><span
+                        wa_lang="{tooltip.transferCredits|attr:title}" class="btn-icon cost-move"
+                        onclick="WA_ManagerUi.forms.sendCredits.show();"></span></td>
                 <td class="value" name="value"></td>
             </tr>
             <tr>
@@ -1076,21 +1139,201 @@
             </tr>
             <tr name="password">
                 <td class="name" wa_lang="{form.account.password.text}"></td>
-                <td class="option"><span wa_lang="{tooltip.changeAccountPassword|attr:title}" class="btn-icon editing" onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
+                <td class="option"><span wa_lang="{tooltip.changeAccountPassword|attr:title}" class="btn-icon editing"
+                                         onclick="WA_ManagerUi.forms.setAccountPassword.show();"></span></td>
                 <td class="value closed" wa_lang="{form.account.password.value_hidden}"></td>
             </tr>
             <tr name="readonlyKey">
                 <td class="name" name="text" wa_lang="{form.account.readonlyKey.text}"></td>
-                <td class="option"><span wa_lang="{tooltip.refreshReadonlyKey|attr:title}" class="btn-icon generate" onclick="WA_ManagerUi.forms.account.resetReadonlyKey();"></span><span wa_lang="{tooltip.copyToClipboardReadonlyKey|attr:title}" id="btn_copy_readonlyKey" class="btn-icon copy"></span></td>
+                <td class="option"><span wa_lang="{tooltip.refreshReadonlyKey|attr:title}" class="btn-icon generate"
+                                         onclick="WA_ManagerUi.forms.account.resetReadonlyKey();"></span><span
+                        wa_lang="{tooltip.copyToClipboardReadonlyKey|attr:title}" id="btn_copy_readonlyKey"
+                        class="btn-icon copy"></span></td>
                 <td class="value" name="value"></td>
             </tr>
+        </table>
+    </div>
+</div>
+<div class="referals-content" style="display: block">
+    <div class="scrollbar" style="display: block;">
+        <div class="scroller" style="top: 0px; height: 100%;"></div>
+    </div>
+    <div class="content-scroll" style="top:0;">
+        <table class="account-set referer">
+            <thead>
+            <tr>
+                <td class="name">Ник реферeра</td>
+                <td class="income">Доход реферера</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="name">SYSTEM</td>
+                <td class="income">0</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="account-set referals">
+            <thead>
+            <tr>
+                <td class="name">Ник реферала</td>
+                <td class="inactivity">Неактивность</td>
+                <td class="income">Ваш доход</td>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <td class="name">Итого</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            </tfoot>
+            <tbody>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            <tr>
+                <td class="name">Creator</td>
+                <td class="inactivity">0</td>
+                <td class="income">0</td>
+            </tr>
+            </tbody>
         </table>
     </div>
 </div>
 </div>
 </div>
 </div>
-<div id="gr-hint" class="gr-hint" style="display: none;" onmouseover="this.style.display = 'none';"><div class="gr-hint-content" name="text"></div></div>
+<div id="gr-hint" class="gr-hint" style="display: none;" onmouseover="this.style.display = 'none';">
+    <div class="gr-hint-content" name="text"></div>
+</div>
 <script src="js/main.js" type="text/javascript"></script>
 </body>
 </html>
