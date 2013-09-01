@@ -526,7 +526,7 @@
                     });
                     output.referrals.sort(function(a, b) {
                         return (a.login.toUpperCase() < b.login.toUpperCase()) ? -1 : (a.login.toUpperCase() > b.login.toUpperCase()) ? 1 : 0;
-                    })
+                    });
 
 					data.callback(output);
 				}, data.exception, data.ge_callback);
@@ -599,6 +599,33 @@
 					data.callback(output);
 				}, data.exception, data.ge_callback);
 			},
+            getReferrals: function(data){
+                data = $.extend(true, {
+                    exception: {}
+                }, data);
+
+                var req = api.requestStorage.addRequest();
+
+                req.setOpCode(OperationCode.Get.Referrals);
+                req.setToken(data.token);
+
+                req.send(function(_data){
+                    var output = [];
+
+                    $.each(_data[OperationItem.Referrals], function(key, referral){
+                        output.push(paramTransfer({}, referral, [
+                            [OperationItem.Login, "login"],
+                            [OperationItem.Inactivity, "inactivity"],
+                            [OperationItem.Deductions, "deductions"]
+                        ]));
+                    });
+                    output.sort(function(a, b) {
+                        return (a.login.toUpperCase() < b.login.toUpperCase()) ? -1 : (a.login.toUpperCase() > b.login.toUpperCase()) ? 1 : 0;
+                    })
+
+                    data.callback(output);
+                }, data.exception, data.ge_callback);
+            },
 			setTaskStatus: function(data){
 				data = $.extend(true, {
 					exception: {}
@@ -1343,7 +1370,8 @@
 				IPRanges: "Get IP ranges",
 				DayStats: "Get day stats",
 				TimeDistribution: "Get time distribution",
-				All: "Get all"
+				All: 'Get all',
+                Referrals: 'Get referrals'
 			},
 
 			Set : {

@@ -155,8 +155,19 @@
 							setTitle([manager.lng.pageTitle, manager.lng.form.account.pageTitle]);
 							break;
                         case "referrals":
-                            $(".main .auth-success .referals-content").show();
                             setTitle([manager.lng.pageTitle, manager.lng.form.referrals.pageTitle]);
+                            $(".main .auth-success .referals-content").show();
+	                        if(WA_ManagerUi.utils.dateDiff(new Date(), WA_ManagerStorage.referrals.getLastUpdate(), "min") >= 5){
+		                        WA_ManagerUi.forms.referrals.clear();
+		                        WA_ManagerStorage.api_updateReferrals({
+			                        callback: function(referrals){
+				                        WA_ManagerUi.forms.referrals.load();
+			                        },
+			                        onError: function(){
+				                        WA_ManagerUi.forms.referrals.load();
+			                        }
+		                        });
+	                        };
                             break;
 						default:
 							manager.forms.manager.show($.extend(true, data, {form: "task"}));

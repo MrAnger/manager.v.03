@@ -382,6 +382,7 @@
 				});
 
                 //parse referrals
+                mStorage.referrals.setLastUpdate(new Date());
                 $.each(data.referrals, function(key, ref){
                     var referral = new Referral();
                     referral.setLogin(ref.login);
@@ -1299,6 +1300,33 @@
 			ge_callback: options.onError
 		}, options.silent);
 	};
+    mStorage.api_updateReferrals = function(_options){
+        var options = $.extend(true, {
+            silent: false,
+            callback: function(data){},
+            exception: {},
+            onError: function(data, gErrorName){}
+        }, _options);
+
+        API_METHOD.getReferrals({
+            token: mStorage.getToken(),
+            callback: function(data){
+                mStorage.referrals.clear();
+
+                mStorage.referrals.setLastUpdate(new Date());
+                $.each(data, function(key, ref){
+                    var referral = new Referral();
+                    referral.setLogin(ref.login);
+                    referral.setInactivity(ref.inactivity);
+                    referral.setDeductions(ref.deductions);
+
+                    mStorage.referrals.addReferral(referral);
+                });
+
+                options.callback(mStorage.getReferralList());
+            }
+        });
+    };
 	mStorage.api_accountActivate = function(_options){
 		var options = $.extend(true, {
 			email: "",
@@ -1974,7 +2002,8 @@
 	};
     function ReferralContainer(){
         var SelfObj = this,
-            data = {};
+            data = {},
+            lastUpdate = null;
 
         this.getReferralByLogin = function(login){
             return data[login];
@@ -1997,6 +2026,9 @@
 
             return total;
         };
+        this.getLastUpdate = function(){
+            return lastUpdate;
+        };
         this.addReferral = function(referral){
             return (data[referral.getLogin()] = referral);
         };
@@ -2005,6 +2037,9 @@
         };
         this.removeReferral = function(referral){
             return (delete data[referral.getLogin()]);
+        };
+        this.setLastUpdate = function(date){
+            return (lastUpdate = date);
         };
         this.clear = function(){
             data = {};
