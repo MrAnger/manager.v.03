@@ -246,7 +246,7 @@
         $(cy4ki).hide();
         clipHtml = $("#"+$(clip.getHTML()).attr('id')).parent()[0];
         clip.addEventListener('onMouseUp', function(client){
-            clip.setText($("[name=form_account] [name=referralUrl] [name=value]").html());
+            clip.setText($("[name=form_account] [name=referralUrl] [name=value]").text());
         });
         clip.addEventListener('onComplete', function(client){
             WA_ManagerUi.utils.noticeShow(WA_ManagerUi.lng.form.account.referralUrl.copy_success, "success");
