@@ -4512,7 +4512,7 @@
 		var _const = WA_ManagerStorage.const.system,
 			preConst = (_const.taskSecondCost * (beforeClick + afterClick)) + (_const.ipRangeFactor * rangeSize) + (_const.uniqueTimeFactor * uniquePeriod) + _const.taskMinCost;
 
-		if (allowStatic) return (preConst * _const.staticIPFactor).toFixed(2);
+		if (!allowStatic) return (preConst * _const.staticIPFactor).toFixed(2);
 		else return (preConst).toFixed(2);
 	};
 	var DataFormat = {
