@@ -360,6 +360,7 @@
 						{name: "afterClick", value: task.getAfterClick()},//
 						{name: "beforeClick", value: task.getBeforeClick()},//
 						{name: "allowProxy", value: task.getAllowProxy()},//
+						{name: "allowStatic", value: task.getAllowStatic()},//
 						{name: "ignoreGU", value: task.getIgnoreGU()},//
 						{name: "growth", value: task.getGrowth()},//
 						{name: "domain", value: task.getDomain()},//
@@ -401,6 +402,8 @@
 							continue;
 						}else if(name == "allowProxy"){
 							$("form[name=task-setting] [name=allowProxy]").prop("checked", !task.getAllowProxy());
+						}else if(name == "allowStatic"){
+							$("form[name=task-setting] [name=allowStatic]").prop("checked", task.getAllowStatic());
 						}else if(name == "profile"){
 							if(val != ""){
 								$("form[name=task-setting] [name=use_profile]").click();
@@ -503,6 +506,7 @@
 					if(use_mask.checked) $(use_mask).click();
 
 					$("form[name=task-setting] [name=allowProxy]")[0].checked = false;
+					$("form[name=task-setting] [name=allowStatic]")[0].checked = false;
 
 					var use_profile = $("form[name=task-setting] [name=use_profile]")[0];
 					if(use_profile.checked) $(use_profile).click();
@@ -1328,12 +1332,12 @@
 				afterClick = $("form[name=task-setting] [name=afterClick]").val(),
 				rangeSize = $("form[name=task-setting] [name=rangeSize]").val(),
 				uniquePeriod = $("form[name=task-setting] [name=uniquePeriod]").val();
-
 			$("[name=holder-task-setting] [name=view_taskCost]").html(getTaskCost(
 				(isInt(beforeClick)) ? parseInt(beforeClick) : 0,
 				(isInt(afterClick)) ? parseInt(afterClick) : 0,
 				(isInt(rangeSize)) ? parseInt(rangeSize) : 0,
-				(isInt(uniquePeriod)) ? parseInt(uniquePeriod) : 0));
+				(isInt(uniquePeriod)) ? parseInt(uniquePeriod) : 0,
+				$("form[name=task-setting] [name=allowStatic]").prop("checked")));
 		}, 500);
 		interval.start();
 	});
@@ -1396,6 +1400,7 @@
 				{value: OP_ITEM.IgnoreGU, name: lng.ignoreGU},
 				{value: OP_ITEM.IdList, name: lng.listId},
 				{value: OP_ITEM.AllowProxy, name: lng.allowProxy},
+				{value: OP_ITEM.AllowStatic, name: lng.allowStatic},
 				{value: OP_ITEM.ListMode, name: lng.listMode},
 				{value: OP_ITEM.Frozen, name: lng.frozen},
 				{value: OP_ITEM.DayTargeting, name: lng.dayTargeting},
@@ -1977,6 +1982,7 @@
 			afterClick: WA_ManagerStorage.api.Constants.Limit.Task.AfterClick.Value.Default,
 			beforeClick: WA_ManagerStorage.api.Constants.Limit.Task.BeforeClick.Value.Default,
 			allowProxy: false,
+			allowStatic: true,
 			ignoreGU: false,
 			growth: 0,
 			domain: "",
@@ -2248,7 +2254,8 @@
 				profile: this["profile"],
 				ignoreGU: this["ignoreGU"],
 				allowProxy: this["allowProxy"],
-				listId: this["listId"]
+				listId: this["listId"],
+				allowStatic: this["allowStatic"]
 			},
 			folderId = parseInt($(this).find("[name=folderId]").val()),
 			taskId = parseInt($(this).find("[name=taskId]").val()),
@@ -2329,6 +2336,7 @@
 			if(taskObj.getListId() != parseInt(inputs.listId.value)) modified_params.listId = parseInt(inputs.listId.value);
 			if(taskObj.getIgnoreGU() != inputs.ignoreGU.checked) modified_params.ignoreGU = inputs.ignoreGU.checked;
 			if(taskObj.getAllowProxy() != !inputs.allowProxy.checked) modified_params.allowProxy = !inputs.allowProxy.checked;
+			if(taskObj.getAllowStatic() != inputs.allowStatic.checked) modified_params.allowStatic = inputs.allowStatic.checked;
 			if(taskObj.getListMode() != eval($(form).find("[name=listIp-type]:checked").val())) modified_params.listMode = eval($(form).find("[name=listIp-type]:checked").val());
 			var newDayTargeting = convertToDayTargeting(WA_ManagerUi.data.graphs.dayTargeting.getData());
 			if(!isEqualDayTargeting(taskObj.getDayTargeting(), newDayTargeting)) modified_params.dayTargeting = newDayTargeting;
@@ -4500,9 +4508,12 @@
 		});
 		return string;
 	};
-	function getTaskCost(beforeClick, afterClick, rangeSize, uniquePeriod){
-		var _const = WA_ManagerStorage.const.system;
-		return ((_const.taskSecondCost * (beforeClick + afterClick)) + (_const.ipRangeFactor * rangeSize) + (_const.uniqueTimeFactor * uniquePeriod) + _const.taskMinCost).toFixed(2);
+	function getTaskCost(beforeClick, afterClick, rangeSize, uniquePeriod, allowStatic){
+		var _const = WA_ManagerStorage.const.system,
+			preConst = (_const.taskSecondCost * (beforeClick + afterClick)) + (_const.ipRangeFactor * rangeSize) + (_const.uniqueTimeFactor * uniquePeriod) + _const.taskMinCost;
+
+		if (allowStatic) return (preConst * _const.staticIPFactor).toFixed(2);
+		else return (preConst).toFixed(2);
 	};
 	var DataFormat = {
 		int: function(int){

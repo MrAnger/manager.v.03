@@ -328,7 +328,8 @@
 						[OperationItem.ExchangeRate, "exchangeRate"],
 						[OperationItem.SystemWMR, "systemWMR"],
 						[OperationItem.UniqueTimeFactor, "uniqueTimeFactor"],
-						[OperationItem.IPRangeFactor, "ipRangeFactor"]
+						[OperationItem.IPRangeFactor, "ipRangeFactor"],
+						[OperationItem.StaticIPFactor, "staticIPFactor"]
 					]);
 
 					//parse general info
@@ -375,7 +376,8 @@
 								[OperationItem.UniquePeriod, "uniquePeriod"],
 								[OperationItem.Mask, "mask"],
 								[OperationItem.Days, "days"],
-								[OperationItem.ExtSource, "extSource"]
+								[OperationItem.ExtSource, "extSource"],
+								[OperationItem.AllowStatic, "allowStatic"]
 							]);
 
 							//parse geo Targeting
@@ -696,6 +698,7 @@
 				if(data.listId != null) req.addData(OperationItem.IdList, data.listId);
 				if(data.listMode != null) req.addData(OperationItem.ListMode, data.listMode);
 				if(data.profile != null) req.addData(OperationItem.Profile, data.profile);
+				if(data.allowStatic != null) req.addData(OperationItem.AllowStatic, data.allowStatic);
 				if(data.geoTargeting != null){
 					var geoTargeting = [];
 					$.each(data.geoTargeting, function(key, targ){
@@ -836,6 +839,7 @@
 				req.addData(OperationItem.Mask, data.mask);
 				req.addData(OperationItem.Days, data.days);
 				req.addData(OperationItem.ExtSource, data.extSource);
+				req.addData(OperationItem.AllowStatic, data.allowStatic);
 
 				req.send(function(_data){
 					var output = {};
@@ -1583,7 +1587,9 @@
             Referer: 'Referer',
             Referrals: 'Referrals',
             Inactivity: 'Inactivity',
-            Deductions: 'Deductions'
+            Deductions: 'Deductions',
+			AllowStatic: 'Allow static',
+			StaticIPFactor: 'Static IP factor'
 		},
 
 		ResponseStatus : {

@@ -44,7 +44,8 @@
 			exchangeRate: 0,
 			systemWMR: "",
 			uniqueTimeFactor: 0,
-			ipRangeFactor: 0
+			ipRangeFactor: 0,
+			staticIPFactor: 0
 		}
 	};
 
@@ -134,6 +135,9 @@
 	mStorage.getConstTaskMinCost = function(){
 		return mStorage.const.system.taskMinCost;
 	};
+	mStorage.getConstStaticIPFactor = function(){
+		return mStorage.const.system.staticIPFactor;
+	};
 	mStorage.getConstTransferPercent = function(){
 		return mStorage.const.system.transferPercent;
 	};
@@ -178,6 +182,9 @@
 	};
 	mStorage.setConstIpRangeFactor = function(_const){
 		return (mStorage.const.system.ipRangeFactor = _const);
+	};
+	mStorage.setConstStaticIPFactor = function(_const){
+		return (mStorage.const.system.staticIPFactor = _const);
 	};
 
 	//METHODS
@@ -276,6 +283,9 @@
 						case "uniqueTimeFactor":
 							mStorage.setConstUniqueTimeFactor(val);
 							break;
+						case "staticIPFactor":
+							mStorage.setConstStaticIPFactor(val);
+							break;
 					};
 				});
 
@@ -363,6 +373,7 @@
 						taskObj.setTimeDistribution(task.timeDistribution);
 						taskObj.setUniquePeriod(task.uniquePeriod);
 						taskObj.setWeekTargeting(task.weekTargeting);
+						taskObj.setAllowStatic(task.allowStatic);
 						//prepare day stat
 						$.each(task.dayStat, function(id, data){
 							var minDef = task.dayTargeting[id].min,
@@ -523,6 +534,9 @@
 					case "dayTargeting":
 						task.setDayTargeting(val);
 						break;
+					case "allowStatic":
+						task.setAllowStatic(val);
+						break;
 				};
 			});
 
@@ -592,6 +606,7 @@
 
 		newTask.setAfterClick(sourceTask.getAfterClick());
 		newTask.setAllowProxy(sourceTask.getAllowProxy());
+		newTask.setAllowStatic(sourceTask.getAllowStatic());
 		newTask.setBeforeClick(sourceTask.getBeforeClick());
 		newTask.setDomain(sourceTask.getDomain());
 		newTask.setDays(sourceTask.getDays());
@@ -663,6 +678,9 @@
 						break;
 					case API_OP_ITEM.AllowProxy:
 						task.setAllowProxy(sourceTask.getAllowProxy());
+						break;
+					case API_OP_ITEM.AllowStatic:
+						task.setAllowStatic(sourceTask.getAllowStatic());
 						break;
 					case API_OP_ITEM.UniquePeriod:
 						task.setUniquePeriod(sourceTask.getUniquePeriod());
@@ -769,6 +787,7 @@
 
 				taskObj.setAfterClick(taskData.afterClick);
 				taskObj.setAllowProxy(taskData.allowProxy);
+				taskObj.setAllowStatic(taskData.allowStatic);
 				taskObj.setBeforeClick(taskData.beforeClick);
 				taskObj.setDays(taskData.days);
 				taskObj.setDomain(taskData.domain);
@@ -1685,6 +1704,7 @@
 				timeDistribution: [],
 				geoTargeting: [],
 				dayStat: [],
+				allowStatic: true,
 				lastUpdateDayStat: null
 			};
 
@@ -1756,6 +1776,9 @@
 		};
 		this.getDayStat = function(){
 			return data.dayStat;
+		};
+		this.getAllowStatic = function(){
+			return data.allowStatic;
 		};
 		this.getLastUpdateDayStat = function(){
 			return data.lastUpdateDayStat;
@@ -1844,6 +1867,9 @@
 		};
 		this.setDisabled = function(state){
 			return (data.frozen = state);
+		};
+		this.setAllowStatic = function(state){
+			return (data.allowStatic = state);
 		};
 	};
 	function IPRange(){
