@@ -546,8 +546,8 @@
 					growth = task.getGrowth()/100,
 					weekTarg = task.getWeekTargeting()[getNumberDayForApi(mStorage.getDateServer())].val/100;
 
-				data.min = Math.round((minDef+growth*task.getDays())*weekTarg);
-				data.max = Math.round((maxDef+growth*task.getDays())*weekTarg);
+				data.min = Math.round(minDef*growth*task.getDays()*weekTarg);
+				data.max = Math.round(maxDef*growth*task.getDays()*weekTarg);
 			});
 		});
 

@@ -2356,54 +2356,7 @@
 						taskObj = taskObj[0];
 						manager.forms.task.setName(manager.forms.task.getActiveHtml(), taskObj.getName());
 						//DayStat
-						(function(data){
-							var lineMin = {
-									name: "min",
-									data: []
-								},
-								lineMax = {
-									name: "max",
-									data: []
-								},
-								lineGive = {
-									name: "give",
-									data: []
-								},
-								lineIncomplete = {
-									name: "incomplete",
-									data: []
-								},
-								lineOverload = {
-									name: "overload",
-									data: []
-								},
-								onePercent = 0,
-								summ_incomplete = 0,
-								summ_overload = 0,
-								percentControl = 5;
-
-							data.sort(function(a,b){return a.id - b.id;});
-
-							$.each(data, function(key, val){
-								lineMin.data.push([val.id, val.min]);
-								lineMax.data.push([val.id, val.max]);
-								lineGive.data.push([val.id, val.give]);
-								lineIncomplete.data.push([val.id, val.incomplete]);
-								lineOverload.data.push([val.id, val.overload]);
-
-								onePercent += (val.min + val.max);
-								summ_incomplete += val.incomplete;
-								summ_overload += val.overload;
-							});
-							onePercent = (onePercent/2)/100;
-							manager.forms.task.notify.hide();
-							if(onePercent > 0){
-								if(summ_incomplete/onePercent > percentControl) manager.forms.task.notify.show("incomplete");
-								if(summ_overload/onePercent > percentControl) manager.forms.task.notify.show("overload");
-							};
-
-							manager.data.graphs.dayStat.setData([lineMin, lineMax, lineGive, lineIncomplete, lineOverload]);
-						})(taskObj.getDayStat());
+						manager.forms.task.printDayStat(taskObj.getDayStat());
 					},
 					exception: {
 						FolderNotFound: function(){
