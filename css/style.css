@@ -322,6 +322,7 @@ textarea {
 	border-width: 1px;
 	border-style: solid;
 	border-color: #ccc #aaa #aaa #ccc;
+	background-color: #fbfac6;
 	box-sizing: border-box;
 	-o-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -339,7 +340,7 @@ textarea {
 .required input[type=password],
 .required select,
 .required textarea {
-	background-color: #fbfac6;
+	background-color: #fff;
 }
 
 select {
