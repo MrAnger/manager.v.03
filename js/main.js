@@ -405,6 +405,7 @@
 		}else{
 			$("[name=task-setting] [name=use_profile_setting]").hide("fast");
 			$("[name=task-setting] [name=profile]").val("");
+			$("[name=task-setting] [name=profileStorage]").val("");
 		};
 	}).click().click();
 	$("[name=task-setting] input[name=use_listIp]").change(function(e){

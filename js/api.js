@@ -377,7 +377,8 @@
 								[OperationItem.Mask, "mask"],
 								[OperationItem.Days, "days"],
 								[OperationItem.ExtSource, "extSource"],
-								[OperationItem.AllowStatic, "allowStatic"]
+								[OperationItem.AllowStatic, "allowStatic"],
+								[OperationItem.ProfileStorage, "profileStorage"]
 							]);
 
 							//parse geo Targeting
@@ -698,6 +699,7 @@
 				if(data.listId != null) req.addData(OperationItem.IdList, data.listId);
 				if(data.listMode != null) req.addData(OperationItem.ListMode, data.listMode);
 				if(data.profile != null) req.addData(OperationItem.Profile, data.profile);
+				if(data.profileStorage != null) req.addData(OperationItem.ProfileStorage, data.profileStorage);
 				if(data.allowStatic != null) req.addData(OperationItem.AllowStatic, data.allowStatic);
 				if(data.geoTargeting != null){
 					var geoTargeting = [];
@@ -1589,7 +1591,8 @@
             Inactivity: 'Inactivity',
             Deductions: 'Deductions',
 			AllowStatic: 'Allow static',
-			StaticIPFactor: 'Static IP factor'
+			StaticIPFactor: 'Static IP factor',
+			ProfileStorage: 'Profile storage'
 		},
 
 		ResponseStatus : {
@@ -1759,6 +1762,13 @@
 					Length: {
 						Min: 0,
 						Max: 50
+					}
+				},
+				ProfileStorage: {
+					Regexp: /^(http|https|ftp)(:\/\/)((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Zа-яА-Я0-9\-]*\.)+[a-zA-Zа-яА-Я\-\d]{2,9}))(\/{1}.{1,})?$/,
+					Length: {
+						Min: 0,
+						Max: 255
 					}
 				},
 				Days: {

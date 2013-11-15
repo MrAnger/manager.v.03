@@ -365,6 +365,7 @@
 						{name: "growth", value: task.getGrowth()},//
 						{name: "domain", value: task.getDomain()},//
 						{name: "profile", value: task.getProfile()},//
+						{name: "profileStorage", value: task.getProfileStorage()},//
 						{name: "frozen", value: task.getFrozen()},
 						{name: "listMode", value: task.getListMode()},//
 						{name: "rangeSize", value: task.getRangeSize()},//
@@ -408,6 +409,7 @@
 							if(val != ""){
 								$("form[name=task-setting] [name=use_profile]").click();
 								$("form[name=task-setting] [name=profile]").val(val);
+								$("form[name=task-setting] [name=profileStorage]").val(task.getProfileStorage());
 							};
 						}else if(name == "frozen"){
 							$("#task-status").removeClass("status-off").addClass((val) ? "status-off" : "");
@@ -1397,6 +1399,7 @@
 				{value: OP_ITEM.BeforeClick, name: lng.beforeClick},
 				{value: OP_ITEM.Profile, name: lng.profile},
 				{value: OP_ITEM.AfterClick, name: lng.afterClick},
+				{value: OP_ITEM.ProfileStorage, name: lng.profileStorage},
 				{value: OP_ITEM.IgnoreGU, name: lng.ignoreGU},
 				{value: OP_ITEM.IdList, name: lng.listId},
 				{value: OP_ITEM.AllowProxy, name: lng.allowProxy},
@@ -2252,6 +2255,7 @@
 				growth: this["growth"],
 				days: this["days"],
 				profile: this["profile"],
+				profileStorage: this["profileStorage"],
 				ignoreGU: this["ignoreGU"],
 				allowProxy: this["allowProxy"],
 				listId: this["listId"],
@@ -2321,12 +2325,18 @@
 				min: WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Min,
 				max: WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Max
 			}), "error");
+		}else if(!CheckType(inputs.profileStorage.value, TYPE.TASK_PROFILE_STORAGE, true)){
+			NoticeShow(insertLoc(manager.lng.form.task_setting.profileStorage.error, {
+				min: WA_ManagerStorage.api.Constants.Limit.Task.ProfileStorage.Length.Min,
+				max: WA_ManagerStorage.api.Constants.Limit.Task.ProfileStorage.Length.Max
+			}), "error");
 		}else{
 			if(taskObj.getName() != inputs.name.value) modified_params.name = inputs.name.value;
 			if(taskObj.getDomain() != inputs.domain.value) modified_params.domain = inputs.domain.value;
 			if(taskObj.getExtSource() != inputs.extSource.value) modified_params.extSource = inputs.extSource.value;
 			if(taskObj.getMask() != inputs.mask.value) modified_params.mask = inputs.mask.value;
 			if(taskObj.getProfile() != inputs.profile.value) modified_params.profile = inputs.profile.value;
+			if(taskObj.getProfileStorage() != inputs.profileStorage.value) modified_params.profileStorage = inputs.profileStorage.value;
 			if(taskObj.getBeforeClick() != parseInt(inputs.beforeClick.value)) modified_params.beforeClick = parseInt(inputs.beforeClick.value);
 			if(taskObj.getAfterClick() != parseInt(inputs.afterClick.value)) modified_params.afterClick = parseInt(inputs.afterClick.value);
 			if(taskObj.getRangeSize() != parseInt(inputs.rangeSize.value)) modified_params.rangeSize = parseInt(inputs.rangeSize.value);
@@ -3082,6 +3092,12 @@
 			regexp: WA_ManagerStorage.api.Constants.Limit.Task.Profile.Regexp,
 			min:  WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Min,
 			max:  WA_ManagerStorage.api.Constants.Limit.Task.Profile.Length.Max
+		},
+		TASK_PROFILE_STORAGE: {
+			dataType: "text",
+			regexp: WA_ManagerStorage.api.Constants.Limit.Task.ProfileStorage.Regexp,
+			min:  WA_ManagerStorage.api.Constants.Limit.Task.ProfileStorage.Length.Min,
+			max:  WA_ManagerStorage.api.Constants.Limit.Task.ProfileStorage.Length.Max
 		},
 		IPLIST_NAME: {
 			dataType: "text",

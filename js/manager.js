@@ -369,6 +369,7 @@
 						taskObj.setMask(task.mask);
 						taskObj.setName(task.name);
 						taskObj.setProfile(task.profile);
+						taskObj.setProfileStorage(task.profileStorage);
 						taskObj.setRangeSize(task.rangeSize);
 						taskObj.setTimeDistribution(task.timeDistribution);
 						taskObj.setUniquePeriod(task.uniquePeriod);
@@ -516,6 +517,9 @@
 					case "profile":
 						task.setProfile(val);
 						break;
+					case "profileStorage":
+						task.setProfileStorage(val);
+						break;
 					case "rangeSize":
 						task.setRangeSize(val);
 						break;
@@ -621,6 +625,7 @@
 		newTask.setMask(sourceTask.getMask());
 		newTask.setName(newName);
 		newTask.setProfile(sourceTask.getProfile());
+		newTask.setProfileStorage(sourceTask.getProfileStorage());
 		newTask.setRangeSize(sourceTask.getRangeSize());
 		newTask.setUniquePeriod(sourceTask.getUniquePeriod());
 		//prepare geo targeting
@@ -718,6 +723,9 @@
 					case API_OP_ITEM.Profile:
 						task.setProfile(sourceTask.getProfile());
 						break;
+					case API_OP_ITEM.ProfileStorage:
+						task.setProfileStorage(sourceTask.getProfileStorage());
+						break;
 					case API_OP_ITEM.GeoTargeting:
 						var geoTargeting = [];
 						$.each(sourceTask.getGeoTargeting(), function(key, targ){geoTargeting[key] = $.extend(true, {}, targ, {recd: 0});});
@@ -801,6 +809,7 @@
 				taskObj.setMask(taskData.mask);
 				taskObj.setName(taskData.name);
 				taskObj.setProfile(taskData.profile);
+				taskObj.setProfileStorage(taskData.profileStorage);
 				taskObj.setRangeSize(taskData.rangeSize);
 				taskObj.setUniquePeriod(taskData.uniquePeriod);
 
@@ -1741,6 +1750,9 @@
 		this.getProfile = function(){
 			return data.profile;
 		};
+		this.getProfileStorage = function(){
+			return data.profileStorage;
+		};
 		this.getFrozen = function(){
 			return data.frozen;
 		};
@@ -1815,6 +1827,9 @@
 		};
 		this.setProfile = function(profile){
 			return (data.profile = profile);
+		};
+		this.setProfileStorage = function(profileStorage){
+			return (data.profileStorage = profileStorage);
 		};
 		this.setFrozen = function(frozen){
 			return (data.frozen = frozen);

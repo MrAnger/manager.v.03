@@ -300,6 +300,10 @@ WA_ManagerUi.lng = {
 				"placeholder": "Профиль",
 				"error": "Введеный профиль не валиден.<br>Максимальная длина: %MAX%."
 			},
+			"profileStorage":{
+				"placeholder": "Адрес хранилища профилей",
+				"error": "Введеное хранилище профилей не валидно.<br>Максимальная длина: %MAX%."
+			},
 			"listId":{
 				"text": "Фильтровать трафик IP-списками"
 			},
@@ -402,6 +406,7 @@ WA_ManagerUi.lng = {
 				"listMode": "Тип IP списка",
 				"days": "Счётчик дней работы",
 				"profile": "Профиль",
+				"profileStorage": "Хранилище профилей",
 				"geoTargeting": "Гео таргетинг",
 				"dayTargeting": "Суточный таргетинг",
 				"weekTargeting": "Недельный таргетинг",
