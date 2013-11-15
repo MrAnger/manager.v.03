@@ -335,6 +335,13 @@ textarea {
 	font: 10pt arial;
 }
 
+.required input[type=text],
+.required input[type=password],
+.required select,
+.required textarea {
+	background-color: #fbfac6;
+}
+
 select {
 	padding-right: 3px;
 }

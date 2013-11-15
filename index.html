@@ -61,10 +61,10 @@
                 <span class="save"></span>
             </div>
             <form name="console_query" onsubmit="return false;">
-                <div class="text-line">
+                <div class="text-line required">
                     <input name="query" type="text" value>
                 </div>
-                <div class="text-line">
+                <div class="text-line required">
                     <input type="submit" class="btn" value wa_lang="{form.console.send.text|attr:value}">
                 </div>
             </form>
@@ -79,14 +79,14 @@
                 <form name="account_activation" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.account_activation.email.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="email" type="text" value placeholder autocomplete="false"
                                    wa_lang="{form.account_activation.email.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.account_activation.code.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="code" type="text" value placeholder autocomplete="false"
                                    wa_lang="{form.account_activation.code.placeholder|attr:placeholder}">
                         </div>
@@ -106,7 +106,7 @@
                 <form name="folder_add" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.folder_add.folder_name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="folder_name" type="text" value placeholder
                                    wa_lang="{form.folder_add.folder_name.placeholder|attr:placeholder}">
                         </div>
@@ -128,7 +128,7 @@
 
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.folder_rename.folder_name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="folder_name" type="text" value placeholder
                                    wa_lang="{form.folder_rename.placeholder|attr:placeholder}">
                         </div>
@@ -148,21 +148,21 @@
                 <form name="task_add" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.task_add.name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="task_name" type="text" value placeholder
                                    wa_lang="{form.task_add.name.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.task_add.domain.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="task_domain" type="text" value placeholder
                                    wa_lang="{form.task_add.domain.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.task_add.extSource.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="task_extSource" type="text" value placeholder
                                    wa_lang="{form.task_add.extSource.placeholder|attr:placeholder}">
                         </div>
@@ -182,14 +182,14 @@
                 <form name="send_credits" wa_step="0" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.send_credits.recipient.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="recipient" type="text" placeholder
                                    wa_lang="{form.send_credits.recipient.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.send_credits.credits.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="credits" type="text" placeholder
                                    wa_lang="{form.send_credits.credits.placeholder|attr:placeholder}">
                         </div>
@@ -198,7 +198,7 @@
                             name="summ">1</span></div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.send_credits.code.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="code" type="text" placeholder
                                    wa_lang="{form.send_credits.code.placeholder|attr:placeholder}">
                         </div>
@@ -260,7 +260,7 @@
 
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.task_move.category}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <select name="selectBox_folder" size="8"></select>
                         </div>
                     </div>
@@ -282,14 +282,14 @@
 
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.task_clone.name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="task_name" type="text" value placeholder
                                    wa_lang="{form.task_clone.name.placeholder|attr:placeholder}">
                         </div>
                     </div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.task_clone.category}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <select name="selectBox_folder" size="8"></select>
                         </div>
                     </div>
@@ -361,7 +361,7 @@
             <div class="text" name="text" wa_lang="{form.pay.text}"></div>
             <div class="label-block">
                 <div class="label-text" wa_lang="{form.pay.credits.text}"></div>
-                <div class="text-line">
+                <div class="text-line required">
                     <input name="credits" type="text" placeholder wa_lang="{form.pay.credits.placeholder}">
                 </div>
                 <div class="small-text"><span>WMR: </span><span name="summ">1</span></div>
@@ -380,7 +380,7 @@
                 <form name="setAccountPassword" wa_step="0" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.setAccountPassword.password.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="password" type="password" value placeholder autocomplete="off"
                                    wa_lang="{form.setAccountPassword.password.placeholder|attr:placeholder}"><span
                                 class="show-box"></span>
@@ -388,7 +388,7 @@
                     </div>
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.setAccountPassword.code.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="code" type="text" value placeholder autocomplete="off"
                                    wa_lang="{form.setAccountPassword.code.placeholder|attr:placeholder}">
                         </div>
@@ -408,7 +408,7 @@
                 <form name="ipList_add" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.ipList_add.ipList_name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="ipList_name" type="text" value placeholder
                                    wa_lang="{form.ipList_add.ipList_name.placeholder|attr:placeholder}">
                         </div>
@@ -430,7 +430,7 @@
 
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.ipList_clone.ipList_name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="ipList_name" type="text" value placeholder
                                    wa_lang="{form.ipList_clone.ipList_name.placeholder|attr:placeholder}">
                         </div>
@@ -452,7 +452,7 @@
 
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.ipList_rename.ipList_name.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <input name="ipList_name" type="text" value placeholder
                                    wa_lang="{form.ipList_rename.ipList_name.placeholder|attr:placeholder}">
                         </div>
@@ -487,7 +487,7 @@
                 <form name="ipRange_add" onsubmit="return false;">
                     <div class="label-block">
                         <div class="label-text" wa_lang="{form.ipRange_add.ipRange.text}"></div>
-                        <div class="text-line">
+                        <div class="text-line required">
                             <textarea name="ipRange" placeholder wrap="off"
                                       wa_lang="{form.ipRange_add.ipRange.placeholder|attr:placeholder}"></textarea>
                         </div>
@@ -560,14 +560,14 @@
             <div class="sign-box">
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.auth.mail.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="mail" type="text" value placeholder
                                wa_lang="{form.auth.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.auth.password.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="password" class="password" type="password" value placeholder
                                wa_lang="{form.auth.password.placeholder|attr:placeholder}">
                     </div>
@@ -596,21 +596,21 @@
             <div class="sign-box">
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.login.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="reg_login" type="text" value placeholder autocomplete="off"
                                wa_lang="{form.reg.login.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.mail.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="reg_mail" type="text" value placeholder autocomplete="off"
                                wa_lang="{form.reg.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.password.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="reg_password" class="password" type="password" value placeholder autocomplete="off"
                                wa_lang="{form.reg.password.placeholder|attr:placeholder}"><span
                             class="show-box"></span>
@@ -618,7 +618,7 @@
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.reg.referer.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="reg_referer" class="password" type="text" value placeholder autocomplete="off"
                                wa_lang="{form.reg.referer.placeholder|attr:placeholder}"></span>
                     </div>
@@ -649,21 +649,21 @@
             <div class="sign-box">
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.forgot.mail.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="forgot_mail" type="text" value placeholder
                                wa_lang="{form.forgot.mail.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.forgot.code.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="forgot_code" type="text" value placeholder disabled
                                wa_lang="{form.forgot.code.placeholder|attr:placeholder}">
                     </div>
                 </div>
                 <div class="label-block">
                     <div class="label-text" wa_lang="{form.forgot.password.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="forgot_password" class="password" type="password" value disabled placeholder
                                wa_lang="{form.forgot.password.placeholder|attr:placeholder}"><span
                             class="show-box"></span>
@@ -836,28 +836,28 @@
 <div name="general">
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.name.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="name" type="text" value placeholder
                    wa_lang="{form.task_setting.name.placeholder|attr:placeholder}">
         </div>
     </div>
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.domain.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="domain" type="text" value placeholder
                    wa_lang="{form.task_setting.domain.placeholder|attr:placeholder}">
         </div>
     </div>
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.extSource.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="extSource" type="text" value="" placeholder
                    wa_lang="{form.task_setting.extSource.placeholder|attr:placeholder}">
         </div>
     </div>
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.beforeClick.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="beforeClick" type="text" value class="number"
                    wa_lang="{form.task_setting.beforeClick.placeholder|attr:placeholder}">
         </div>
@@ -868,14 +868,14 @@
     </div>
     <div name="use-mask-setting">
         <div class="label-block">
-            <div class="text-line">
+            <div class="text-line required">
                 <textarea name="mask" placeholder
                           wa_lang="{form.task_setting.mask.placeholder|attr:placeholder}"></textarea>
             </div>
         </div>
         <div class="label-block">
             <div class="label-text" wa_lang="{form.task_setting.afterClick.text}"></div>
-            <div class="text-line">
+            <div class="text-line required">
                 <input name="afterClick" type="text" value class="number"
                        wa_lang="{form.task_setting.afterClick.placeholder|attr:placeholder}">
             </div>
@@ -890,27 +890,27 @@
 <div name="audit">
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.rangeSize.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="rangeSize" type="text" value class="number">
         </div>
     </div>
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.uniquePeriod.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="uniquePeriod" type="text" class="number"
                    wa_lang="{form.task_setting.uniquePeriod.placeholder|attr:placeholder}">
         </div>
     </div>
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.growth.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="growth" type="text" class="number"
                    wa_lang="{form.task_setting.growth.placeholder|attr:placeholder}">
         </div>
     </div>
     <div class="label-block">
         <div class="label-text" wa_lang="{form.task_setting.days.text}"></div>
-        <div class="text-line">
+        <div class="text-line required">
             <input name="days" type="text" value class="number"
                    wa_lang="{form.task_setting.days.placeholder|attr:placeholder}">
         </div>
@@ -945,7 +945,7 @@
         <div class="label-text"><label><input name="use_listIp" type="checkbox"><span
                 wa_lang="{form.task_setting.listId.text}"></span></label></div>
         <div name="use_listIp_setting">
-            <div class="text-line">
+            <div class="text-line required">
                 <select name="listId"></select>
             </div>
             <div name="listIp-option">
@@ -1004,12 +1004,12 @@
             <div class="spoiler-box-content">
                 <div class="geo-box">
                     <div class="label-text" wa_lang="{form.task_setting.geoTargeting.searchCountry.text}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <input name="searchCountry" type="text" value placeholder
                                wa_lang="{form.task_setting.geoTargeting.searchCountry.placeholder|attr:placeholder}">
                     </div>
                     <div class="label-text" wa_lang="{form.task_setting.geoTargeting.countryList}"></div>
-                    <div class="text-line">
+                    <div class="text-line required">
                         <select name="selectBox_country" size="8"></select>
                     </div>
                     <div class="label-text" wa_lang="{form.task_setting.geoTargeting.selectedCountries}"></div>
